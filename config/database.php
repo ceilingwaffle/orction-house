@@ -2,6 +2,9 @@
 
 return [
 
+    // Enable database logging
+    'log' => true,
+
     /*
     |--------------------------------------------------------------------------
     | PDO Fetch Style

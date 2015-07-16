@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Auth;
+use Illuminate\Http\Request;
 use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
@@ -21,7 +22,16 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers;
+
+    // Redirect to this URI when authentication required
+    protected $loginPath = '/auth/login';
+
+    // Redirect to this URI after successful login
+    protected $redirectPath = '/home';
+
+    // Log in using the 'username' column from the users table
+    protected $username = 'username';
 
     /**
      * Create a new authentication controller instance.
@@ -42,8 +52,7 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'username' => 'required|max:50|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -57,9 +66,9 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'username' => $data['username'],
             'password' => bcrypt($data['password']),
         ]);
     }
+
 }
