@@ -39,7 +39,7 @@ if (Config::get('database.log', false)) {
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
 // Authentication routes
@@ -53,5 +53,5 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 Route::get('/home', function()
 {
-    return 'Home page';
+    return view('home');
 });

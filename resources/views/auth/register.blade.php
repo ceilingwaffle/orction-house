@@ -1,22 +1,26 @@
-<form method="POST" action="/auth/register">
-    {!! csrf_field() !!}
+@extends('layouts.master')
 
-    <div>
-        User Name
-        <input type="text" name="username" value="{{ old('username') }}">
-    </div>
+@section('content')
+    <form method="POST" action="/auth/register">
+        {!! csrf_field() !!}
 
-    <div>
-        Password
-        <input type="password" name="password">
-    </div>
+        <div>
+            User Name
+            <input type="text" name="username" value="{{ old('username') }}">
+        </div>
 
-    <div class="col-md-6">
-        Confirm Password
-        <input type="password" name="password_confirmation">
-    </div>
+        <div>
+            Password
+            <input type="password" name="password">
+        </div>
 
-    <div>
-        <button type="submit">Register</button>
-    </div>
-</form>
+        <div>
+            Confirm Password
+            <input type="password" name="password_confirmation">
+        </div>
+
+        <div>
+            <button type="submit">Register</button>
+        </div>
+    </form>
+@endsection

@@ -1,21 +1,25 @@
-<form method="POST" action="/auth/login">
-    {!! csrf_field() !!}
+@extends('layouts.master')
 
-    <div>
-        User Name
-        <input type="username" name="username" value="{{ old('username') }}">
-    </div>
+@section('content')
+    <form method="POST" action="/auth/login">
+        {!! csrf_field() !!}
 
-    <div>
-        Password
-        <input type="password" name="password" id="password">
-    </div>
+        <div>
+            User Name
+            <input type="username" name="username" value="{{ old('username') }}">
+        </div>
 
-    <div>
-        <input type="checkbox" name="remember"> Remember Me
-    </div>
+        <div>
+            Password
+            <input type="password" name="password" id="password">
+        </div>
 
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
+        <div>
+            <input type="checkbox" name="remember"> Remember Me
+        </div>
+
+        <div>
+            <button type="submit">Login</button>
+        </div>
+    </form>
+@endsection

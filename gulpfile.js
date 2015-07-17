@@ -1,4 +1,7 @@
+var gulp = require('gulp');
 var elixir = require('laravel-elixir');
+var imagemin = require('gulp-imagemin');
+var pngquant = require('imagemin-pngquant');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,5 +15,16 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.sass(['app.scss'], 'public/assets/css');
+    mix.task('images');
+});
+
+gulp.task('images', function () {
+    return gulp.src('resources/assets/images/*')
+        .pipe(imagemin({
+            progressive: true,
+            svgoPlugins: [{removeViewBox: false}],
+            use: [pngquant()]
+        }))
+        .pipe(gulp.dest('public/assets/img'));
 });
