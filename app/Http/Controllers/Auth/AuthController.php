@@ -28,7 +28,7 @@ class AuthController extends Controller
     protected $loginPath = '/auth/login';
 
     // Redirect to this URI after successful login
-    protected $redirectPath = '/home';
+    protected $redirectPath = '/';
 
     // Log in using the 'username' column from the users table
     protected $username = 'username';

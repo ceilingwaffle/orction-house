@@ -39,7 +39,7 @@ if (Config::get('database.log', false)) {
 */
 
 Route::get('/', function () {
-    return redirect('/home');
+    return redirect('/auctions');
 });
 
 // Authentication routes
@@ -51,7 +51,10 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-Route::get('/home', function()
+Route::group(['middleware' => 'auth'], function()
 {
-    return view('home');
+    Route::get('/auctions', function()
+    {
+        return view('auctions');
+    });
 });
