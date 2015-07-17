@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAuctionUserBidsTable extends Migration
+class CreateBidsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,7 @@ class CreateAuctionUserBidsTable extends Migration
      */
     public function up()
     {
-        Schema::create('auction_user_bids', function (Blueprint $table) {
+        Schema::create('bids', function (Blueprint $table) {
             $table->increments('id');
 
             $table->decimal('amount', 8, 2);
@@ -34,6 +34,6 @@ class CreateAuctionUserBidsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('auction_user_bids');
+        Schema::drop('bids');
     }
 }

@@ -19,7 +19,7 @@ class CreateAuctionsTable extends Migration
             $table->text('description');
             $table->decimal('start_price', 8, 2);
             $table->dateTime('end_date');
-            $table->string('image_file_name');
+            $table->string('image_file_name')->nullable();
 
             $table->unsignedInteger('user_id'); // Auction created by user ID
             $table->unsignedInteger('auction_category_id');

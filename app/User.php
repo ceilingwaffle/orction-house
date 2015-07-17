@@ -3,10 +3,10 @@
 namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
+use App\Common\BaseModel;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class User extends Model implements AuthenticatableContract
+class User extends BaseModel implements AuthenticatableContract
 {
     use Authenticatable;
 
