@@ -23,7 +23,7 @@ class BidTableSeeder extends Seeder
             $randomUser = BaseModel::getRandomRecord(App\User::class);
 
             // Get the minimum bid allowed for this random auction
-            $minBid = $randomAuction->calculateMinimumBid($randomUser);
+            $minBid = $randomAuction->calculateMinimumBidForUser($randomUser);
 
 //            var_dump('Auction ID = ' . $randomAuction->id);
 //            var_dump('Auction start price = $' . $randomAuction->start_price);

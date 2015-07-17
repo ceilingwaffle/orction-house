@@ -39,7 +39,7 @@ class Auction extends BaseModel
      * @param User $user
      * @return mixed
      */
-    public function calculateMinimumBid(User $user)
+    public function calculateMinimumBidForUser(User $user)
     {
         // if nBids = 0
         //      minBid = start_price;
