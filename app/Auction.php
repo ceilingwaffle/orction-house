@@ -41,39 +41,19 @@ class Auction extends BaseModel
      */
     public function calculateMinimumBidForUser(User $user)
     {
-        // if nBids = 0
-        //      minBid = start_price;
-
-        // if nBids = 1
-        //      if (this.user_id) = (highestBidder.user_id)
-        //          minBid = highestBid + 0.5
-        //      else
-        //          minBid = start_price
-
-        // if nBids > 1
-        //      if (this.user_id) = (highestBidder.user_id)
-        //          minBid = highestBid + 0.5
-        //      else
-        //          minBid = (2nd highest bid) + 0.5
-
-
         $auction = $this->with(['bids' => function($query) {
             $query->orderBy('amount', 'desc')->take(2);
         }])->first();
 
-        // Determine the minimum bid like so:
-
         if ($auction->bids->count() === 0) {
             $minBid = $this->start_price;
         } elseif ($auction->bids->count() === 1) {
-            // if this user id = highest bidder
             if ($user->id === $auction->bids->first()->user_id) {
                 $minBid = $auction->bids[0]->amount + 0.5;
             } else {
                 $minBid = $this->start_price;
             }
         } else {
-            // if this user id = highest bidder
             if ($user->id === $auction->bids->first()->user_id) {
                 $minBid = $auction->bids[0]->amount + 0.5;
             } else {

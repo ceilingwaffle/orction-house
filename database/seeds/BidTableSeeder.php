@@ -25,10 +25,6 @@ class BidTableSeeder extends Seeder
             // Get the minimum bid allowed for this random auction
             $minBid = $randomAuction->calculateMinimumBidForUser($randomUser);
 
-//            var_dump('Auction ID = ' . $randomAuction->id);
-//            var_dump('Auction start price = $' . $randomAuction->start_price);
-//            var_dump('Auction min bid = $' . $minBid);
-
             // Set a bid amount equal to the minimum bid plus a random amount between $0 and $20
             $bidAmount = $faker->randomFloat(2, $minBid, $minBid + 20);
 

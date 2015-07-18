@@ -41,34 +41,3 @@ $factory->define(App\Auction::class, function (Faker\Generator $faker) {
         'auction_condition_id' => BaseModel::getRandomId(App\AuctionCondition::class),
     ];
 });
-
-// Bid
-//$factory->define(App\Bid::class, function (Faker\Generator $faker) {
-//
-//    $randomAuction = BaseModel::getRandomRecord(App\Auction::class);
-//    $randomUser = BaseModel::getRandomRecord(App\User::class);
-//
-//    var_dump('id = ' . $randomAuction->id);
-//
-//    // Get the highest bid for this random auction
-//    $highestBid = App\Bid::where('auction_id', '=', $randomAuction->id)
-//                            ->orderBy('amount', 'desc')
-//                            ->first();
-//
-//    if (is_null($highestBid)) {
-//        var_dump('is null');
-//        // Set a bid amount equal to any amount higher than the auction start price
-//        $bidAmount = $faker->randomFloat(2, $randomAuction->start_price, 99);
-//    } else {
-//        var_dump('is NOT null');
-//
-//        // Set a bid amount equal to the highest bid plus a random amount between $0.50 and $20.00
-//        $bidAmount = $faker->randomFloat(2, $highestBid->amount + 0.50, 20);
-//    }
-//
-//    return [
-//        'amount' => $bidAmount,
-//        'auction_id' => $randomAuction->id,
-//        'user_id' => $randomUser->id,
-//    ];
-//});
