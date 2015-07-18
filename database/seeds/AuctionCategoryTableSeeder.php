@@ -24,7 +24,7 @@ class AuctionCategoryTableSeeder extends Seeder
 
         foreach ($categories as $category) {
             App\AuctionCategory::create([
-                'category_name' => $category,
+                'category' => $category,
             ]);
         }
 

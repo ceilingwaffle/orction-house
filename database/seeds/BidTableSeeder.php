@@ -15,12 +15,15 @@ class BidTableSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
+        $auctions = App\Auction::all();
+        $users = App\User::all();
+
         $fakeRecordCount = 120;
 
         for ($i = 0; $i < $fakeRecordCount; $i++) {
 
-            $randomAuction = BaseModel::getRandomRecord(App\Auction::class);
-            $randomUser = BaseModel::getRandomRecord(App\User::class);
+            $randomAuction = $auctions->random();
+            $randomUser = $users->random();
 
             // Get the minimum bid allowed for this random auction
             $minBid = $randomAuction->calculateMinimumBidForUser($randomUser);

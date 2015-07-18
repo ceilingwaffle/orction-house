@@ -24,6 +24,11 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 // Auction
 $factory->define(App\Auction::class, function (Faker\Generator $faker) {
+
+    $randomUser = App\User::all()->random();
+    $randomAuctionCategory = App\AuctionCategory::all()->random();
+    $randomAuctionCondition = App\AuctionCondition::all()->random();
+
     return [
         'title' => $faker->realText(20),
         'description' => $faker->sentence(30, $variableNumWords = true),
@@ -36,8 +41,8 @@ $factory->define(App\Auction::class, function (Faker\Generator $faker) {
             'cats',
             $fullPath = false
         ),
-        'user_id' => BaseModel::getRandomId(App\User::class),
-        'auction_category_id' => BaseModel::getRandomId(App\AuctionCategory::class),
-        'auction_condition_id' => BaseModel::getRandomId(App\AuctionCondition::class),
+        'user_id' => $randomUser->id,
+        'auction_category_id' => $randomAuctionCategory->id,
+        'auction_condition_id' => $randomAuctionCondition->id,
     ];
 });

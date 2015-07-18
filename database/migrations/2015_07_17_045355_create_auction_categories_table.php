@@ -14,7 +14,7 @@ class CreateAuctionCategoriesTable extends Migration
     {
         Schema::create('auction_categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('category_name', 50)->unique();
+            $table->string('category', 50)->unique();
         });
     }
 

@@ -14,7 +14,7 @@ class CreateAuctionConditionsTable extends Migration
     {
         Schema::create('auction_conditions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('condition_name', 50)->unique();
+            $table->string('condition', 50)->unique();
         });
     }
 

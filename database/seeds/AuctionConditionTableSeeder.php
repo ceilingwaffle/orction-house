@@ -15,7 +15,7 @@ class AuctionConditionTableSeeder extends Seeder
 
         foreach ($conditions as $condition) {
             App\AuctionCondition::create([
-                'condition_name' => $condition,
+                'condition' => $condition,
             ]);
         }
 
