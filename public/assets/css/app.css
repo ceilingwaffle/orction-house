@@ -35,4 +35,33 @@ body > .container {
   margin-top: 0 !important;
   margin-bottom: 20px !important; }
 
+.s-auction-listing-box {
+  min-height: 108px;
+  padding: 14px;
+  background-color: #f5f5f5;
+  border: 1px solid #e1e1e1;
+  position: relative; }
+  .s-auction-listing-box > img {
+    float: left;
+    height: 80px;
+    width: 80px;
+    margin-right: 14px; }
+  .s-auction-listing-box > table {
+    font-size: 0.85em; }
+    .s-auction-listing-box > table tr td.s-auction-title {
+      font-size: 1.40em;
+      font-weight: bold; }
+    .s-auction-listing-box > table tr td.td-left {
+      text-align: right;
+      width: auto;
+      font-weight: bold; }
+    .s-auction-listing-box > table tr td.td-right {
+      padding-left: 10px;
+      text-align: left;
+      width: 120px; }
+
+.hover {
+  background-color: #f5e740;
+  cursor: pointer; }
+
 /*# sourceMappingURL=app.css.map */

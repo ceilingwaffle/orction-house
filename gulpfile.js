@@ -15,6 +15,7 @@ var pngquant = require('imagemin-pngquant');
  */
 
 elixir(function(mix) {
+    mix.scripts(['app.js'], 'public/assets/js/all.js');
     mix.sass(['app.scss'], 'public/assets/css');
     mix.task('images');
 });
