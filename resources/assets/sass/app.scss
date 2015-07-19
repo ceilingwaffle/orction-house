@@ -48,6 +48,12 @@ body > .container {
 // Auctions
 .s-auction-listing-box {
 
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: inherit;
+  }
+
   min-height: 108px;
   padding: 14px;
   background-color: #f5f5f5;
@@ -82,7 +88,7 @@ body > .container {
         &.td-right {
           padding-left: 10px;
           text-align: left;
-          width: 120px;
+          width: 170px;
         }
       }
     }

@@ -13,7 +13,7 @@ class AuctionTableSeeder extends Seeder
     {
         $this->purgeImages();
 
-        factory(App\Auction::class, 5)->create();
+        factory(App\Auction::class, 30)->create();
     }
 
     /**

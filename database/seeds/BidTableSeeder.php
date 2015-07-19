@@ -18,7 +18,8 @@ class BidTableSeeder extends Seeder
         $auctions = App\Auction::all();
         $users = App\User::all();
 
-        $fakeRecordCount = 120;
+        // Total bids = 10 times the number of auctions
+        $fakeRecordCount = $auctions->count() * 10;
 
         for ($i = 0; $i < $fakeRecordCount; $i++) {
 
@@ -37,6 +38,12 @@ class BidTableSeeder extends Seeder
                 'auction_id' => $randomAuction->id,
                 'user_id' => $randomUser->id,
             ]);
+        }
+
+        // One random auction should have 0 bids
+        $auction = App\Auction::all()->random();
+        if ($auction) {
+            Bid::where('auction_id', '=', $auction->id)->delete();
         }
     }
 }
