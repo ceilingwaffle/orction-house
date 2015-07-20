@@ -4,94 +4,55 @@ namespace App\Repositories;
 
 use DB;
 
-class AuctionRepository
+class AuctionRepository extends Repository
 {
-    protected $pdoBindings = [];
-    protected $whereStatements = '';
-    protected $orderBy;
-    protected $orderByDirection;
-
-    /**
-     * Prepares where statements and PDO bindings to be applied to the query later
-     *
-     * @param array $params
-     * @return $this
-     */
-    public function prepareQueryFilters($params = [])
-    {
-        // Reset
-        $this->pdoBindings = [];
-        $this->whereStatements = '';
-
-        foreach ($params as $param => $searchValue) {
-            $this->addWhereStatementAndBindingForUrlParam($param, $searchValue);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Set the column to order the results by
-     *
-     * @param $orderByField
-     * @param $direction
-     * @return $this
-     */
-    public function orderBy($orderByField, $direction)
-    {
-        if (empty($orderByField)) {
-            // Get the default order by field
-            foreach ($this->getAuctionSortableFields() as $field) {
-                if ($field['default']) {
-                    $this->orderBy = $field['field'];
-                    $this->orderByDirection = 'asc';
-                    return $this;
-                }
-            }
-        }
-
-        $this->orderBy = $orderByField;
-        $this->orderByDirection = (empty($direction) ? 'asc' : $direction);
-
-        return $this;
-    }
-
-    /**
-     * Create any where statements and PDO bindings from the URL
-     * parameters, to be used to filter the search results
-     *
-     * @param $param
-     * @param $searchValue
-     */
-    private function addWhereStatementAndBindingForUrlParam($param, $searchValue)
-    {
-        // Ignore if no filter parameter was provided
-        if (empty($searchValue)) {
-            return;
-        }
-
-        // Add 'where' statement
-        if ($param == 'title') {
-            $bindingName = 'auction_title';
-            $this->whereStatements .= " AND a.title LIKE CONCAT('%', :{$bindingName}, '%') ";
-        } elseif ($param == 'category') {
-            $bindingName = 'auction_category_id';
-            $this->whereStatements .= " AND acat.id = :{$bindingName} ";;
-        } else {
-            return;
-        }
-
-        // Add PDO binding
-        $this->pdoBindings[$bindingName] = $searchValue;
-    }
-
     /**
      * Returns an array of auction listings
      *
+     * @param array $params
      * @return array
      */
-    public function getAuctions()
+    public function getAuctions(array $params)
     {
+        // Set up the where statements and PDO bindings depending on the URL filter-parameters provided
+        $whereParams = [];
+
+        if (isset($params['title'])) {
+            $whereParams['title'] = [
+                'urlParam' => 'title',
+                'columnName' => 'auction_title',
+                'whereStatement' => " AND a.title LIKE CONCAT('%', :title, '%') "
+            ];
+        }
+
+        if (isset($params['category'])) {
+            $whereParams['category'] = [
+                'urlParam' => 'category',
+                'columnName' => 'auction_category_id',
+                'whereStatement' => " AND acat.id = :category "
+            ];
+        }
+
+        if (isset($params['min_price'])) {
+            $whereParams['min_price'] = [
+                'urlParam' => 'min_price',
+                'columnName' => 'highest_bid_amount',
+                'whereStatement' => " AND b1.amount >= :min_price "
+            ];
+        }
+
+        if (isset($params['max_price'])) {
+            $whereParams['max_price'] = [
+                'urlParam' => 'max_price',
+                'columnName' => 'highest_bid_amount',
+                'whereStatement' => " AND b1.amount <= :max_price "
+            ];
+        }
+
+        // Apply the bindings and where filters
+        $this->prepareQueryFilters($params, $whereParams);
+
+        // Prepare the database query
         $query = "SELECT
              a.id AS 'auction_id'
              , a.title AS 'auction_title'
@@ -157,6 +118,7 @@ class AuctionRepository
             WHERE 1 {$this->whereStatements}
             ORDER BY {$this->orderBy} {$this->orderByDirection};";
 
+        // Fetch the results
         $results = DB::select(DB::raw($query), $this->pdoBindings);
 
         return $results;
@@ -185,10 +147,10 @@ class AuctionRepository
      */
     public function getAuctionSortableFields()
     {
-        return [
+        $sortables = [
             [
                 'field' => 'auction_title',
-                'name' => 'Auction Title',
+                'name' => 'Item Name',
                 'default' => false
             ],
             [
@@ -203,7 +165,7 @@ class AuctionRepository
             ],
             [
                 'field' => 'auction_category_id',
-                'name' => 'Category',
+                'name' => 'Item Category',
                 'default' => false
             ],
             [
@@ -213,9 +175,16 @@ class AuctionRepository
             ],
             [
                 'field' => 'highest_bid_amount',
-                'name' => 'Current Price',
+                'name' => 'Price',
                 'default' => false
             ],
         ];
+
+        // Sort alphabetically by name
+        usort($sortables, function ($elem1, $elem2) {
+            return strcmp($elem1['name'], $elem2['name']);
+        });
+
+        return $sortables;
     }
 }

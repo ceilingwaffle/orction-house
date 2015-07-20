@@ -58,7 +58,7 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-default btn-block">Apply</button>
+                    <button type="submit" class="btn btn-default btn-block" style="font-weight:bold;">Apply</button>
                 </form>
             </div>
         </div>

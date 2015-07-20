@@ -54,9 +54,8 @@ class AuctionController extends Controller
 
         // Fetch the auction data
         $auctions = $this->auctions
-            ->prepareQueryFilters($params)
-            ->orderBy($params['order_by'], $params['order_direction'])
-            ->getAuctions();
+            ->orderBy($params['order_by'], $params['order_direction'], $this->auctions->getAuctionSortableFields())
+            ->getAuctions($params);
 
         // Apply pagination to the data
         $perPage = 4;
