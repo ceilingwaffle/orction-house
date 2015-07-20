@@ -33,6 +33,11 @@ class AuctionController extends Controller
         $this->paginator = $paginator;
     }
 
+    /**
+     * Render the auctions index page
+     *
+     * @return $this
+     */
     public function getIndex()
     {
         $auctions = $this->auctions->getAuctions();
@@ -50,6 +55,5 @@ class AuctionController extends Controller
 
         return view('auctions.index')->with(compact('auctions', 'paginator'));
     }
-
 
 }

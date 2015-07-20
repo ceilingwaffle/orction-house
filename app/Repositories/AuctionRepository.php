@@ -74,7 +74,8 @@ class AuctionRepository
                 ) t1
                 GROUP BY user_id
                 ORDER BY user_id
-            ) f ON f.user_id = a.user_id;";
+            ) f ON f.user_id = a.user_id
+            ORDER BY a.end_date;";
 
         $results = DB::select(DB::raw($query));
 

@@ -13,7 +13,7 @@ class AuctionTableSeeder extends Seeder
     {
         $this->purgeImages();
 
-        factory(App\Auction::class, 30)->create();
+        factory(App\Auction::class, 100)->create();
     }
 
     /**
@@ -23,10 +23,12 @@ class AuctionTableSeeder extends Seeder
     {
         $path = getenv('AUCTION_IMAGE_DIRECTORY_PATH');
 
-        $files = glob("{$path}/*"); // get all file names
-        foreach($files as $file){ // iterate files
-            if(is_file($file))
-                unlink($file); // delete file
+        // Delete the files names in the folder
+        $files = glob("{$path}/*");
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
         }
     }
 }

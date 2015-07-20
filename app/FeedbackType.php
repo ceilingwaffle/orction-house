@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class FeedbackType extends Model
 {
-    protected $table = 'feedback_types';
+    const POSITIVE = 1;
+    const NEUTRAL = 2;
+    const NEGATIVE = 3;
 
+    protected $table = 'feedback_types';
 
 }

@@ -12,14 +12,14 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        // Create a consistent user
+        // Create 1 consistent user
         User::create([
             'username' => 'waffle',
             'password' => bcrypt('abc123'),
             'remember_token' => null,
         ]);
 
-        // Create 9 random users
-        factory(App\User::class, 3)->create();
+        // Create 6 random users
+        factory(App\User::class, 6)->create();
     }
 }

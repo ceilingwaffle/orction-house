@@ -2,6 +2,9 @@
 
 namespace App\Transformers;
 
+use App\Exceptions\UnexpectedFeedbackTypeStringFormatException;
+use App\FeedbackType;
+
 class AuctionsIndexTransformer extends BaseTransformer
 {
     /**
@@ -24,8 +27,48 @@ class AuctionsIndexTransformer extends BaseTransformer
             'total_bids' => $auction->total_bids,
             'highest_bid_amount' => $auction->highest_bid_amount,
             'highest_bidder_username' => $auction->highest_bidder_username,
-            'seller_positive_feedback_percentage' => $auction->user_feedback_type_counts,
+            'seller_positive_feedback_percentage' => $this->convertFeedbackStringToPercentage($auction->user_feedback_type_counts),
             'seller_feedback_link' => '#todo',
         ];
+    }
+
+    /**
+     * Converts a feedback string from the database query (like 1,2,3:1,1,2)
+     * to its positive-feedback percentage value (e.g. pos,neutral,neg:1,1,2 --> 1 out of 4 positive --> 25%)
+     *
+     * @param $feedbackString
+     * @return mixed
+     * @throws UnexpectedFeedbackTypeStringFormatException
+     */
+    public function convertFeedbackStringToPercentage($feedbackString)
+    {
+        // Split the string into array values
+        $feedbackTypesAndCounts = explode(':', $feedbackString);
+        $feedbackTypes = explode(',', $feedbackTypesAndCounts[0]);
+        $feedbackCounts = explode(',', $feedbackTypesAndCounts[1]);
+
+        // We expect an equal number of feedback types to counts, otherwise
+        // something went wrong with the database query result.
+        if (count($feedbackTypes) != count($feedbackCounts)) {
+            throw new UnexpectedFeedbackTypeStringFormatException();
+        }
+
+        // Group the feedback values into their feedback types
+        $amounts = [];
+        for ($i = 0; $i < count($feedbackTypes); $i++) {
+            $amounts[$feedbackTypes[$i]] = $feedbackCounts[$i];
+        }
+
+        // Set the feedback count values (0 if not the feedback type is not set)
+        $positive = (array_key_exists(FeedbackType::POSITIVE, $amounts) ? $amounts[FeedbackType::POSITIVE] : 0);
+        $negative = (array_key_exists(FeedbackType::NEGATIVE, $amounts) ? $amounts[FeedbackType::NEGATIVE] : 0);
+
+        // Calculate the percentage of "positive to negative" feedback counts (we ignore neutral in this calculation)
+        $total = $positive + $negative;
+        $percentage = round($positive / $total * 100);
+
+        $pcString = $percentage . '%';
+
+        return $pcString;
     }
 }
