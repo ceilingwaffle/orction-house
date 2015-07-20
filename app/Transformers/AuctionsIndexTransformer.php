@@ -20,7 +20,7 @@ class AuctionsIndexTransformer extends BaseTransformer
             'auction_id' => $auction->auction_id,
             'auction_title' => $auction->auction_title,
             'auction_has_ended' => $this->auctionHasEnded($auction->auction_end_date),
-            'auction_time_remaining' => $this->convertAuctionEndDate($auction->auction_end_date),
+            'auction_time_remaining' => $this->toHumanTimeDifference($auction->auction_end_date),
             'auction_status' => ucfirst($auction->auction_status),
             'auction_category' => $auction->auction_category,
             'auction_condition' => $auction->auction_condition,
@@ -29,7 +29,7 @@ class AuctionsIndexTransformer extends BaseTransformer
             'total_bids' => $auction->total_bids,
             'highest_bid_amount' => $auction->highest_bid_amount,
             'highest_bidder_username' => $auction->highest_bidder_username,
-            'seller_positive_feedback_percentage' => $this->convertFeedbackStringToPercentage($auction->user_feedback_type_counts),
+            'seller_positive_feedback_percentage' => $this->feedbackStringToPercentage($auction->user_feedback_type_counts),
             'seller_feedback_link' => '#todo',
         ];
     }
@@ -42,7 +42,7 @@ class AuctionsIndexTransformer extends BaseTransformer
      * @return mixed
      * @throws UnexpectedFeedbackTypeStringFormatException
      */
-    public function convertFeedbackStringToPercentage($feedbackString)
+    public function feedbackStringToPercentage($feedbackString)
     {
         // Split the string into array values
         $feedbackTypesAndCounts = explode(':', $feedbackString);
@@ -65,7 +65,7 @@ class AuctionsIndexTransformer extends BaseTransformer
         $positive = (array_key_exists(FeedbackType::POSITIVE, $amounts) ? $amounts[FeedbackType::POSITIVE] : 0);
         $negative = (array_key_exists(FeedbackType::NEGATIVE, $amounts) ? $amounts[FeedbackType::NEGATIVE] : 0);
 
-        // Calculate the percentage of "positive to negative" feedback counts (we ignore neutral in this calculation)
+        // Calculate the percentage of "positive to negative" feedback counts (we ignore neutral feedback in this calculation)
         $total = $positive + $negative;
         $percentage = round($positive / $total * 100);
 
@@ -93,7 +93,7 @@ class AuctionsIndexTransformer extends BaseTransformer
      * @param $auctionEndDateString
      * @return string
      */
-    public function convertAuctionEndDate($auctionEndDateString)
+    public function toHumanTimeDifference($auctionEndDateString)
     {
         $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
 
