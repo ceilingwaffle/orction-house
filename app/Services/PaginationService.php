@@ -17,7 +17,7 @@ class PaginationService
     protected $paginatorHtml;
 
     /**
-     * Creates pagination results from the provided data set
+     * Creates paginated results from the provided data set
      *
      * @param $data
      * @param int $perPage
@@ -29,7 +29,7 @@ class PaginationService
         $page = $currentPage;
         $offset = ($page * $perPage) - $perPage;
 
-        $paginated = new LengthAwarePaginator(
+        $paginator = new LengthAwarePaginator(
             array_slice($data, $offset, $perPage, true),
             count($data),
             $perPage,
@@ -40,8 +40,8 @@ class PaginationService
             ]
         );
 
-        $this->paginatedData = $paginated->getCollection()->toArray();
-        $this->paginatorHtml = $paginated->render();
+        $this->paginatedData = $paginator->getCollection()->toArray();
+        $this->paginatorHtml = $paginator->render();
 
         return $this;
     }

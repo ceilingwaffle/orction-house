@@ -3,9 +3,16 @@
 namespace App\Repositories;
 
 use DB;
+use Illuminate\Support\Collection;
 
 class AuctionRepository
 {
+    /**
+     * Returns a collection of auction data
+     *
+     * @param array $params
+     * @return \Illuminate\Support\Collection
+     */
     public function getAuctions(array $params = [])
     {
         $query = "SELECT
@@ -71,7 +78,9 @@ class AuctionRepository
 
         $results = DB::select(DB::raw($query));
 
-        return $results;
+        $collection = new Collection($results);
+
+        return $collection;
 
     }
 }
