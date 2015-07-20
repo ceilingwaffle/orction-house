@@ -37,7 +37,7 @@
                                 </tr>
                                 <tr>
                                     <td class="td-left">Current Bid:</td>
-                                    <td class="td-right">{{ $auction['highest_bid_amount'] }}</td>
+                                    <td class="td-right">$ {{ $auction['highest_bid_amount'] }}</td>
                                     <td class="td-left">Highest Bidder:</td>
                                     <td class="td-right">{{ $auction['highest_bidder_username'] }}</td>
                                 </tr>
@@ -53,7 +53,12 @@
                                 </tr>
                                 <tr>
                                     <td class="td-left">Listed By:</td>
-                                    <td class="td-right">{{ $auction['auction_seller_username'] }} ({{ $auction['seller_positive_feedback_percentage'] }})</td>
+                                    <td class="td-right">
+                                        {{ $auction['auction_seller_username'] }}
+                                        @if(!is_null($auction['seller_positive_feedback_percentage']) )
+                                            ({{ $auction['seller_positive_feedback_percentage'] }})
+                                        @endif
+                                    </td>
                                     <td class="td-left">Total bids:</td>
                                     <td class="td-right">{{ $auction['total_bids'] }}</td>
                                 </tr>

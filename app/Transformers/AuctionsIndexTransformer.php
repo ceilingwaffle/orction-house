@@ -67,6 +67,11 @@ class AuctionsIndexTransformer extends BaseTransformer
 
         // Calculate the percentage of "positive to negative" feedback counts (we ignore neutral feedback in this calculation)
         $total = $positive + $negative;
+
+        if ($total === 0) {
+            return null;
+        }
+
         $percentage = round($positive / $total * 100);
 
         $pcString = $percentage . '%';
