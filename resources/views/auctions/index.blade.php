@@ -8,7 +8,7 @@
                 <h3 class="panel-title">Filter</h3>
             </div>
             <div class="panel-body">
-                <form method="get" action="">
+                <form id="auctions-filter-form" method="get" action="">
                     <input type="hidden" name="page" value="{{ Input::get('page', 1) }}" />
                     <div class="form-group">
                         <label for="title">Item Name:</label>
@@ -17,7 +17,7 @@
                     </div>
                     <div class="form-group">
                         <label for="category">Item Category:</label>
-                        <select id="category" name="category" class="form-control">
+                        <select id="category" name="category" class="form-control" data-default-value="">
                             <option value="">All</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}"
@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-group">
                         <label for="order_by">Sort By:</label>
-                        <select id="order_by" name="order_by" class="form-control">
+                        <select id="order_by" name="order_by" class="form-control" data-default-value="auction_end_date">
                             @foreach($sortableFields as $sortable)
                                 <option value="{{ $sortable['field'] }}"
                                         @if(Input::get('order_by') == $sortable['field']) selected
@@ -52,12 +52,13 @@
                     </div>
                     <div class="form-group">
                         <label for="order_direction">Sort Direction:</label>
-                        <select id="order_direction" name="order_direction" class="form-control">
+                        <select id="order_direction" name="order_direction" class="form-control" data-default-value="asc">
                             <option value="asc" @if(Input::get('order_direction') == 'asc') selected @endif>Ascending</option>
                             <option value="desc" @if(Input::get('order_direction') == 'desc') selected @endif>Descending</option>
                         </select>
                     </div>
 
+                    <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;" onClick="clearForm(this); return false;">Reset</button>
                     <button type="submit" class="btn btn-default btn-block" style="font-weight:bold;">Apply</button>
                 </form>
             </div>

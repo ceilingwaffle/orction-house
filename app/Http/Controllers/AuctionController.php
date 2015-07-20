@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Repositories\AuctionRepository;
 use App\Services\PaginationService;
 use App\Transformers\AuctionsIndexTransformer;
-use App\Transformers\BaseTransformer;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Input;
 
 class AuctionController extends Controller

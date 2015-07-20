@@ -42,7 +42,7 @@ class AuctionsIndexTransformer extends BaseTransformer
      * @return mixed
      * @throws UnexpectedFeedbackTypeStringFormatException
      */
-    public function feedbackStringToPercentage($feedbackString)
+    private function feedbackStringToPercentage($feedbackString)
     {
         // Split the string into array values
         $feedbackTypesAndCounts = explode(':', $feedbackString);
@@ -85,7 +85,7 @@ class AuctionsIndexTransformer extends BaseTransformer
      * @param $auctionEndDateString
      * @return bool
      */
-    public function auctionHasEnded($auctionEndDateString)
+    private function auctionHasEnded($auctionEndDateString)
     {
         $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
 
@@ -98,7 +98,7 @@ class AuctionsIndexTransformer extends BaseTransformer
      * @param $auctionEndDateString
      * @return string
      */
-    public function toHumanTimeDifference($auctionEndDateString)
+    private function toHumanTimeDifference($auctionEndDateString)
     {
         $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
 
