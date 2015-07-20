@@ -42,16 +42,16 @@ class AuctionController extends Controller
     {
         $auctions = $this->auctions->getAuctions();
 
-        // Transform the data so we can present it differently
-        $transformer = new AuctionsIndexTransformer();
-        $auctions = $transformer->transformCollection($auctions);
-
         // Apply pagination to the data
         $perPage = 4;
         $currentPage = \Input::get('page', 1);
-        $paginator = $this->paginator->makePaginated($auctions, $perPage, $currentPage);
+        $paginator = $this->paginator->makePaginated($auctions->toArray(), $perPage, $currentPage);
         $auctions = $paginator->getPaginatedData();
         $paginator = $paginator->getPaginatorHtml();
+
+        // Transform the data so we can present it differently
+        $transformer = new AuctionsIndexTransformer();
+        $auctions = $transformer->transformMany($auctions);
 
         return view('auctions.index')->with(compact('auctions', 'paginator'));
     }

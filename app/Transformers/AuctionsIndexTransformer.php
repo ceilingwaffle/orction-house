@@ -4,6 +4,7 @@ namespace App\Transformers;
 
 use App\Exceptions\UnexpectedFeedbackTypeStringFormatException;
 use App\FeedbackType;
+use Carbon\Carbon;
 
 class AuctionsIndexTransformer extends BaseTransformer
 {
@@ -18,7 +19,8 @@ class AuctionsIndexTransformer extends BaseTransformer
         return [
             'auction_id' => $auction->auction_id,
             'auction_title' => $auction->auction_title,
-            'auction_time_remaining' => $auction->auction_end_date,
+            'auction_has_ended' => $this->auctionHasEnded($auction->auction_end_date),
+            'auction_time_remaining' => $this->convertAuctionEndDate($auction->auction_end_date),
             'auction_status' => ucfirst($auction->auction_status),
             'auction_category' => $auction->auction_category,
             'auction_condition' => $auction->auction_condition,
@@ -70,5 +72,31 @@ class AuctionsIndexTransformer extends BaseTransformer
         $pcString = $percentage . '%';
 
         return $pcString;
+    }
+
+    /**
+     * Returns true if an auction has ended
+     *
+     * @param $auctionEndDateString
+     * @return bool
+     */
+    public function auctionHasEnded($auctionEndDateString)
+    {
+        $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
+
+        return $dt->isPast();
+    }
+
+    /**
+     * Returns a human readable string like "2 minutes ago"
+     *
+     * @param $auctionEndDateString
+     * @return string
+     */
+    public function convertAuctionEndDate($auctionEndDateString)
+    {
+        $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
+
+        return $dt->diffForHumans();
     }
 }

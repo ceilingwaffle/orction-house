@@ -44,7 +44,11 @@
                                 <tr>
                                     <td class="td-left">Status:</td>
                                     <td class="td-right">{{ $auction['auction_status'] }}</td>
-                                    <td class="td-left">Time Remaining:</td>
+                                    @if ($auction['auction_has_ended'])
+                                        <td class="td-left">Auction Ended:</td>
+                                    @else
+                                        <td class="td-left">Time Remaining:</td>
+                                    @endif
                                     <td class="td-right">{{ $auction['auction_time_remaining'] }}</td>
                                 </tr>
                                 <tr>

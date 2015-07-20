@@ -2,19 +2,17 @@
 
 namespace App\Transformers;
 
-use Illuminate\Support\Collection;
-
 abstract class BaseTransformer
 {
     /**
      * Transforms a collection of data
      *
-     * @param Collection $items
+     * @param $items
      * @return array
      */
-    public function transformCollection(Collection $items)
+    public function transformMany(array $items)
     {
-        return array_map([$this, 'transform'], $items->toArray());
+        return array_map([$this, 'transform'], $items);
     }
 
     /**
