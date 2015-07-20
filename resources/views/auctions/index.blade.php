@@ -9,6 +9,7 @@
             </div>
             <div class="panel-body">
                 <form method="get" action="">
+                    <input type="hidden" name="page" value="{{ Input::get('page', 1) }}" />
                     <div class="form-group">
                         <label for="title">Item Name:</label>
                         <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Chair"
@@ -49,6 +50,14 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="order_direction">Sort Direction:</label>
+                        <select id="order_direction" name="order_direction" class="form-control">
+                            <option value="asc" @if(Input::get('order_direction') == 'asc') selected @endif>Ascending</option>
+                            <option value="desc" @if(Input::get('order_direction') == 'desc') selected @endif>Descending</option>
+                        </select>
+                    </div>
+
                     <button type="submit" class="btn btn-default btn-block">Apply</button>
                 </form>
             </div>

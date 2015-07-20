@@ -47,6 +47,7 @@ class AuctionController extends Controller
         $params['min_price'] = Input::get('min_price');
         $params['max_price'] = Input::get('max_price');
         $params['order_by'] = Input::get('order_by');
+        $params['order_direction'] = Input::get('order_direction');
 
         // Validate input
 
@@ -54,7 +55,7 @@ class AuctionController extends Controller
         // Fetch the auction data
         $auctions = $this->auctions
             ->prepareQueryFilters($params)
-            ->orderBy($params['order_by'])
+            ->orderBy($params['order_by'], $params['order_direction'])
             ->getAuctions();
 
         // Apply pagination to the data

@@ -7,10 +7,9 @@ use DB;
 class AuctionRepository
 {
     protected $pdoBindings = [];
-
     protected $whereStatements = '';
-
     protected $orderBy;
+    protected $orderByDirection;
 
     /**
      * Prepares where statements and PDO bindings to be applied to the query later
@@ -32,24 +31,28 @@ class AuctionRepository
     }
 
     /**
-     * Sets the column to order the results by
+     * Set the column to order the results by
      *
-     * @param $fieldName
+     * @param $orderByField
+     * @param $direction
      * @return $this
      */
-    public function orderBy($fieldName)
+    public function orderBy($orderByField, $direction)
     {
-        if (empty($fieldName)) {
+        if (empty($orderByField)) {
             // Get the default order by field
             foreach ($this->getAuctionSortableFields() as $field) {
                 if ($field['default']) {
                     $this->orderBy = $field['field'];
+                    $this->orderByDirection = 'asc';
                     return $this;
                 }
             }
         }
 
-        $this->orderBy = $fieldName;
+        $this->orderBy = $orderByField;
+        $this->orderByDirection = (empty($direction) ? 'asc' : $direction);
+
         return $this;
     }
 
@@ -152,7 +155,7 @@ class AuctionRepository
                 ORDER BY user_id
             ) f ON f.user_id = a.user_id
             WHERE 1 {$this->whereStatements}
-            ORDER BY {$this->orderBy};";
+            ORDER BY {$this->orderBy} {$this->orderByDirection};";
 
         $results = DB::select(DB::raw($query), $this->pdoBindings);
 
