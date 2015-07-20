@@ -8,7 +8,49 @@
                 <h3 class="panel-title">Filter</h3>
             </div>
             <div class="panel-body">
-                filter stuff here....
+                <form method="get" action="">
+                    <div class="form-group">
+                        <label for="title">Item Name:</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Chair"
+                               value="{{ Input::get('title') }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Item Category:</label>
+                        <select id="category" name="category" class="form-control">
+                            <option value="">All</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}"
+                                        @if(Input::get('category') == $category->id) selected @endif>
+                                    {{ $category->category }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="min_price">Min Price:</label>
+                        <input type="text" id="min_price" name="min_price" class="form-control"
+                               placeholder="e.g. $10.00" value="{{ Input::get('min_price') }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="max_price">Max Price:</label>
+                        <input type="text" id="max_price" name="max_price" class="form-control"
+                               placeholder="e.g. $50.00" value="{{ Input::get('max_price') }}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="order_by">Sort By:</label>
+                        <select id="order_by" name="order_by" class="form-control">
+                            @foreach($sortableFields as $sortable)
+                                <option value="{{ $sortable['field'] }}"
+                                        @if(Input::get('order_by') == $sortable['field']) selected
+                                        @elseif($sortable['default'] and !Input::get('order_by')) selected
+                                        @endif>
+                                    {{ $sortable['name'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-default btn-block">Apply</button>
+                </form>
             </div>
         </div>
     </div>
@@ -21,7 +63,8 @@
                 @if (!isset($auctions) or empty($auctions))
                     No results found
                 @else
-                    <p class="text-muted" style="margin-top:0;margin-bottom:10px;">Click on an auction to view its full details and place a bid.</p>
+                    <p class="text-muted"
+                       style="margin-top:0;margin-bottom:10px;">Click on an auction to view its full details and place a bid.</p>
                     @foreach ($auctions as $auction)
                         <div class="s-auction-listing-box" id="auction-{{ $auction['auction_id'] }}"
                              data-auction-url="#{{ $auction['auction_id'] }}"
@@ -47,7 +90,7 @@
                                     @if ($auction['auction_has_ended'])
                                         <td class="td-left">Auction Ended:</td>
                                     @else
-                                        <td class="td-left">Time Remaining:</td>
+                                        <td class="td-left">Auction Ends:</td>
                                     @endif
                                     <td class="td-right">{{ $auction['auction_time_remaining'] }}</td>
                                 </tr>

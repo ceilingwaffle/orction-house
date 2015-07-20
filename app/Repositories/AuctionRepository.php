@@ -3,17 +3,91 @@
 namespace App\Repositories;
 
 use DB;
-use Illuminate\Support\Collection;
 
 class AuctionRepository
 {
+    protected $pdoBindings = [];
+
+    protected $whereStatements = '';
+
+    protected $orderBy;
+
     /**
-     * Returns a collection of auction data
+     * Prepares where statements and PDO bindings to be applied to the query later
      *
      * @param array $params
-     * @return \Illuminate\Support\Collection
+     * @return $this
      */
-    public function getAuctions(array $params = [])
+    public function prepareQueryFilters($params = [])
+    {
+        // Reset
+        $this->pdoBindings = [];
+        $this->whereStatements = '';
+
+        foreach ($params as $param => $searchValue) {
+            $this->addWhereStatementAndBindingForUrlParam($param, $searchValue);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sets the column to order the results by
+     *
+     * @param $fieldName
+     * @return $this
+     */
+    public function orderBy($fieldName)
+    {
+        if (empty($fieldName)) {
+            // Get the default order by field
+            foreach ($this->getAuctionSortableFields() as $field) {
+                if ($field['default']) {
+                    $this->orderBy = $field['field'];
+                    return $this;
+                }
+            }
+        }
+
+        $this->orderBy = $fieldName;
+        return $this;
+    }
+
+    /**
+     * Create any where statements and PDO bindings from the URL
+     * parameters, to be used to filter the search results
+     *
+     * @param $param
+     * @param $searchValue
+     */
+    private function addWhereStatementAndBindingForUrlParam($param, $searchValue)
+    {
+        // Ignore if no filter parameter was provided
+        if (empty($searchValue)) {
+            return;
+        }
+
+        // Add 'where' statement
+        if ($param == 'title') {
+            $bindingName = 'auction_title';
+            $this->whereStatements .= " AND a.title LIKE CONCAT('%', :{$bindingName}, '%') ";
+        } elseif ($param == 'category') {
+            $bindingName = 'auction_category_id';
+            $this->whereStatements .= " AND acat.id = :{$bindingName} ";;
+        } else {
+            return;
+        }
+
+        // Add PDO binding
+        $this->pdoBindings[$bindingName] = $searchValue;
+    }
+
+    /**
+     * Returns an array of auction listings
+     *
+     * @return array
+     */
+    public function getAuctions()
     {
         $query = "SELECT
              a.id AS 'auction_id'
@@ -24,7 +98,9 @@ class AuctionRepository
                   WHEN a.end_date > now() THEN 'open'
                   ELSE 'expired'
                END AS 'auction_status'
+             , acat.id AS 'auction_category_id'
              , acat.category AS 'auction_category'
+             , acon.id AS 'auction_condition_id'
              , acon.condition AS 'auction_condition'
              , a.image_file_name AS 'auction_image'
              , u.username AS 'auction_creator_username'
@@ -75,13 +151,68 @@ class AuctionRepository
                 GROUP BY user_id
                 ORDER BY user_id
             ) f ON f.user_id = a.user_id
-            ORDER BY a.end_date;";
+            WHERE 1 {$this->whereStatements}
+            ORDER BY {$this->orderBy};";
+
+        $results = DB::select(DB::raw($query), $this->pdoBindings);
+
+        return $results;
+    }
+
+    /**
+     * Returns an array of auction categories and their IDs
+     *
+     * @return array
+     */
+    public function getAuctionCategories()
+    {
+        $query = "SELECT ac.id, ac.category
+                  FROM auction_categories ac
+                  ORDER BY ac.category;";
 
         $results = DB::select(DB::raw($query));
 
-        $collection = new Collection($results);
+        return $results;
+    }
 
-        return $collection;
-
+    /**
+     * Returns an array of sortable auction fields
+     *
+     * @return array
+     */
+    public function getAuctionSortableFields()
+    {
+        return [
+            [
+                'field' => 'auction_title',
+                'name' => 'Auction Title',
+                'default' => false
+            ],
+            [
+                'field' => 'auction_end_date',
+                'name' => 'Time Ending',
+                'default' => true
+            ],
+            [
+                'field' => 'auction_status',
+                'name' => 'Status',
+                'default' => false
+            ],
+            [
+                'field' => 'auction_category_id',
+                'name' => 'Category',
+                'default' => false
+            ],
+            [
+                'field' => 'total_bids',
+                'name' => 'Number of Bids',
+                'default' => false
+            ],
+            [
+                'field' => 'highest_bid_amount',
+                'name' => 'Current Price',
+                'default' => false
+            ],
+        ];
     }
 }

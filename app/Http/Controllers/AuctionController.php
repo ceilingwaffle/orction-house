@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Input;
 
 class AuctionController extends Controller
 {
@@ -40,20 +41,47 @@ class AuctionController extends Controller
      */
     public function getIndex()
     {
-        $auctions = $this->auctions->getAuctions();
+        // Get filter parameters
+        $params['title'] = Input::get('title');
+        $params['category'] = Input::get('category');
+        $params['min_price'] = Input::get('min_price');
+        $params['max_price'] = Input::get('max_price');
+        $params['order_by'] = Input::get('order_by');
+
+        // Validate input
+
+
+        // Fetch the auction data
+        $auctions = $this->auctions
+            ->prepareQueryFilters($params)
+            ->orderBy($params['order_by'])
+            ->getAuctions();
 
         // Apply pagination to the data
         $perPage = 4;
-        $currentPage = \Input::get('page', 1);
-        $paginator = $this->paginator->makePaginated($auctions->toArray(), $perPage, $currentPage);
+        $currentPage = Input::get('page', 1);
+        $paginator = $this->paginator->makePaginated($auctions, $perPage, $currentPage);
         $auctions = $paginator->getPaginatedData();
         $paginator = $paginator->getPaginatorHtml();
 
-        // Transform the data so we can present it differently
+        // Transform the data so we can present each value in a custom way
         $transformer = new AuctionsIndexTransformer();
         $auctions = $transformer->transformMany($auctions);
 
-        return view('auctions.index')->with(compact('auctions', 'paginator'));
+        // Get auction categories
+        $categories = $this->auctions->getAuctionCategories();
+
+        // Get a list of fields to sort the results by
+        $sortableFields = $this->auctions->getAuctionSortableFields();
+
+        // Render the page
+        return view('auctions.index')
+                ->with(compact(
+                    'auctions',
+                    'paginator',
+                    'categories',
+                    'sortableFields'
+                ));
     }
 
 }
