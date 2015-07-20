@@ -56,6 +56,7 @@
                             </table>
                         </div>
                     @endforeach
+                    {!! $paginator !!}
                 @endif
             </div>
         </div>
