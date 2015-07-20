@@ -58,7 +58,7 @@ class AuctionRepository
                                              AS 'feedback_type_counts'
                 FROM
                 (
-                    SELECT  u.id AS 'user_id', ft.id AS 'feedback_type_id', count(ft.id) AS 'feedback_type_count'
+                    SELECT u.id AS 'user_id', ft.id AS 'feedback_type_id', count(ft.id) AS 'feedback_type_count'
                     FROM feedback_types ft
                     INNER JOIN feedback f ON f.feedback_type_id = ft.id
                     INNER JOIN auctions a ON a.id = f.auction_id

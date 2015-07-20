@@ -53,5 +53,5 @@ Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 Route::group(['middleware' => 'auth'], function()
 {
-    Route::get('/auctions', ['uses' => 'AuctionController@getIndex']);
+    Route::get('auctions', ['uses' => 'AuctionController@getIndex']);
 });
