@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Auction;
+use App\User;
 use DB;
 
 class AuctionRepository extends Repository
@@ -12,7 +14,7 @@ class AuctionRepository extends Repository
      * @param array $params
      * @return array
      */
-    public function getAuctions(array $params)
+    public function getAuctions(array $params = [])
     {
         // Set up the where statements and PDO bindings depending on the URL filter-parameters provided
         $whereParams = [];
@@ -49,8 +51,18 @@ class AuctionRepository extends Repository
             ];
         }
 
+        if (isset($params['auction_id']) && !empty($params['auction_id'])) {
+            $whereParams['auction_id'] = [
+                'urlParam' => 'auction_id',
+                'columnName' => 'auction_id',
+                'whereStatement' => " AND a.id = :auction_id "
+            ];
+        }
+
         // Apply the bindings and where filters
         $this->prepareQueryFilters($params, $whereParams);
+
+        $orderBy = empty($this->orderBy) ? "" : "ORDER BY {$this->orderBy} {$this->orderByDirection}";
 
         // Prepare the database query
         $query = "SELECT
@@ -75,6 +87,10 @@ class AuctionRepository extends Repository
              , b1.amount AS 'highest_bid_amount'
              , b1.username AS 'highest_bidder_username'
              , f.feedback_type_counts AS 'user_feedback_type_counts'
+             , a.description as 'auction_description'
+             , a.created_at as 'auction_listed_at'
+             , a.updated_at as 'auction_updated_at'
+             , a.description as 'auction_description'
             FROM auctions a
             LEFT OUTER JOIN winners w ON w.auction_id = a.id
             LEFT OUTER JOIN auction_categories acat ON acat.id = a.auction_category_id
@@ -116,7 +132,7 @@ class AuctionRepository extends Repository
                 ORDER BY user_id
             ) f ON f.user_id = a.user_id
             WHERE 1 {$this->whereStatements}
-            ORDER BY {$this->orderBy} {$this->orderByDirection};";
+            {$orderBy};";
 
         // Fetch the results
         $results = DB::select(DB::raw($query), $this->pdoBindings);
@@ -203,5 +219,25 @@ class AuctionRepository extends Repository
         }
 
         return false;
+    }
+
+    /**
+     * Returns a set of data for a single auction
+     *
+     * @param $auctionId
+     * @return array
+     */
+    public function getAuctionViewData($auctionId)
+    {
+        $params['auction_id'] = $auctionId;
+
+        return $this->getAuctions($params)[0];
+    }
+
+    public function getMinimumBidForUser($auctionId, User $user)
+    {
+        $auction = Auction::findOrFail($auctionId);
+
+        return $auction->calculateMinimumBidForUser($user);
     }
 }

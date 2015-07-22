@@ -35,6 +35,8 @@ body > .container {
   margin-top: 0 !important;
   margin-bottom: 20px !important; }
 
+/* Auctions
+-------------------------------------------------- */
 .s-auction-listing-box {
   min-height: 108px;
   padding: 14px;
@@ -78,6 +80,8 @@ body > .container {
   display: table;
   margin: 0 auto; }
 
+/* Validation
+-------------------------------------------------- */
 label.error {
   color: #ce363a;
   margin-top: 3px; }
@@ -89,6 +93,8 @@ label.error {
 .s-auction-status-expired {
   color: red; }
 
+/* Single Auction View
+-------------------------------------------------- */
 .s-auction-top-row {
   margin-bottom: 10px; }
   .s-auction-top-row > a.s-back-link {
@@ -150,7 +156,7 @@ hr {
     text-align: left;
     font-weight: bold;
     padding-left: 30px;
-    min-width: 150px; }
+    min-width: 80px; }
 
 .s-time-remaining {
   color: red; }

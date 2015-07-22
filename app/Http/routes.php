@@ -56,5 +56,5 @@ Route::group(['middleware' => 'auth'], function()
 {
     Route::get('auctions', ['uses' => 'AuctionController@getIndex']);
     Route::get('auctions/{id}', ['uses' => 'AuctionController@getView']);
-    Route::post('auctions/{id}/bid/{bidAmount}', ['uses' => 'BidController@postBid']);
+    Route::post('auctions/{id}/bid', ['uses' => 'BidController@postBid']);
 });

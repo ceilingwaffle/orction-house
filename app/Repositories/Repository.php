@@ -69,7 +69,7 @@ abstract class Repository
      * @param $searchValue
      * @param array $whereParam
      */
-    private function addWhereStatementAndBindingForUrlParam($searchValue, array $whereParam)
+    protected function addWhereStatementAndBindingForUrlParam($searchValue, array $whereParam)
     {
         // Ignore if no filter parameter was provided
         if (empty($searchValue) or empty($whereParam)) {
