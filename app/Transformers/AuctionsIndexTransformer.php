@@ -2,7 +2,7 @@
 
 namespace App\Transformers;
 
-use App\Exceptions\UnexpectedFeedbackTypeStringFormatException;
+use App\Exceptions\UnexpectedAuctionFeedbackTypeStringFormatException;
 use App\FeedbackType;
 use Carbon\Carbon;
 
@@ -40,7 +40,7 @@ class AuctionsIndexTransformer extends BaseTransformer
      *
      * @param $feedbackString
      * @return mixed
-     * @throws UnexpectedFeedbackTypeStringFormatException
+     * @throws UnexpectedAuctionFeedbackTypeStringFormatException
      */
     private function feedbackStringToPercentage($feedbackString)
     {
@@ -49,10 +49,10 @@ class AuctionsIndexTransformer extends BaseTransformer
         $feedbackTypes = explode(',', $feedbackTypesAndCounts[0]);
         $feedbackCounts = explode(',', $feedbackTypesAndCounts[1]);
 
-        // We expect an equal number of feedback types to counts, otherwise
+        // We expect an equal number of feedback types to feedback counts, otherwise
         // something went wrong with the database query result.
         if (count($feedbackTypes) != count($feedbackCounts)) {
-            throw new UnexpectedFeedbackTypeStringFormatException();
+            throw new UnexpectedAuctionFeedbackTypeStringFormatException();
         }
 
         // Group the feedback values into their feedback types
@@ -103,5 +103,40 @@ class AuctionsIndexTransformer extends BaseTransformer
         $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
 
         return $dt->diffForHumans();
+    }
+
+    /**
+     * Transforms some search parameter values into different values
+     *
+     * @param array $params
+     * @return array
+     */
+    public function transformSearchParams(array $params)
+    {
+        if (isset($params['min_price']) && !empty($params['min_price'])) {
+            $params['min_price'] = $this->transformMoney($params['min_price']);
+        }
+
+        if (isset($params['max_price']) && !empty($params['max_price'])) {
+            $params['max_price'] = $this->transformMoney($params['max_price']);
+        }
+
+        return $params;
+    }
+
+    /**
+     * Removes the dollar sign from the beginning of the provided string
+     *
+     * @param $moneyString
+     * @return string
+     */
+    private function transformMoney($moneyString)
+    {
+        // Remove the $ from the beginning of the string
+        if (substr($moneyString, 0, 1) === '$') {
+            $moneyString = ltrim($moneyString, '$');
+        }
+
+        return $moneyString;
     }
 }

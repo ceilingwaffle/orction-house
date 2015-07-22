@@ -19,25 +19,20 @@ $(document).ready(function () {
 });
 
 /**
- * Resets the fields of a form to default values
+ * Reloads the current page at the current pagination page number
  *
- * @param element
+ * @returns {boolean}
  */
-function clearForm(element) {
-    var e = $(element);
-    var form = e.parent('form').get(0);
-    var $form = $("#" + form.id + " *");
+function reloadAtCurrentPage() {
 
-    $form.filter(':input').each(function () {
-        var $field = $(this);
-        var defaultValue = $field.attr('data-default-value');
+    var page = (location.search.split('page=')[1]||'').split('&')[0];
 
-        if (defaultValue) {
-            $field.val(defaultValue);
-        } else {
-            $field.val("");
-        }
+    if (page.length == 0) {
+        page = 1;
+    }
 
-    });
+    window.location = '//' + location.host + location.pathname + '?page=' + page;
+
+    return false;
 }
 //# sourceMappingURL=all.js.map

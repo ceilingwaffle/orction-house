@@ -75,6 +75,12 @@ return [
     'unique'               => 'The :attribute has already been taken.',
     'url'                  => 'The :attribute format is invalid.',
 
+    // Custom
+    'money' => 'The :attribute field must be a valid monetary amount.',
+    'auction_category' => 'The :attribute field must be a valid auction category ID.',
+    'auction_order_by' => 'The :attribute field must be a valid auction results field name.',
+    'sort_direction' => 'The :attribute field must be a valid sort direction.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

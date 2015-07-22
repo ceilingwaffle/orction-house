@@ -8,12 +8,21 @@
                 <h3 class="panel-title">Filter</h3>
             </div>
             <div class="panel-body">
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form id="auctions-filter-form" method="get" action="">
-                    <input type="hidden" name="page" value="{{ Input::get('page', 1) }}" />
+                    <input type="hidden" name="page" value="{{ old('page') ?: Input::get('page', 1) }}" />
                     <div class="form-group">
                         <label for="title">Item Name:</label>
                         <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Chair"
-                               value="{{ Input::get('title') }}" />
+                               value="{{ old('title') ?: Input::get('title') }}" />
                     </div>
                     <div class="form-group">
                         <label for="category">Item Category:</label>
@@ -30,12 +39,12 @@
                     <div class="form-group">
                         <label for="min_price">Min Price:</label>
                         <input type="text" id="min_price" name="min_price" class="form-control"
-                               placeholder="e.g. $10.00" value="{{ Input::get('min_price') }}" />
+                               placeholder="e.g. $10.00" value="{{ old('min_price') ?: Input::get('min_price') }}" />
                     </div>
                     <div class="form-group">
                         <label for="max_price">Max Price:</label>
                         <input type="text" id="max_price" name="max_price" class="form-control"
-                               placeholder="e.g. $50.00" value="{{ Input::get('max_price') }}" />
+                               placeholder="e.g. $50.00" value="{{ old('max_price') ?: Input::get('max_price') }}" />
                     </div>
                     <div class="form-group">
                         <label for="order_by">Sort By:</label>
@@ -58,7 +67,7 @@
                         </select>
                     </div>
 
-                    <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;" onClick="clearForm(this); return false;">Reset</button>
+                    <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;" onClick="reloadAtCurrentPage();">Reset</button>
                     <button type="submit" class="btn btn-default btn-block" style="font-weight:bold;">Apply</button>
                 </form>
             </div>

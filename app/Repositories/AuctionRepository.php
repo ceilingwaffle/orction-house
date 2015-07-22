@@ -187,4 +187,21 @@ class AuctionRepository extends Repository
 
         return $sortables;
     }
+
+    /**
+     * Returns true if the field name is allowed to be sorted by in the DB query
+     *
+     * @param $field
+     * @return bool
+     */
+    public function isValidSortableField($field)
+    {
+        foreach ($this->getAuctionSortableFields() as $validField) {
+            if ($field === $validField['field']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

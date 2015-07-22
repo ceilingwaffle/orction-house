@@ -34,9 +34,10 @@ class AuctionController extends Controller
     /**
      * Render the auctions index page
      *
+     * @param Request $request
      * @return $this
      */
-    public function getIndex()
+    public function getIndex(Request $request)
     {
         // Get filter parameters
         $params['title'] = Input::get('title');
@@ -46,8 +47,19 @@ class AuctionController extends Controller
         $params['order_by'] = Input::get('order_by');
         $params['order_direction'] = Input::get('order_direction');
 
-        // Validate input
+        // Validate input. Redirects back with errors if any validation fails.
+        $this->validate($request, [
+            'title' => 'max:50',
+            'category' => 'numeric|auction_category',
+            'min_price' => 'money',
+            'max_price' => 'money',
+            'order_by' => 'auction_order_by',
+            'order_direction' => 'sort_direction',
+        ]);
 
+        // Transform some of the URL parameter values into different values
+        $transformer = new AuctionsIndexTransformer();
+        $params = $transformer->transformSearchParams($params);
 
         // Fetch the auction data
         $auctions = $this->auctions
@@ -61,8 +73,7 @@ class AuctionController extends Controller
         $auctions = $paginator->getPaginatedData();
         $paginator = $paginator->getPaginatorHtml();
 
-        // Transform the data so we can present each value in a custom way
-        $transformer = new AuctionsIndexTransformer();
+        // Transform the auctions data
         $auctions = $transformer->transformMany($auctions);
 
         // Get auction categories

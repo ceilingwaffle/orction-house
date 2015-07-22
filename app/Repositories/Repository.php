@@ -82,8 +82,6 @@ abstract class Repository
 
         // Add PDO binding
         $this->pdoBindings[$bindingName] = $searchValue;
-
-
     }
 
 }
