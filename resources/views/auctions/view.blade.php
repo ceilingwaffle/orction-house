@@ -48,6 +48,7 @@
                 <p class="right s-faded-text">({{ $auction['auction_ended_date'] }})</p>
             </div>
             <form id="bid-form" method="post" action="/auctions/{{ $auction['auction_id'] }}/bid">
+                {!! csrf_field() !!}
                 <div class="s-auction-bid-box">
                     <div class="s-auction-text-row">
                         <p class="left">Current Bid:</p>

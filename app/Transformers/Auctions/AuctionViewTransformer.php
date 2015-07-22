@@ -2,7 +2,7 @@
 
 namespace App\Transformers\Auctions;
 
-class AuctionViewTransformer extends AuctionTransformer
+class AuctionViewTransformer extends AuctionBaseTransformer
 {
     /**
      * Transforms a single auction result
@@ -34,6 +34,7 @@ class AuctionViewTransformer extends AuctionTransformer
             'auction_updated_date' => $this->formatDate($auction->auction_updated_at),
             'auction_updated_date_readable' => $this->toHumanTimeDifference($auction->auction_updated_at),
             'auction_description' => $auction->auction_description,
+            'user_minimum_bid' => $this->toDecimalPlacesFormat($auction->user_minimum_bid),
         ];
     }
 
@@ -47,4 +48,6 @@ class AuctionViewTransformer extends AuctionTransformer
     {
         return date('d M, Y    h:i:s a', strtotime($dateString));
     }
+
+
 }

@@ -7,7 +7,7 @@ use App\FeedbackType;
 use App\Transformers\BaseTransformer;
 use Carbon\Carbon;
 
-abstract class AuctionTransformer extends BaseTransformer
+abstract class AuctionBaseTransformer extends BaseTransformer
 {
     private function feedbackStringToValues($feedbackString)
     {

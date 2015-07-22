@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\AuctionRepository;
 use App\Services\PaginationService;
-use App\Transformers\Auctions\AuctionsIndexTransformer;
+use App\Transformers\Auctions\AuctionIndexTransformer;
 use App\Transformers\Auctions\AuctionViewTransformer;
 use Auth;
 use Illuminate\Http\Request;
@@ -60,7 +60,7 @@ class AuctionController extends Controller
         ]);
 
         // Transform some of the URL parameter values into different values
-        $transformer = new AuctionsIndexTransformer();
+        $transformer = new AuctionIndexTransformer();
         $params = $transformer->transformSearchParams($params);
 
         // Fetch the auction data
@@ -107,13 +107,13 @@ class AuctionController extends Controller
 
         // Fetch the auction data
         $auction = $this->auctions->getAuctionViewData($id);
+        $auction->user_minimum_bid = $this->auctions->getMinimumBidForUser($id, Auth::user());
 
         // Transform the data
         $transformer = new AuctionViewTransformer();
         $auction = $transformer->transform($auction);
 
         // Calculate the minimum amount this user can bid
-        $auction['user_minimum_bid'] = $this->auctions->getMinimumBidForUser($id, Auth::user());
 
         // Render the page
         return view('auctions.view')->with(compact('id', 'auction'));

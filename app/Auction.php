@@ -56,7 +56,6 @@ class Auction extends BaseModel
         } else {
             if ($user->id === $auction->bids->first()->user_id) {
                 $minBid = $auction->bids[0]->amount + 0.5;
-                dd('e');
             } else {
                 $minBid = $auction->bids[1]->amount + 0.5;
             }

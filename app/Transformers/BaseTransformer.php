@@ -53,4 +53,16 @@ abstract class BaseTransformer
 
         return $moneyString;
     }
+
+    /**
+     * Returns a string with two decimal places on the end
+     *
+     * @param $string
+     * @param int $decPlaces
+     * @return string
+     */
+    protected function toDecimalPlacesFormat($string, $decPlaces = 2)
+    {
+        return number_format($string, $decPlaces);
+    }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Transformers\Auctions;
 
-class AuctionsIndexTransformer extends AuctionTransformer
+class AuctionIndexTransformer extends AuctionBaseTransformer
 {
     /**
      * Transforms a single auction result
