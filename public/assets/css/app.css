@@ -36,12 +36,17 @@ body > .container {
   margin-bottom: 20px !important; }
 
 .s-auction-listing-box {
-  margin-bottom: 10px;
   min-height: 108px;
   padding: 14px;
   background-color: #f5f5f5;
   border: 1px solid #e1e1e1;
-  position: relative; }
+  display: block;
+  color: inherit;
+  margin-bottom: 10px;
+  text-decoration: none; }
+  .s-auction-listing-box:hover {
+    text-decoration: none;
+    color: inherit; }
   .s-auction-listing-box:last-child {
     margin-bottom: inherit; }
   .s-auction-listing-box > img {
@@ -64,8 +69,7 @@ body > .container {
       width: 170px; }
 
 .hover {
-  background-color: #f5e740;
-  cursor: pointer; }
+  background-color: #f5e740 !important; }
 
 .pagination {
   display: table;

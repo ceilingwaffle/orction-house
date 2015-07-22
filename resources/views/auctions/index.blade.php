@@ -67,8 +67,12 @@
                         </select>
                     </div>
 
-                    <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;" onClick="reloadAtCurrentPage();">Reset</button>
-                    <button type="submit" class="btn btn-default btn-block" style="font-weight:bold;">Apply</button>
+                    <div class="col-xs-4" style="padding-left: 0; padding-right: 6px;">
+                        <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;" onClick="reloadAtCurrentPage();">Reset</button>
+                    </div>
+                    <div class="col-xs-8" style="padding-left: 6px; padding-right: 0;">
+                        <button type="submit" class="btn btn-primary btn-block" style="font-weight:bold;">Apply Filter</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -85,8 +89,8 @@
                     <p class="text-muted"
                        style="margin-top:0;margin-bottom:10px;">Click on an auction to view its full details and place a bid.</p>
                     @foreach ($auctions as $auction)
-                        <div class="s-auction-listing-box" id="auction-{{ $auction['auction_id'] }}"
-                             data-auction-url="#{{ $auction['auction_id'] }}"
+                        <a href="/auctions/{{ $auction['auction_id'] }}" class="s-auction-listing-box" id="auction-{{ $auction['auction_id'] }}"
+                             {{--data-auction-url="/auctions/{{ $auction['auction_id'] }}"--}}
                              title="{{ $auction['auction_title'] }}">
                             <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" alt="Auction Photo" />
                             <table>
@@ -125,7 +129,7 @@
                                     <td class="td-right">{{ $auction['total_bids'] }}</td>
                                 </tr>
                             </table>
-                        </div>
+                        </a>
                     @endforeach
                     {!! $paginator !!}
                 @endif

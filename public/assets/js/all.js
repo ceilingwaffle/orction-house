@@ -15,16 +15,24 @@ $(document).ready(function () {
         });
     }
 
+    // Auctions filter form validation using jquery.validate
     $('#auctions-filter-form').validate({
         rules: {
-            title: "required"
+            title: {
+                maxlength: 50
+            },
+            min_price: {
+                money: true
+            },
+            max_price: {
+                money: true
+            }
         },
         messages: {
             title: {
                 required: "Title is required."
             }
         },
-        onfocusout: true,
         highlight: function(element, errorClass) {
             $(element).addClass('error-highlight');
         },
@@ -33,6 +41,10 @@ $(document).ready(function () {
         }
     });
 
+    // Custom validators
+    jQuery.validator.addMethod("money", function(value, element) {
+        return this.optional(element) || value.match(/^(\$)?\d+(\.\d{1,2})?$/);
+    }, "Must be a valid money format.");
 
 });
 
