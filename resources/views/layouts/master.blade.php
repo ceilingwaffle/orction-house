@@ -33,7 +33,8 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="/assets/js/all.js"></script>
+<script src="/assets/js/vendor/jquery-validation/jquery.validate.js"></script>
+<script src="/assets/js/app.js"></script>
 
 </body>
 </html>

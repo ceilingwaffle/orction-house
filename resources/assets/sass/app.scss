@@ -104,3 +104,14 @@ body > .container {
   display: table;
   margin: 0 auto;
 }
+
+// Validation
+label.error {
+  color: #ce363a;
+  margin-top: 3px;
+}
+
+.error-highlight {
+  border-color: red;
+  background-color: #ffd8d8;
+}

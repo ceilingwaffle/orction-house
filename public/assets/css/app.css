@@ -71,4 +71,12 @@ body > .container {
   display: table;
   margin: 0 auto; }
 
+label.error {
+  color: #ce363a;
+  margin-top: 3px; }
+
+.error-highlight {
+  border-color: red;
+  background-color: #ffd8d8; }
+
 /*# sourceMappingURL=app.css.map */

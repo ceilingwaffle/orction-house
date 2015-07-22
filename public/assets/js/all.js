@@ -15,6 +15,24 @@ $(document).ready(function () {
         });
     }
 
+    $('#auctions-filter-form').validate({
+        rules: {
+            title: "required"
+        },
+        messages: {
+            title: {
+                required: "Title is required."
+            }
+        },
+        onfocusout: true,
+        highlight: function(element, errorClass) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass('error-highlight');
+        }
+    });
+
 
 });
 

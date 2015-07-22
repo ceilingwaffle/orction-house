@@ -7,3 +7,4 @@ _ide_helper.php
 /deploy
 /documents
 .DS_Store
+/bower_components

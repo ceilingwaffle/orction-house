@@ -15,8 +15,12 @@ var pngquant = require('imagemin-pngquant');
  */
 
 elixir(function(mix) {
-    mix.scripts(['app.js'], 'public/assets/js/all.js');
+    mix.copy('bower_components/jquery-validation/dist/jquery.validate.js', 'public/assets/js/vendor/jquery-validation/jquery.validate.js');
+
+    mix.scripts(['app.js'], 'public/assets/js/app.js');
+
     mix.sass(['app.scss'], 'public/assets/css');
+
     mix.task('images');
 });
 
