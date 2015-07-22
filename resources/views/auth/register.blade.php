@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title', 'Sign Up')
 
 @section('content')
     <div class="col-md-8 col-md-offset-2">

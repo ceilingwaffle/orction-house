@@ -1,17 +1,13 @@
 $(document).ready(function () {
 
     // Auction box user events
-    var box = $(".s-auction-listing-box");
-    if ( box ) {
-        box.mouseenter(function () {
+    var auctionBox = $(".s-auction-listing-box");
+    if ( auctionBox ) {
+        auctionBox.mouseenter(function () {
             $(this).addClass('hover');
         });
-        box.mouseleave(function () {
+        auctionBox.mouseleave(function () {
             $(this).removeClass('hover');
-        });
-        box.click(function () {
-            var url = $(this).data('auctionUrl');
-            window.location = url;
         });
     }
 

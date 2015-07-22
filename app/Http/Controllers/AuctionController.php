@@ -92,4 +92,15 @@ class AuctionController extends Controller
                 ));
     }
 
+    /**
+     *
+     *
+     * @param $id
+     * @return $this
+     */
+    public function getView($id)
+    {
+        return view('auctions.view')->with(compact('id'));
+    }
+
 }

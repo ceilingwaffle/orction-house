@@ -1,5 +1,9 @@
 // @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+$linkColour: #337ab7;
+$boxBgColour: #f5f5f5;
+$boxBorder: 1px solid #e1e1e1;
+
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -68,15 +72,16 @@ body > .container {
 
   min-height: 108px;
   padding: 14px;
-  background-color: #f5f5f5;
-  border: 1px solid #e1e1e1;
+  background-color: $boxBgColour;
+  border: $boxBorder;
   //position: relative;
   display: block;
   color: inherit;
   margin-bottom: 10px;
   text-decoration: none;
 
-  &:hover {
+  &:hover,
+  &:visited {
     text-decoration: none;
     color: inherit;
   }
@@ -139,4 +144,135 @@ label.error {
 .error-highlight {
   border-color: red;
   background-color: #ffd8d8;
+}
+
+.s-auction-status-expired {
+  color: red;
+}
+
+// Auction View
+.s-auction-top-row {
+  margin-bottom: 10px;
+
+  & > a.s-back-link {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+
+.s-auction-left-panel {
+  & > * {
+    margin-bottom: 10px;
+  }
+
+}
+
+img.s-auction-photo {
+  width: 100%;
+  height: auto;
+  border: 2px solid grey;
+}
+
+.s-auction-panel-block {
+  background-color: $boxBgColour;
+  border: $boxBorder;
+  padding: 10px;
+
+  & > h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 8px;
+  }
+
+  & * {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  & > a {
+    text-decoration: none;
+    color: $linkColour;
+
+    & > .s-username {
+      font-weight: bold;
+      display: inline-block;
+    }
+    & > .s-feedback-count {
+      display: inline-block;
+    }
+  }
+
+  & > .s-feedback-text {
+    font-size: 0.9em;
+  }
+}
+
+.s-auction-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+hr {
+  margin-top: 5px;
+  margin-bottom: 18px;
+}
+
+.s-auction-text-row {
+  font-size: 1.1em;
+  display: table-row;
+
+  & > * {
+    display: table-cell;
+    padding-bottom: 10px;
+  }
+
+  & > .left {
+    text-align: right;
+    min-width: 150px;
+  }
+
+  & > .right {
+    text-align: left;
+    font-weight: bold;
+    padding-left: 30px;
+    min-width: 150px;
+  }
+
+}
+
+.s-time-remaining {
+  color: red;
+}
+
+.s-faded-text {
+  font-size: 0.7em;
+  color: grey;
+  font-weight: normal !important;
+  white-space: nowrap;
+}
+
+.s-auction-bid-box {
+  padding-top: 10px;
+  padding-bottom: 0;
+  border: 2px solid #c8c8c8;
+  background-color: #d4d4d4;
+  margin-bottom: 10px;
+}
+
+.s-bids-link {
+  color: $linkColour;
+}
+
+form#bid-form {
+  & * input {
+    font-weight: normal;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
 }

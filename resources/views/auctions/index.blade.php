@@ -48,7 +48,8 @@
                     </div>
                     <div class="form-group">
                         <label for="order_by">Sort By:</label>
-                        <select id="order_by" name="order_by" class="form-control" data-default-value="auction_end_date">
+                        <select id="order_by" name="order_by" class="form-control"
+                                data-default-value="auction_end_date">
                             @foreach($sortableFields as $sortable)
                                 <option value="{{ $sortable['field'] }}"
                                         @if(Input::get('order_by') == $sortable['field']) selected
@@ -61,17 +62,23 @@
                     </div>
                     <div class="form-group">
                         <label for="order_direction">Sort Direction:</label>
-                        <select id="order_direction" name="order_direction" class="form-control" data-default-value="asc">
-                            <option value="asc" @if(Input::get('order_direction') == 'asc') selected @endif>Ascending</option>
-                            <option value="desc" @if(Input::get('order_direction') == 'desc') selected @endif>Descending</option>
+                        <select id="order_direction" name="order_direction" class="form-control"
+                                data-default-value="asc">
+                            <option value="asc" @if(Input::get('order_direction') == 'asc') selected @endif>Ascending
+                            </option>
+                            <option value="desc"
+                                    @if(Input::get('order_direction') == 'desc') selected @endif>Descending
+                            </option>
                         </select>
                     </div>
-
                     <div class="col-xs-4" style="padding-left: 0; padding-right: 6px;">
-                        <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;" onClick="reloadAtCurrentPage();">Reset</button>
+                        <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;"
+                                onClick="reloadAtCurrentPage();">Reset
+                        </button>
                     </div>
                     <div class="col-xs-8" style="padding-left: 6px; padding-right: 0;">
-                        <button type="submit" class="btn btn-primary btn-block" style="font-weight:bold;">Apply Filter</button>
+                        <button type="submit" class="btn btn-primary btn-block" style="font-weight:bold;">Apply Filter
+                        </button>
                     </div>
                 </form>
             </div>
@@ -89,9 +96,10 @@
                     <p class="text-muted"
                        style="margin-top:0;margin-bottom:10px;">Click on an auction to view its full details and place a bid.</p>
                     @foreach ($auctions as $auction)
-                        <a href="/auctions/{{ $auction['auction_id'] }}" class="s-auction-listing-box" id="auction-{{ $auction['auction_id'] }}"
-                             {{--data-auction-url="/auctions/{{ $auction['auction_id'] }}"--}}
-                             title="{{ $auction['auction_title'] }}">
+                        <a href="/auctions/{{ $auction['auction_id'] }}" class="s-auction-listing-box"
+                           id="auction-{{ $auction['auction_id'] }}"
+                                {{--data-auction-url="/auctions/{{ $auction['auction_id'] }}"--}}
+                           title="{{ $auction['auction_title'] }}">
                             <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" alt="Auction Photo" />
                             <table>
                                 <tr>
@@ -109,7 +117,12 @@
                                 </tr>
                                 <tr>
                                     <td class="td-left">Status:</td>
-                                    <td class="td-right">{{ $auction['auction_status'] }}</td>
+                                    <td class="td-right
+                                        @if ($auction['auction_status'] != 'Open')
+                                            s-auction-status-expired
+                                        @endif">
+                                        {{ $auction['auction_status'] }}
+                                    </td>
                                     @if ($auction['auction_has_ended'])
                                         <td class="td-left">Auction Ended:</td>
                                     @else
@@ -120,10 +133,12 @@
                                 <tr>
                                     <td class="td-left">Listed By:</td>
                                     <td class="td-right">
-                                        {{ $auction['auction_seller_username'] }}
-                                        @if(!is_null($auction['seller_positive_feedback_percentage']) )
-                                            ({{ $auction['seller_positive_feedback_percentage'] }})
-                                        @endif
+                                        <a href="/users/{{ $auction['auction_seller_username'] }}/feedback">
+                                            {{ $auction['auction_seller_username'] }}
+                                            @if(!is_null($auction['seller_positive_feedback_percentage']) )
+                                                ({{ $auction['seller_positive_feedback_percentage'] }})
+                                            @endif
+                                        </a>
                                     </td>
                                     <td class="td-left">Total bids:</td>
                                     <td class="td-right">{{ $auction['total_bids'] }}</td>
