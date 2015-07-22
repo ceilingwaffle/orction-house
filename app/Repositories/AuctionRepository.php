@@ -17,7 +17,7 @@ class AuctionRepository extends Repository
         // Set up the where statements and PDO bindings depending on the URL filter-parameters provided
         $whereParams = [];
 
-        if (isset($params['title'])) {
+        if (isset($params['title']) && !empty($params['title'])) {
             $whereParams['title'] = [
                 'urlParam' => 'title',
                 'columnName' => 'auction_title',
@@ -25,7 +25,7 @@ class AuctionRepository extends Repository
             ];
         }
 
-        if (isset($params['category'])) {
+        if (isset($params['category']) && !empty($params['category'])) {
             $whereParams['category'] = [
                 'urlParam' => 'category',
                 'columnName' => 'auction_category_id',
@@ -33,7 +33,7 @@ class AuctionRepository extends Repository
             ];
         }
 
-        if (isset($params['min_price'])) {
+        if (isset($params['min_price']) && !empty($params['min_price'])) {
             $whereParams['min_price'] = [
                 'urlParam' => 'min_price',
                 'columnName' => 'highest_bid_amount',
@@ -41,7 +41,7 @@ class AuctionRepository extends Repository
             ];
         }
 
-        if (isset($params['max_price'])) {
+        if (isset($params['max_price']) && !empty($params['max_price'])) {
             $whereParams['max_price'] = [
                 'urlParam' => 'max_price',
                 'columnName' => 'highest_bid_amount',
