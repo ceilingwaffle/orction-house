@@ -26,7 +26,14 @@ class PaginationService
      */
     public function makePaginated($data, $perPage = 10, $currentPage = 1)
     {
-        $page = $currentPage;
+        // If the current page contains no results, load the final page
+        $count = count($data);
+        if ($count <= ($perPage * $currentPage - $perPage)) {
+            $page = (string) ceil($count / $perPage);
+        } else {
+            $page = $currentPage;
+        }
+
         $offset = ($page * $perPage) - $perPage;
 
         $paginator = new LengthAwarePaginator(

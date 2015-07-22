@@ -44,7 +44,9 @@ body > .container {
   color: inherit;
   margin-bottom: 10px;
   text-decoration: none; }
+  .s-auction-listing-box:link,
   .s-auction-listing-box:hover,
+  .s-auction-listing-box:active,
   .s-auction-listing-box:visited {
     text-decoration: none;
     color: inherit; }

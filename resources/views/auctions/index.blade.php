@@ -98,7 +98,6 @@
                     @foreach ($auctions as $auction)
                         <a href="/auctions/{{ $auction['auction_id'] }}" class="s-auction-listing-box"
                            id="auction-{{ $auction['auction_id'] }}"
-                                {{--data-auction-url="/auctions/{{ $auction['auction_id'] }}"--}}
                            title="{{ $auction['auction_title'] }}">
                             <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" alt="Auction Photo" />
                             <table>
