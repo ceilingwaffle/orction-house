@@ -9,10 +9,6 @@ $(document).ready(function () {
         auctionBox.mouseleave(function () {
             $(this).removeClass('hover');
         });
-        auctionBox.click(function () {
-            //var url = $(this).data('auctionUrl');
-            //window.location = url;
-        });
     }
 
     // Auctions filter form validation using jquery.validate
