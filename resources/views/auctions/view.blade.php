@@ -22,6 +22,17 @@
             {{ Session::get('auction_id_error') }}
         </div>
     @endif
+    @if (isset($auction['highest_bidder_username']) and Auth::user()->username == $auction['highest_bidder_username'])
+        @if (isset($auction['auction_status']))
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 alert alert-success text-center s-auction-alert-box">
+                @if ($auction['auction_status'] == 'Sold')
+                    You won this item! Congratulations!
+                @elseif ($auction['auction_status'] == 'Open')
+                    You are currently the highest bidder!
+                @endif
+            </div>
+        @endif
+    @endif
     <div class="row">
         <div class="col-sm-3 col-sm-offset-1 s-auction-left-panel">
             <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" class="s-auction-photo" />
@@ -44,7 +55,7 @@
                 <p class="right">{{ $auction['auction_condition'] }}</p>
             </div>
             <div class="s-auction-text-row">
-                @if ($auction['auction_has_ended'])
+                @if ($auction['auction_has_ended'] === false)
                     <p class="left">Auction Ended:</p>
                 @else
                     <p class="left">Auction Ends:</p>

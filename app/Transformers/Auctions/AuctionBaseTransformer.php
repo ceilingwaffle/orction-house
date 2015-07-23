@@ -94,7 +94,7 @@ abstract class AuctionBaseTransformer extends BaseTransformer
      */
     protected function feedbackStringToPositiveCount($feedbackString)
     {
-        return $this->feedbackStringToValues($feedbackString)['positive'];
+        return (int) $this->feedbackStringToValues($feedbackString)['positive'];
     }
 
     /**

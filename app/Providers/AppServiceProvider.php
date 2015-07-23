@@ -61,7 +61,9 @@ class AppServiceProvider extends ServiceProvider
         // Valid bid amount
         Validator::extend('allowable_bid_amount', function($attribute, $value, $parameters) {
 
-            $bidAmount = floatval($value);
+            $bidTransformer = new App\Transformers\BidTransformer();
+            $bidAmount = $bidTransformer->transform($value);
+
             $auctionId = $parameters[0];
             $userId = $parameters[1];
 

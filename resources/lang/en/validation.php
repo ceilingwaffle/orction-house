@@ -81,7 +81,7 @@ return [
     'auction_order_by' => 'The :attribute field must be a valid auction results field name.',
     'sort_direction' => 'The :attribute field must be a valid sort direction.',
     'not_auction_owner' => 'You cannot bid on your own auction.',
-    'allowable_bid_amount' => 'Invalid bid amount.',
+    'allowable_bid_amount' => 'Bid is too low.',
     'auction_is_open' => 'Bidding has ended for this auction.',
 
     /*

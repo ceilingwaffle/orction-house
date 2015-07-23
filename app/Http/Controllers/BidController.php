@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\AuctionRepository;
+use App\Repositories\BidRepository;
+use App\Transformers\BidTransformer;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -16,9 +18,17 @@ class BidController extends Controller
      */
     private $auctions;
 
-    public function __construct(AuctionRepository $auctions)
-    {
+    /**
+     * @var BidRepository
+     */
+    private $bids;
+
+    public function __construct(
+        AuctionRepository $auctions,
+        BidRepository $bids
+    ) {
         $this->auctions = $auctions;
+        $this->bids = $bids;
     }
 
     /**
@@ -59,8 +69,18 @@ class BidController extends Controller
                      |auction_is_open:{$auctionId}"
         ]);
 
-        dd("Validation passed");
+        $bidAmount = $request->get('bid');
 
+        $transformer = new BidTransformer();
+        $bidAmount = $transformer->transform($bidAmount);
+
+        // Store the bid
+        $success = $this->bids->placeBid($bidAmount, $auctionId, $userId);
+
+        if ( ! $success) {
+            return Redirect::back()->withErrors('An error occurred while placing the bid.');
+        }
+
+        return Redirect::back();
     }
-
 }
