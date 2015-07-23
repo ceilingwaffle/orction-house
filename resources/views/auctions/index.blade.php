@@ -110,7 +110,7 @@
                                 </tr>
                                 <tr>
                                     <td class="td-left">Current Bid:</td>
-                                    <td class="td-right">$ {{ $auction['highest_bid_amount'] }}</td>
+                                    <td class="td-right">$ {{ $auction['current_visible_bid'] }}</td>
                                     <td class="td-left">Highest Bidder:</td>
                                     <td class="td-right">{{ $auction['highest_bidder_username'] }}</td>
                                 </tr>

@@ -182,4 +182,17 @@ form#bid-form * input {
   padding-left: 6px;
   padding-right: 6px; }
 
+.s-bid-errors {
+  margin-left: 180px; }
+  .s-bid-errors > li,
+  .s-bid-errors > p {
+    margin-bottom: 0;
+    margin-top: 0;
+    color: red;
+    font-weight: bold;
+    font-size: 0.8em; }
+    .s-bid-errors > li:last-child,
+    .s-bid-errors > p:last-child {
+      margin-bottom: 10px; }
+
 /*# sourceMappingURL=app.css.map */

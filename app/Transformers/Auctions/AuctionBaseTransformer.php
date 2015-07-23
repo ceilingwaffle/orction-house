@@ -4,11 +4,23 @@ namespace App\Transformers\Auctions;
 
 use App\Exceptions\UnexpectedAuctionFeedbackTypeStringFormatException;
 use App\FeedbackType;
+use App\Repositories\AuctionRepository;
 use App\Transformers\BaseTransformer;
-use Carbon\Carbon;
+use Auth;
 
 abstract class AuctionBaseTransformer extends BaseTransformer
 {
+    /**
+     * @var AuctionRepository
+     */
+    private $auctions;
+
+    public function __construct(AuctionRepository $auctions)
+    {
+        $this->auctions = $auctions;
+    }
+
+
     private function feedbackStringToValues($feedbackString)
     {
         // Split the string into array values
@@ -81,14 +93,12 @@ abstract class AuctionBaseTransformer extends BaseTransformer
     /**
      * Returns true if an auction has ended
      *
-     * @param $auctionEndDateString
+     * @param $auctionId
      * @return bool
      */
-    protected function auctionHasEnded($auctionEndDateString)
+    protected function auctionHasEnded($auctionId)
     {
-        $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
-
-        return $dt->isPast();
+        return $this->auctions->isOpenForBidding($auctionId);
     }
 
     /**
@@ -108,5 +118,18 @@ abstract class AuctionBaseTransformer extends BaseTransformer
         }
 
         return $params;
+    }
+
+    /**
+     * Returns the publicly visible bid amount for the current user
+     *
+     * @param $auctionId
+     * @return mixed
+     */
+    public function getCurrentVisibleBidForAuthUser($auctionId)
+    {
+        $minBid = $this->auctions->getMinimumBidForUser($auctionId, Auth::user());
+
+        return $minBid - 0.5;
     }
 }

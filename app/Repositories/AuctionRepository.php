@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Auction;
 use App\User;
+use Carbon\Carbon;
 use DB;
 
 class AuctionRepository extends Repository
@@ -234,10 +235,58 @@ class AuctionRepository extends Repository
         return $this->getAuctions($params)[0];
     }
 
+    /**
+     * Returns true if the given auction ID exists
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function isValidAuctionId($id)
+    {
+        return Auction::find($id)->exists();
+    }
+
+    /**
+     * Returns the minimum bid allowed for an auction by the given user
+     *
+     * @param $auctionId
+     * @param User $user
+     * @return mixed
+     */
     public function getMinimumBidForUser($auctionId, User $user)
     {
         $auction = Auction::findOrFail($auctionId);
 
         return $auction->calculateMinimumBidForUser($user);
+    }
+
+    /**
+     * Returns true if the auction is owned by the user
+     *
+     * @param $auctionId
+     * @param $userId
+     * @return bool
+     */
+    public function isAuctionOwner($auctionId, $userId)
+    {
+        $auction = Auction::where('id', '=', $auctionId)->where('user_id', '=', $userId)->first();
+
+        return ! is_null($auction);
+    }
+
+    /**
+     * Returns true if bids are allowed to be placed on this auction
+     *
+     * @param $auctionId
+     * @return bool
+     */
+    public function isOpenForBidding($auctionId)
+    {
+        $auctionData = $this->getAuctionViewData($auctionId);
+
+        if ($auctionData->auction_status != 'open')
+            return false;
+
+        return true;
     }
 }

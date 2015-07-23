@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Auction ' . $id)
+@section('title', 'Item - ' . $auction['auction_title'])
 
 @section('content')
     <div class="row">
@@ -12,9 +12,14 @@
             </a>
         </div>
     </div>
-    @if (isset($auction['auction_has_ended']) and $auction['auction_has_ended'])
+    @if (isset($auction['auction_status']) and $auction['auction_status'] != 'Open')
         <div class="col-xs-12 col-sm-10 col-sm-offset-1 alert alert-danger text-center s-auction-alert-box">
-            Bidding on this item has ended.
+            Bidding on this item has ended (auction {{ lcfirst($auction['auction_status']) }}).
+        </div>
+    @endif
+    @if (Session::get('auction_id_error'))
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1 alert alert-danger text-center s-auction-alert-box">
+            {{ Session::get('auction_id_error') }}
         </div>
     @endif
     <div class="row">
@@ -52,14 +57,14 @@
                 <div class="s-auction-bid-box">
                     <div class="s-auction-text-row">
                         <p class="left">Current Bid:</p>
-                        <p class="right" style="font-size: 1.3em;">${{ $auction['highest_bid_amount'] }}</p>
+                        <p class="right" style="font-size: 1.3em;">${{ $auction['current_visible_bid'] }}</p>
                         <p class="right s-bids-link">[{{ $auction['total_bids'] }}
                             @if ($auction['total_bids'] == 1) bid @else bids @endif ]</p>
                     </div>
                     <div class="s-auction-text-row">
                         <p class="left"></p>
                         <p class="right">
-                            <input type="text" id="bid" name="bid" />
+                            <input type="text" id="bid" name="bid" value="{{ old('bid') }}" />
                             <br />
                             <span class="s-faded-text">Enter ${{ $auction['user_minimum_bid'] }} or more</span>
                         </p>
@@ -67,9 +72,14 @@
                             <button type="submit" class="btn btn-primary">Place Bid</button>
                         </p>
                     </div>
-                    <div class="s-auction-text-row">
-                        <p class="left"></p>
-                    </div>
+                    @if (count($errors) > 0)
+                        <div class="s-bid-errors">
+                            <p style="font-size: 1.2em;">Bid failed:</p>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </form>
             <div class="s-auction-text-row">

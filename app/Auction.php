@@ -64,4 +64,15 @@ class Auction extends BaseModel
         return $minBid;
 
     }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function calculateMinimumBidForUserId($userId)
+    {
+        $user = User::findOrFail($userId);
+
+        return $this->calculateMinimumBidForUser($user);
+    }
 }

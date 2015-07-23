@@ -264,7 +264,19 @@ form#bid-form {
   }
 }
 
-.s-auction-alert-box {
-  //color: red;
-  //background-color: #ff6762;
+.s-bid-errors {
+  margin-left: 180px;
+
+  & > li,
+  & > p {
+    margin-bottom: 0;
+    margin-top: 0;
+    color: red;
+    font-weight: bold;
+    font-size: 0.8em;
+
+    &:last-child {
+      margin-bottom: 10px;
+    }
+  }
 }

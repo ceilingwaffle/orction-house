@@ -12,10 +12,12 @@ class AuctionViewTransformer extends AuctionBaseTransformer
      */
     public function transform($auction)
     {
+        $currentVisibleBid = $this->getCurrentVisibleBidForAuthUser($auction->auction_id);
+
         return [
             'auction_id' => $auction->auction_id,
             'auction_title' => $auction->auction_title,
-            'auction_has_ended' => $this->auctionHasEnded($auction->auction_end_date),
+            'auction_has_ended' => $this->auctionHasEnded($auction->auction_id),
             'auction_time_remaining' => $this->toHumanTimeDifference($auction->auction_end_date),
             'auction_status' => ucfirst($auction->auction_status),
             'auction_category' => $auction->auction_category,
@@ -34,7 +36,8 @@ class AuctionViewTransformer extends AuctionBaseTransformer
             'auction_updated_date' => $this->formatDate($auction->auction_updated_at),
             'auction_updated_date_readable' => $this->toHumanTimeDifference($auction->auction_updated_at),
             'auction_description' => $auction->auction_description,
-            'user_minimum_bid' => $this->toDecimalPlacesFormat($auction->user_minimum_bid),
+            'current_visible_bid' => $currentVisibleBid,
+            'user_minimum_bid' => $currentVisibleBid + 0.5,
         ];
     }
 
