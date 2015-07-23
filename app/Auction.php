@@ -8,21 +8,33 @@ class Auction extends BaseModel
 {
     protected $table = 'auctions';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function category()
     {
         return $this->hasOne(AuctionCategory::class, 'id', 'auction_category_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function condition()
     {
         return $this->hasOne(AuctionCondition::class, 'id', 'auction_condition_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function bids()
     {
         return $this->hasMany(Bid::class, 'auction_id', 'id');
@@ -31,6 +43,8 @@ class Auction extends BaseModel
     /**
      * Returns the minimum bid allowed for the given user, calculated like so:
      *
+     * - If the user is the creator of the auction, show the real highest bid amount
+     * - Otherwise:
      * - If no bids, minimum = start_price
      * - If the user is the highest bidder, minimum = current bid + $0.50
      * - If the user is NOT the highest bidder, and there is only 1 bid, minimum = start_price + $0.50

@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Auction;
 use App\User;
-use Carbon\Carbon;
 use DB;
 
 class AuctionRepository extends Repository
@@ -247,7 +246,7 @@ class AuctionRepository extends Repository
     }
 
     /**
-     * Returns the minimum bid allowed for an auction by the given user
+     * Returns the minimum bid allowed for an auction for the given user
      *
      * @param $auctionId
      * @param User $user

@@ -20,7 +20,14 @@ abstract class AuctionBaseTransformer extends BaseTransformer
         $this->auctions = $auctions;
     }
 
-
+    /**
+     * Converts a "feedback-type : feedlback-count" raw string to an array
+     * containing the number of positive and negative feedback counts
+     *
+     * @param $feedbackString
+     * @return array
+     * @throws UnexpectedAuctionFeedbackTypeStringFormatException
+     */
     private function feedbackStringToValues($feedbackString)
     {
         // Split the string into array values

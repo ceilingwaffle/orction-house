@@ -7,7 +7,6 @@ use App\Repositories\AuctionRepository;
 use App\Services\PaginationService;
 use App\Transformers\Auctions\AuctionIndexTransformer;
 use App\Transformers\Auctions\AuctionViewTransformer;
-use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -104,7 +103,7 @@ class AuctionController extends Controller
     public function show($id)
     {
         // Validate the ID
-
+        // todo
 
         // Fetch the auction data
         $auction = $this->auctions->getAuctionViewData($id);
@@ -112,8 +111,6 @@ class AuctionController extends Controller
         // Transform the data
         $transformer = App::make(AuctionViewTransformer::class);
         $auction = $transformer->transform($auction);
-
-        // Calculate the minimum amount this user can bid
 
         // Render the page
         return view('auctions.view')->with(compact('id', 'auction'));

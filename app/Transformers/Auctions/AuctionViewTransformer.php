@@ -41,16 +41,4 @@ class AuctionViewTransformer extends AuctionBaseTransformer
         ];
     }
 
-    /**
-     * Returns a formatted date string, like: "22 Jul, 2015   12:34:56 PM"
-     *
-     * @param $dateString
-     * @return bool|string
-     */
-    protected function formatDate($dateString)
-    {
-        return date('d M, Y    h:i:s a', strtotime($dateString));
-    }
-
-
 }
