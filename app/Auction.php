@@ -32,9 +32,9 @@ class Auction extends BaseModel
      * Returns the minimum bid allowed for the given user, calculated like so:
      *
      * - If no bids, minimum = start_price
-     * - If the user is the highest bidder, minimum = current bid + 0.5
-     * - If the user is NOT the highest bidder, and there is only 1 bid, minimum = start_price
-     * - If the user is NOT the highest bidder, and there are 2 or more bids, minimum = (2nd highest bid) + 0.5
+     * - If the user is the highest bidder, minimum = current bid + $0.50
+     * - If the user is NOT the highest bidder, and there is only 1 bid, minimum = start_price + $0.50
+     * - If the user is NOT the highest bidder, and there are 2 or more bids, minimum = (2nd highest bid) + $1.00
      *
      * @param User $user
      * @return mixed
@@ -45,21 +45,33 @@ class Auction extends BaseModel
             $query->orderBy('amount', 'desc')->take(2);
         }])->first();
 
-        if ($auction->bids->count() === 0) {
-            $minBid = $this->start_price;
-        } elseif ($auction->bids->count() === 1) {
-            if ($user->id === $auction->bids->first()->user_id) {
-                $minBid = $auction->bids[0]->amount + 0.5;
-            } else {
+        // If this user is the owner, get the real current bid amount
+        if ($auction->user_id === $user->id) {
+            if ($auction->bids->count() === 0) {
                 $minBid = $this->start_price;
-            }
-        } else {
-            if ($user->id === $auction->bids->first()->user_id) {
-                $minBid = $auction->bids[0]->amount + 0.5;
             } else {
-                $minBid = $auction->bids[1]->amount + 0.5;
+                $minBid = $auction->bids[0]->amount + 0.5;
+            }
+
+        } else {
+            if ($auction->bids->count() === 0) {
+                $minBid = $this->start_price;
+            } elseif ($auction->bids->count() === 1) {
+                if ($user->id === $auction->bids->first()->user_id) {
+                    $minBid = $auction->bids[0]->amount + 0.5;
+                } else {
+                    $minBid = $this->start_price + 0.5;
+                }
+            } else {
+                if ($user->id === $auction->bids->first()->user_id) {
+                    $minBid = $auction->bids[0]->amount + 0.5;
+                } else {
+                    $minBid = $auction->bids[1]->amount + 1.0;
+                }
             }
         }
+
+
 
         return $minBid;
 
