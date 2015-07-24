@@ -109,8 +109,8 @@
                                     <td class="td-right">{{ $auction['auction_category'] }}</td>
                                 </tr>
                                 <tr>
-                                    <td class="td-left">Current Bid:</td>
-                                    <td class="td-right">$ {{ $auction['current_visible_bid'] }}</td>
+                                    <td class="td-left">Current Price:</td>
+                                    <td class="td-right">$ {{ $auction['current_auction_price'] }}</td>
                                     <td class="td-left">Highest Bidder:</td>
                                     <td class="td-right">{{ $auction['highest_bidder_username'] }}</td>
                                 </tr>
@@ -122,7 +122,7 @@
                                         @endif">
                                         {{ $auction['auction_status'] }}
                                     </td>
-                                    @if ($auction['auction_has_ended'])
+                                    @if ($auction['auction_has_ended'] === true)
                                         <td class="td-left">Auction Ended:</td>
                                     @else
                                         <td class="td-left">Auction Ends:</td>

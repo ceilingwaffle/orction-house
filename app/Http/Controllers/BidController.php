@@ -65,7 +65,7 @@ class BidController extends Controller
             'bid' => "required
                      |money
                      |not_auction_owner:{$auctionId},{$userId}
-                     |allowable_bid_amount:{$auctionId},{$userId}
+                     |allowable_bid_amount:{$auctionId}
                      |auction_is_open:{$auctionId}"
         ]);
 
@@ -75,7 +75,7 @@ class BidController extends Controller
         $bidAmount = $transformer->transform($bidAmount);
 
         // Store the bid
-        $success = $this->bids->placeBid($bidAmount, $auctionId, $userId);
+        $success = $this->bids->storeBid($bidAmount, $auctionId, $userId);
 
         if ( ! $success) {
             return Redirect::back()->withErrors('An error occurred while placing the bid.');

@@ -32,7 +32,7 @@
                             {{--<li><a href="#">One more separated link</a></li>--}}
                         {{--</ul>--}}
                     {{--</li>--}}
-                    <li><a href="/auth/logout">Log Out</a></li>
+                    <li><a href="/auth/logout">Log Out ({{ Auth::user()->username }})</a></li>
                 @endif
             </ul>
         </div>

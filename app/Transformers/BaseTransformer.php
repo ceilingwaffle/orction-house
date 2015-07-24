@@ -46,12 +46,16 @@ abstract class BaseTransformer
      */
     protected function transformMoney($moneyString)
     {
+        if (empty($moneyString)) {
+            $moneyString = "0.0";
+        }
+
         // Remove the $ from the beginning of the string
         if (substr($moneyString, 0, 1) === '$') {
             $moneyString = ltrim($moneyString, '$');
         }
 
-        return $moneyString;
+        return $this->toDecimalPlacesFormat($moneyString, 2);
     }
 
     /**

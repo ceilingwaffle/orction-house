@@ -2,6 +2,8 @@
 
 namespace App\Transformers\Auctions;
 
+use App\Auction;
+
 class AuctionIndexTransformer extends AuctionBaseTransformer
 {
     /**
@@ -12,7 +14,7 @@ class AuctionIndexTransformer extends AuctionBaseTransformer
      */
     public function transform($auction)
     {
-        $currentVisibleBid = $this->getCurrentVisibleBidForAuthUser($auction->auction_id);
+//        $currentVisibleBid = $this->getCurrentVisibleBidForAuthUser($auction->auction_id);
 
         return [
             'auction_id' => $auction->auction_id,
@@ -28,7 +30,8 @@ class AuctionIndexTransformer extends AuctionBaseTransformer
             'highest_bidder_username' => $auction->highest_bidder_username,
             'seller_positive_feedback_percentage' => $this->feedbackStringToPercentage($auction->user_feedback_type_counts),
             'seller_feedback_link' => '#todo',
-            'current_visible_bid' => $currentVisibleBid,
+//            'current_visible_bid' => $currentVisibleBid,
+            'current_auction_price' => $this->transformMoney(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
         ];
     }
 }

@@ -14,7 +14,7 @@ class BidRepository extends Repository
      * @param $userId
      * @return bool
      */
-    public function placeBid($bidAmount, $auctionId, $userId)
+    public function storeBid($bidAmount, $auctionId, $userId)
     {
         $bid = new Bid;
 

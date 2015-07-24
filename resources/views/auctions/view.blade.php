@@ -67,8 +67,16 @@
                 {!! csrf_field() !!}
                 <div class="s-auction-bid-box">
                     <div class="s-auction-text-row">
-                        <p class="left">Current Bid:</p>
-                        <p class="right" style="font-size: 1.3em;">${{ $auction['current_visible_bid'] }}</p>
+                        @if ($auction['total_bids'] === 0)
+                            <p class="left">Starting Bid:</p>
+                        @elseif ($auction['auction_status'] == 'Open')
+                            <p class="left">Current Bid:</p>
+                        @elseif ($auction['auction_status'] == 'Sold')
+                            <p class="left">Winning Bid:</p>
+                        @else
+                            <p class="left">Final Bid:</p>
+                        @endif
+                        <p class="right" style="font-size: 1.3em;">${{ $auction['highest_bid_amount'] }}</p>
                         <p class="right s-bids-link">[{{ $auction['total_bids'] }}
                             @if ($auction['total_bids'] == 1) bid @else bids @endif ]</p>
                     </div>
@@ -77,7 +85,7 @@
                         <p class="right">
                             <input type="text" id="bid" name="bid" value="{{ old('bid') }}" />
                             <br />
-                            <span class="s-faded-text">Enter ${{ $auction['user_minimum_bid'] }} or more</span>
+                            <span class="s-faded-text">Enter ${{ $auction['minimum_bid'] }} or more</span>
                         </p>
                         <p class="right">
                             <button type="submit" class="btn btn-primary">Place Bid</button>

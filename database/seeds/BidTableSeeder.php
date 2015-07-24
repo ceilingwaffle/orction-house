@@ -1,6 +1,5 @@
 <?php
 
-use App\Common\BaseModel;
 use Illuminate\Database\Seeder;
 use App\Bid;
 

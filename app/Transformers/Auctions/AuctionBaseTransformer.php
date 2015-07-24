@@ -30,6 +30,14 @@ abstract class AuctionBaseTransformer extends BaseTransformer
      */
     private function feedbackStringToValues($feedbackString)
     {
+        // Return 0 values if no feedback
+        if (empty($feedbackString)) {
+            return [
+                'positive' => 0,
+                'negative' => 0,
+            ];
+        }
+
         // Split the string into array values
         $feedbackTypesAndCounts = explode(':', $feedbackString);
         $feedbackTypes = explode(',', $feedbackTypesAndCounts[0]);
@@ -94,7 +102,7 @@ abstract class AuctionBaseTransformer extends BaseTransformer
      */
     protected function feedbackStringToPositiveCount($feedbackString)
     {
-        return (int) $this->feedbackStringToValues($feedbackString)['positive'];
+        return (int)$this->feedbackStringToValues($feedbackString)['positive'];
     }
 
     /**
@@ -127,16 +135,28 @@ abstract class AuctionBaseTransformer extends BaseTransformer
         return $params;
     }
 
-    /**
-     * Returns the publicly visible bid amount for the current user
-     *
-     * @param $auctionId
-     * @return mixed
-     */
-    public function getCurrentVisibleBidForAuthUser($auctionId)
-    {
-        $minBid = $this->auctions->getMinimumBidForUser($auctionId, Auth::user());
+//    /**
+//     * Returns the publicly visible bid amount for the current user
+//     *
+//     * @param $auctionId
+//     * @return mixed
+//     */
+//    public function getCurrentVisibleBidForAuthUser($auctionId)
+//    {
+//        $minBid = $this->auctions->getMinimumBidForUser($auctionId, Auth::user());
+//
+//        return $minBid - 0.5;
+//    }
+//
+//    public function calculateCurrentBidVisibleForUser($auctionId, $totalBids)
+//    {
+//        if ($totalBids == 0) {
+//            $currentBid = $this->auctions->getMinimumBidForUser($auctionId, Auth::user());
+//        } else {
+//            $currentBid = $this->auctions->getMinimumBidForUser($auctionId, Auth::user()) - 0.5;
+//        }
+//
+//        return $currentBid;
+//    }
 
-        return $minBid - 0.5;
-    }
 }

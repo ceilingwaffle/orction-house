@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App;
+use App\Auction;
 use App\AuctionCategory;
 use App\Repositories\AuctionRepository;
+use App\Transformers\BidTransformer;
 use Illuminate\Support\ServiceProvider;
 use Validator;
 
@@ -61,15 +63,15 @@ class AppServiceProvider extends ServiceProvider
         // Valid bid amount
         Validator::extend('allowable_bid_amount', function($attribute, $value, $parameters) {
 
-            $bidTransformer = new App\Transformers\BidTransformer();
+            $bidTransformer = new BidTransformer();
             $bidAmount = $bidTransformer->transform($value);
 
             $auctionId = $parameters[0];
-            $userId = $parameters[1];
 
-            $auction = \App\Auction::findOrFail($auctionId);
+            $repo = App::make(AuctionRepository::class);
+            $auctionData = $repo->getAuctionViewData($auctionId);
 
-            $minBidAllowed = $auction->calculateMinimumBidForUserId($userId);
+            $minBidAllowed = Auction::determineMinimumBid($auctionData->auction_start_price, $auctionData->highest_bid_amount);
 
             return $bidAmount >= $minBidAllowed;
         });

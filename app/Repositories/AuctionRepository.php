@@ -91,6 +91,7 @@ class AuctionRepository extends Repository
              , a.created_at as 'auction_listed_at'
              , a.updated_at as 'auction_updated_at'
              , a.description as 'auction_description'
+             , a.start_price as 'auction_start_price'
             FROM auctions a
             LEFT OUTER JOIN winners w ON w.auction_id = a.id
             LEFT OUTER JOIN auction_categories acat ON acat.id = a.auction_category_id
