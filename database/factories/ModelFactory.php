@@ -30,7 +30,7 @@ $factory->define(App\Auction::class, function (Faker\Generator $faker) {
     $randomAuctionCondition = App\AuctionCondition::all()->random();
 
     return [
-        'title' => $faker->realText(20),
+        'title' => ucfirst(implode(' ', $faker->words(rand(1,4)))), //$faker->realText(20),
         'description' => $faker->sentence(30, $variableNumWords = true),
         'start_price' => $faker->randomFloat(2, 0, 99),
         'end_date' => $faker->dateTimeBetween('-4 days', '+7 days'),
@@ -38,7 +38,7 @@ $factory->define(App\Auction::class, function (Faker\Generator $faker) {
             getenv('AUCTION_IMAGE_DIRECTORY_PATH'),
             getenv('AUCTION_IMAGE_WIDTH'),
             getenv('AUCTION_IMAGE_HEIGHT'),
-            'cats',
+            null, //'cats',
             $fullPath = false
         ),
         'user_id' => $randomUser->id,

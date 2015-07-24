@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 s-auction-top-row">
+        <div class="col-xs-12 col-md-10 col-md-offset-1 s-auction-top-row">
             <a href="/auctions" class="s-back-link">
                 <button type="button" class="btn btn-xs btn-default" aria-label="Back to search results">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -13,18 +13,18 @@
         </div>
     </div>
     @if (isset($auction['auction_status']) and $auction['auction_status'] != 'Open')
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 alert alert-danger text-center s-auction-alert-box">
+        <div class="col-xs-12 col-md-10 col-md-offset-1 alert alert-danger text-center s-auction-alert-box">
             Bidding on this item has ended (auction {{ lcfirst($auction['auction_status']) }}).
         </div>
     @endif
     @if (Session::get('auction_id_error'))
-        <div class="col-xs-12 col-sm-10 col-sm-offset-1 alert alert-danger text-center s-auction-alert-box">
+        <div class="col-xs-12 col-md-10 col-md-offset-1 alert alert-danger text-center s-auction-alert-box">
             {{ Session::get('auction_id_error') }}
         </div>
     @endif
     @if (isset($auction['highest_bidder_username']) and Auth::user()->username == $auction['highest_bidder_username'])
-        @if (isset($auction['auction_status']))
-            <div class="col-xs-12 col-sm-10 col-sm-offset-1 alert alert-success text-center s-auction-alert-box">
+        @if (isset($auction['auction_status']) and $auction['auction_status'] != 'Expired')
+            <div class="col-xs-12 col-md-10 col-md-offset-1 alert alert-success text-center s-auction-alert-box">
                 @if ($auction['auction_status'] == 'Sold')
                     You won this item! Congratulations!
                 @elseif ($auction['auction_status'] == 'Open')
@@ -34,7 +34,7 @@
         @endif
     @endif
     <div class="row">
-        <div class="col-sm-3 col-sm-offset-1 s-auction-left-panel">
+        <div class="col-md-3 col-md-offset-1 s-auction-left-panel">
             <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" class="s-auction-photo" />
             <div class="s-auction-panel-block">
                 <h3>Seller Information</h3>
@@ -47,7 +47,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-sm-7">
+        <div class="col-md-7">
             <h1 class="s-auction-title">{{ $auction['auction_title'] }}</h1>
             <hr />
             <div class="s-auction-text-row">
@@ -55,7 +55,7 @@
                 <p class="right">{{ $auction['auction_condition'] }}</p>
             </div>
             <div class="s-auction-text-row">
-                @if ($auction['auction_has_ended'] === false)
+                @if ($auction['auction_has_ended'] === true)
                     <p class="left">Auction Ended:</p>
                 @else
                     <p class="left">Auction Ends:</p>
@@ -118,6 +118,6 @@
             <h3>Item Description:</h3>
             <p>{{ $auction['auction_description'] }}</p>
         </div>
-        <div class="col-sm-1"></div>
+        <div class="col-md-1"></div>
     </div>
 @endsection

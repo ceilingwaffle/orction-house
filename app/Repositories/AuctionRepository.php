@@ -282,11 +282,8 @@ class AuctionRepository extends Repository
      */
     public function isOpenForBidding($auctionId)
     {
-        $auctionData = $this->getAuctionViewData($auctionId);
+        $auction = $this->getAuctionViewData($auctionId);
 
-        if ($auctionData->auction_status != 'open')
-            return false;
-
-        return true;
+        return ! Auction::auctionHasEnded($auction->auction_status);
     }
 }

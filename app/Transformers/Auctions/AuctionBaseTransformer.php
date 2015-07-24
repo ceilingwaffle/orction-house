@@ -105,16 +105,16 @@ abstract class AuctionBaseTransformer extends BaseTransformer
         return (int)$this->feedbackStringToValues($feedbackString)['positive'];
     }
 
-    /**
-     * Returns true if an auction has ended
-     *
-     * @param $auctionId
-     * @return bool
-     */
-    protected function auctionHasEnded($auctionId)
-    {
-        return $this->auctions->isOpenForBidding($auctionId);
-    }
+//    /**
+//     * Returns true if an auction has ended
+//     *
+//     * @param $auctionId
+//     * @return bool
+//     */
+//    protected function auctionHasEnded($auctionId)
+//    {
+//        return $this->auctions->isOpenForBidding($auctionId);
+//    }
 
     /**
      * Transforms some search parameter values into different values

@@ -1,5 +1,6 @@
 <?php
 
+use App\Auction;
 use Illuminate\Database\Seeder;
 use App\Bid;
 
@@ -22,11 +23,11 @@ class BidTableSeeder extends Seeder
 
         for ($i = 0; $i < $fakeRecordCount; $i++) {
 
-            $randomAuction = $auctions->random();
+            $randomAuction = Auction::find($auctions->random()->id);
             $randomUser = $users->random();
 
             // Get the minimum bid allowed for this random auction
-            $minBid = $randomAuction->calculateMinimumBidForUser($randomUser);
+            $minBid = Auction::determineMinimumBid($randomAuction->start_price, $randomAuction->getHighestBid());
 
             // Set a bid amount equal to the minimum bid plus a random amount between $0 and $20
             $bidAmount = $faker->randomFloat(2, $minBid, $minBid + 20);

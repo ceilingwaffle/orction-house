@@ -53,16 +53,16 @@ Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
 Route::group(['middleware' => 'auth'], function () {
-    // All auctions
+    // Auctions index
     Route::get('auctions', ['uses' => 'AuctionController@index']);
 
-    // Single auction
-    Route::get('auctions/{id}', ['uses' => 'AuctionController@show']);
+    // Auction view
+    Route::get('auctions/{id}', ['uses' => 'AuctionController@show'])->where(['id' => '[0-9]+']);
 
-    // Create new auction form
+    // Auction create + store
     Route::get('auctions/create', ['uses' => 'AuctionController@create']);
     Route::post('auctions/create', ['uses' => 'AuctionController@store']);
 
-    // Store auction bid
+    // Bid store
     Route::post('auctions/{id}/bid', ['uses' => 'BidController@store']);
 });

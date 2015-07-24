@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Common\BaseModel;
+use Exception;
 
 class Auction extends BaseModel
 {
@@ -109,7 +110,7 @@ class Auction extends BaseModel
      */
     public static function determineMinimumBid($startPrice, $currentBid)
     {
-        if (empty($currentBid) or $currentBid === 0) {
+        if (empty($currentBid) or $currentBid === 0.0) {
             return $startPrice;
         } else {
             return $currentBid + 0.5;
@@ -129,4 +130,39 @@ class Auction extends BaseModel
             return $currentBid;
         }
     }
+
+    /**
+     * Returns true if an auction has ended
+     *
+     * @param $auctionStatus
+     * @return bool
+     * @throws Exception
+     */
+    public static function auctionHasEnded($auctionStatus)
+    {
+        if (!is_string($auctionStatus)) {
+            throw new Exception("Expected string but got " . gettype($auctionStatus));
+        }
+
+        return $auctionStatus != 'open';
+    }
+
+    /**
+     * Returns the highest bid amount for this auction, or 0.0 if no bids
+     *
+     * @return float
+     */
+    public function getHighestBid()
+    {
+        $auction = $this->with(['bids' => function($query) {
+            $query->orderBy('amount', 'desc')->take(1);
+        }])->first()->toArray();
+
+        if (isset($auction['bids'][0])) {
+            return $auction['bids'][0]['amount'];
+        } else {
+            return 0.0;
+        }
+    }
+
 }
