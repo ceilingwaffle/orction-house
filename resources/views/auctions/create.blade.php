@@ -20,14 +20,29 @@
                             <label for="description">Describe the item:</label>
                             <textarea id="description" name="description" class="form-control" placeholder="" value={{ old('description') }}></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="category">Category:</label>
-                            <select id="category" name="category" class="form-control">
-                                <option value="0" disabled>--- Select ---</option>
-                                @foreach ($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->category }}</option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="category">Item Category:</label>
+                                    <select id="category" name="category" class="form-control">
+                                        <option value="0" disabled>--- Select ---</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->category }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="condition">Item Condition:</label>
+                                    <select id="condition" name="condition" class="form-control">
+                                        <option value="0" disabled>--- Select ---</option>
+                                        @foreach ($conditions as $condition)
+                                            <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">

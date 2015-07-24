@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App;
 use App\Repositories\AuctionRepository;
+use App\Transformers\Auctions\AuctionCreateTransformer;
 use Exception;
 use File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -42,9 +44,20 @@ class ListAuctionService
         return $savedFile->getFilename();
     }
 
+    /**
+     * Transforms data from input and passes it to the repository for saving
+     *
+     * @param array $auctionData
+     * @return mixed
+     */
     public function createAuction(array $auctionData)
     {
+        // Transform the data
+        $transformer = App::make(AuctionCreateTransformer::class);
+        $auctionData = $transformer->transform($auctionData);
 
+        // Save the auction
+        return $this->auctionRepo->createAuction($auctionData);
     }
 
     /**

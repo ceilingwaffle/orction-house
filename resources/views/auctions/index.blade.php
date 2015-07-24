@@ -97,7 +97,12 @@
                         <a href="/auctions/{{ $auction['auction_id'] }}" class="s-auction-listing-box"
                            id="auction-{{ $auction['auction_id'] }}"
                            title="{{ $auction['auction_title'] }}">
-                            <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" alt="Auction Photo" />
+                            @if (isset($auction['auction_image']) and ! empty($auction['auction_image']))
+                                <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" alt="Auction Photo" />
+                            @else
+                                <img src="/assets/img/{{ getenv('AUCTION_IMAGE_PLACEHOLDER_FILE_NAME') }}" alt="Auction Photo" />
+                            @endif
+
                             <table>
                                 <tr>
                                     <td colspan="4" class="s-auction-title">{{ $auction['auction_title'] }}</td>

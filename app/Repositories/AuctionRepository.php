@@ -158,6 +158,22 @@ class AuctionRepository extends Repository
     }
 
     /**
+     * Returns an array of auction conditions and their IDs
+     *
+     * @return array
+     */
+    public function getAuctionConditions()
+    {
+        $query = "SELECT ac.id, ac.condition
+                  FROM auction_conditions ac
+                  ORDER BY ac.id;";
+
+        $results = DB::select(DB::raw($query));
+
+        return $results;
+    }
+
+    /**
      * Returns an array of sortable auction fields
      *
      * @return array
@@ -285,6 +301,30 @@ class AuctionRepository extends Repository
         $auction = $this->getAuctionViewData($auctionId);
 
         return ! Auction::auctionHasEnded($auction->auction_status);
+    }
+
+    /**
+     * Inserts a new auction record into the database
+     *
+     * @param array $auctionData
+     * @return Auction
+     */
+    public function createAuction(array $auctionData)
+    {
+        $auction = new Auction([
+            'title' => $auctionData['title'],
+            'description' => $auctionData['description'],
+            'start_price' => $auctionData['start_price'],
+            'end_date' => $auctionData['end_date'],
+            'image_file_name' => $auctionData['image_file_name'],
+            'auction_category_id' => $auctionData['auction_category_id'],
+            'auction_condition_id' => $auctionData['auction_condition_id'],
+            'user_id' => $auctionData['user_id'],
+        ]);
+
+        $auction->save();
+
+        return $auction;
     }
 
 }

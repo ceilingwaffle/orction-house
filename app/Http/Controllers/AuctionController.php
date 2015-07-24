@@ -8,6 +8,7 @@ use App\Services\ListAuctionService;
 use App\Services\PaginationService;
 use App\Transformers\Auctions\AuctionIndexTransformer;
 use App\Transformers\Auctions\AuctionViewTransformer;
+use Auth;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -132,14 +133,16 @@ class AuctionController extends Controller
     public function create()
     {
         $categories = $this->auctions->getAuctionCategories();
+        $conditions = $this->auctions->getAuctionConditions();
 
-        return view('auctions.create')->with(compact('categories'));
+        return view('auctions.create')->with(compact('categories', 'conditions'));
     }
 
     /**
      * Stores a new auction
      *
      * @param Request $request
+     * @return $this
      */
     public function store(Request $request)
     {
@@ -148,6 +151,7 @@ class AuctionController extends Controller
             'item_name' => 'required|max:50',
             'description' => 'required|max:1000',
             'category' => 'required|integer|min:1|auction_category',
+            'condition' => 'required|integer|min:1|auction_condition',
             'starting_price' => 'required|money',
             'days' => 'required|integer|min:1|max:14',
             'photo' => 'image|max:1000', // max file size 1,000 kb
@@ -155,6 +159,7 @@ class AuctionController extends Controller
 
         $auctionCreator = App::make(ListAuctionService::class);
 
+        // Prepare the photo for storage
         if ($request->file('photo')) {
             try {
                 $photoFileName = $auctionCreator->preparePhoto($request->file('photo'));
@@ -163,14 +168,25 @@ class AuctionController extends Controller
             }
         }
 
-        $auctionCreator->createAuction([
+        // Create the auction
+        $auction = $auctionCreator->createAuction([
             'title' => Input::get('item_name'),
             'description' => Input::get('description'),
             'category_id' => Input::get('category'),
+            'condition_id' => Input::get('condition'),
             'start_price' => Input::get('starting_price'),
-            'days_to_list' => Input::get('days'),
+            'future_days_to_end' => Input::get('days'),
             'photo_file' => isset($photoFileName) ? $photoFileName : null,
+            'user_id' => Auth::user()->id,
         ]);
+
+        // Redirect back with an error message if the auction was not created
+        if (!$auction) {
+            return Redirect::back()->withErrors('Sorry, something went wrong trying to save your auction.');
+        }
+
+        // The auction was saved successfully. Show the auction page.
+        return Redirect::to('/auctions/' . $auction->id);
     }
 
 }

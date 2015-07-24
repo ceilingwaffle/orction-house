@@ -5,6 +5,7 @@ namespace App\Providers;
 use App;
 use App\Auction;
 use App\AuctionCategory;
+use App\AuctionCondition;
 use App\Repositories\AuctionRepository;
 use App\Transformers\BidTransformer;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +33,11 @@ class AppServiceProvider extends ServiceProvider
         // Valid auction category ID
         Validator::extend('auction_category', function ($attribute, $value, $parameters) {
             return AuctionCategory::isValidCategoryId($value);
+        });
+
+        // Valid auction condition ID
+        Validator::extend('auction_condition', function ($attribute, $value, $parameters) {
+            return AuctionCondition::isValidConditionId($value);
         });
 
         // Valid sortable field for the auctions query

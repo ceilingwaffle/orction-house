@@ -35,7 +35,11 @@
     @endif
     <div class="row">
         <div class="col-md-3 col-md-offset-1 s-auction-left-panel">
-            <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" class="s-auction-photo" />
+            @if (isset($auction['auction_image']) and ! empty($auction['auction_image']))
+                <img src="/assets/img/auctions/{{ $auction['auction_image'] }}" class="s-auction-photo" />
+            @else
+                <img src="/assets/img/{{ getenv('AUCTION_IMAGE_PLACEHOLDER_FILE_NAME') }}" class="s-auction-photo" />
+            @endif
             <div class="s-auction-panel-block">
                 <h3>Seller Information</h3>
                 <a href="/users/{{ $auction['auction_seller_username'] }}/feedback">

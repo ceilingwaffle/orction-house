@@ -9,6 +9,17 @@ class Auction extends BaseModel
 {
     protected $table = 'auctions';
 
+    protected $fillable = [
+        'title',
+        'description',
+        'start_price',
+        'end_date',
+        'image_file_name',
+        'user_id',
+        'auction_category_id',
+        'auction_condition_id',
+    ];
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
