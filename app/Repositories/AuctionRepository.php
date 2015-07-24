@@ -286,4 +286,5 @@ class AuctionRepository extends Repository
 
         return ! Auction::auctionHasEnded($auction->auction_status);
     }
+
 }

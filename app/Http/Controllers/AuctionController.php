@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App;
 use App\Repositories\AuctionRepository;
+use App\Services\ListAuctionService;
 use App\Services\PaginationService;
 use App\Transformers\Auctions\AuctionIndexTransformer;
 use App\Transformers\Auctions\AuctionViewTransformer;
+use Exception;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Input;
+use Redirect;
 use Response;
 
 class AuctionController extends Controller
@@ -150,7 +153,24 @@ class AuctionController extends Controller
             'photo' => 'image|max:1000', // max file size 1,000 kb
         ]);
 
-        dd(Input::all());
+        $auctionCreator = App::make(ListAuctionService::class);
+
+        if ($request->file('photo')) {
+            try {
+                $photoFileName = $auctionCreator->preparePhoto($request->file('photo'));
+            } catch (Exception $e) {
+                return Redirect::back()->withErrors('An error occurred while processing the photo. Please try again later.');
+            }
+        }
+
+        $auctionCreator->createAuction([
+            'title' => Input::get('item_name'),
+            'description' => Input::get('description'),
+            'category_id' => Input::get('category'),
+            'start_price' => Input::get('starting_price'),
+            'days_to_list' => Input::get('days'),
+            'photo_file' => isset($photoFileName) ? $photoFileName : null,
+        ]);
     }
 
 }

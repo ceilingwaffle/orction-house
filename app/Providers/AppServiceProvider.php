@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
 
             return $repo->isOpenForBidding($auctionId);
         });
-        
+
     }
 
     /**
