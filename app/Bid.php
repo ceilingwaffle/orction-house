@@ -8,5 +8,9 @@ class Bid extends BaseModel
 {
     protected $table = 'bids';
 
-
+    protected $fillable = [
+        'amount',
+        'auction_id',
+        'user_id',
+    ];
 }

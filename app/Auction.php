@@ -113,7 +113,7 @@ class Auction extends BaseModel
 //    }
 
     /**
-     * Calculates the minimum bid allowed based on the current bid
+     * Returns the minimum bid allowed
      *
      * @param $startPrice
      * @param $currentBid
@@ -121,14 +121,12 @@ class Auction extends BaseModel
      */
     public static function determineMinimumBid($startPrice, $currentBid)
     {
-        if (empty($currentBid) or $currentBid === 0.0) {
-            return $startPrice;
-        } else {
-            return $currentBid + 0.5;
-        }
+        return self::determineCurrentAuctionPrice($startPrice, $currentBid) + 0.5;
     }
 
     /**
+     * Returns the current auction price
+     *
      * @param $startPrice
      * @param $currentBid
      * @return mixed
