@@ -12,11 +12,11 @@ $(document).ready(function () {
     }
 
     // Custom validators
-    jQuery.validator.addMethod("money", function(value, element) {
+    jQuery.validator.addMethod("money", function (value, element) {
         return this.optional(element) || value.match(/^(\$)?\d+(\.\d{1,2})?$/);
     }, "Must be a valid money format (e.g. $1.23).");
 
-    jQuery.validator.addMethod("integer", function(value, element) {
+    jQuery.validator.addMethod("integer", function (value, element) {
         return this.optional(element) || value.match(/^\d+$/);
     }, "Must be a whole number.");
 
@@ -38,10 +38,31 @@ $(document).ready(function () {
                 required: "Title is required."
             }
         },
-        highlight: function(element, errorClass) {
+        highlight: function (element) {
             $(element).addClass('error-highlight');
         },
-        unhighlight: function(element, errorClass) {
+        unhighlight: function (element) {
+            $(element).removeClass('error-highlight');
+        }
+    });
+
+    $('#place-bid-form').validate({
+        errorLabelContainer: ".s-bid-errors",
+        wrapper: "li",
+        rules: {
+            bid: {
+                money: true
+            }
+        },
+        messages: {
+            bid: {
+                money: "Bid must be a valid monetary amount (e.g. $1.23)."
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function (element) {
             $(element).removeClass('error-highlight');
         }
     });
@@ -68,7 +89,7 @@ $(document).ready(function () {
             days: {
                 required: true,
                 integer: true,
-                range: [1,14]
+                range: [ 1, 14 ]
             },
             photo: {
                 required: false,
@@ -80,10 +101,10 @@ $(document).ready(function () {
                 accept: "The file must be an image."
             }
         },
-        highlight: function(element, errorClass) {
+        highlight: function (element) {
             $(element).addClass('error-highlight');
         },
-        unhighlight: function(element, errorClass) {
+        unhighlight: function (element) {
             $(element).removeClass('error-highlight');
         }
     });
@@ -97,9 +118,9 @@ $(document).ready(function () {
  */
 function reloadAtCurrentPage() {
 
-    var page = (location.search.split('page=')[1]||'').split('&')[0];
+    var page = (location.search.split('page=')[ 1 ] || '').split('&')[ 0 ];
 
-    if (page.length == 0) {
+    if ( page.length == 0 ) {
         page = 1;
     }
 

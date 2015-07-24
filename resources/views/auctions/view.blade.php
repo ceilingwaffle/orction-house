@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title', 'Item - ' . $auction['auction_title'])
+@section('title', $auction['auction_title'])
 
 @section('content')
     <div class="row">
@@ -67,7 +67,7 @@
                 <p class="right s-time-remaining">{{ $auction['auction_time_remaining'] }}</p>
                 <p class="right s-faded-text">({{ $auction['auction_ended_date'] }})</p>
             </div>
-            <form id="bid-form" method="post" action="/auctions/{{ $auction['auction_id'] }}/bid">
+            <form id="place-bid-form" method="post" action="/auctions/{{ $auction['auction_id'] }}/bid">
                 {!! csrf_field() !!}
                 <div class="s-auction-bid-box">
                     <div class="s-auction-text-row">
@@ -95,14 +95,11 @@
                             <button type="submit" class="btn btn-primary">Place Bid</button>
                         </p>
                     </div>
-                    @if (count($errors) > 0)
-                        <div class="s-bid-errors">
-                            <p style="font-size: 1.2em;">Bid failed:</p>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </div>
-                    @endif
+                    <div class="s-bid-errors">
+                        @if (count($errors) > 0)
+                            <li>{{ $errors->get('bid')[0] }}</li>
+                        @endif
+                    </div>
                 </div>
             </form>
             <div class="s-auction-text-row">

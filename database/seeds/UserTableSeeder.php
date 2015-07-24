@@ -19,7 +19,7 @@ class UserTableSeeder extends Seeder
             'remember_token' => null,
         ]);
 
-        // Create 6 random users
-        factory(App\User::class, 6)->create();
+        // Create 12 random users
+        factory(App\User::class, 12)->create();
     }
 }

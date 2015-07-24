@@ -55,6 +55,10 @@ abstract class BaseTransformer
             $moneyString = ltrim($moneyString, '$');
         }
 
+        if ( ! is_numeric($moneyString)) {
+            $moneyString = "0.0";
+        }
+
         return $this->toDecimalPlacesFormat($moneyString, 2);
     }
 

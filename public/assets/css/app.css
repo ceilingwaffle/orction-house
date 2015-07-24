@@ -157,7 +157,8 @@ hr {
     text-align: left;
     font-weight: bold;
     padding-left: 30px;
-    min-width: 80px; }
+    min-width: 80px;
+    max-width: 220px; }
 
 .s-time-remaining {
   color: red; }
@@ -186,14 +187,19 @@ form#bid-form * input {
 .s-bid-errors {
   margin-left: 180px; }
   .s-bid-errors > li,
-  .s-bid-errors > p {
+  .s-bid-errors > p,
+  .s-bid-errors > label {
     margin-bottom: 0;
     margin-top: 0;
     color: red;
     font-weight: bold;
-    font-size: 0.8em; }
+    font-size: 1.0em; }
     .s-bid-errors > li:last-child,
-    .s-bid-errors > p:last-child {
+    .s-bid-errors > p:last-child,
+    .s-bid-errors > label:last-child {
       margin-bottom: 10px; }
+
+label.error {
+  color: red; }
 
 /*# sourceMappingURL=app.css.map */
