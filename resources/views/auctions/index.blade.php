@@ -107,12 +107,23 @@
                                 <tr>
                                     <td class="td-left">Category:</td>
                                     <td class="td-right">{{ $auction['auction_category'] }}</td>
+                                    <td class="td-left">Listed By:</td>
+                                    <td class="td-right">
+                                        <a href="/users/{{ $auction['auction_seller_username'] }}/feedback">
+                                            {{ $auction['auction_seller_username'] }}
+                                            @if(!is_null($auction['seller_positive_feedback_percentage']) )
+                                                ({{ $auction['seller_positive_feedback_percentage'] }})
+                                            @endif
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="td-left">Current Price:</td>
                                     <td class="td-right">$ {{ $auction['current_auction_price'] }}</td>
-                                    <td class="td-left">Highest Bidder:</td>
-                                    <td class="td-right">{{ $auction['highest_bidder_username'] }}</td>
+                                    {{--<td class="td-left">Highest Bidder:</td>--}}
+                                    {{--<td class="td-right">{{ $auction['highest_bidder_username'] }}</td>--}}
+                                    <td class="td-left">Total bids:</td>
+                                    <td class="td-right">{{ $auction['total_bids'] }}</td>
                                 </tr>
                                 <tr>
                                     <td class="td-left">Status:</td>
@@ -128,19 +139,6 @@
                                         <td class="td-left">Auction Ends:</td>
                                     @endif
                                     <td class="td-right">{{ $auction['auction_time_remaining'] }}</td>
-                                </tr>
-                                <tr>
-                                    <td class="td-left">Listed By:</td>
-                                    <td class="td-right">
-                                        <a href="/users/{{ $auction['auction_seller_username'] }}/feedback">
-                                            {{ $auction['auction_seller_username'] }}
-                                            @if(!is_null($auction['seller_positive_feedback_percentage']) )
-                                                ({{ $auction['seller_positive_feedback_percentage'] }})
-                                            @endif
-                                        </a>
-                                    </td>
-                                    <td class="td-left">Total bids:</td>
-                                    <td class="td-right">{{ $auction['total_bids'] }}</td>
                                 </tr>
                             </table>
                         </a>
