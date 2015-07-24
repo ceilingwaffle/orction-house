@@ -243,7 +243,7 @@ class AuctionRepository extends Repository
      */
     public function isValidAuctionId($id)
     {
-        return Auction::find($id)->exists();
+        return ! is_null(Auction::find($id));
     }
 
     /**

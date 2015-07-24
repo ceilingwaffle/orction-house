@@ -72,13 +72,11 @@
                         </select>
                     </div>
                     <div class="col-xs-4" style="padding-left: 0; padding-right: 6px;">
-                        <button type="button" class="btn btn-danger btn-block" style="font-weight:bold;"
-                                onClick="reloadAtCurrentPage();">Reset
+                        <button type="button" class="btn btn-danger btn-block" onClick="reloadAtCurrentPage();">Reset
                         </button>
                     </div>
                     <div class="col-xs-8" style="padding-left: 6px; padding-right: 0;">
-                        <button type="submit" class="btn btn-primary btn-block" style="font-weight:bold;">Apply Filter
-                        </button>
+                        <button type="submit" class="btn btn-primary btn-block">Apply Filter</button>
                     </div>
                 </form>
             </div>

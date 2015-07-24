@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Input;
+use Response;
 
 class AuctionController extends Controller
 {
@@ -34,7 +35,7 @@ class AuctionController extends Controller
     }
 
     /**
-     * Render the auctions index page
+     * Renders the auctions index page
      *
      * @param Request $request
      * @return $this
@@ -86,16 +87,16 @@ class AuctionController extends Controller
 
         // Render the page
         return view('auctions.index')
-                ->with(compact(
-                    'auctions',
-                    'paginator',
-                    'categories',
-                    'sortableFields'
-                ));
+            ->with(compact(
+                'auctions',
+                'paginator',
+                'categories',
+                'sortableFields'
+            ));
     }
 
     /**
-     * Render the auction view page
+     * Renders the auction view page
      *
      * @param $id
      * @return $this
@@ -103,7 +104,11 @@ class AuctionController extends Controller
     public function show($id)
     {
         // Validate the ID
-        // todo
+        $valid = $this->auctions->isValidAuctionId($id);
+
+        if (!$valid) {
+            App::abort(404, "Auction not found.");
+        }
 
         // Fetch the auction data
         $auction = $this->auctions->getAuctionViewData($id);
@@ -114,6 +119,21 @@ class AuctionController extends Controller
 
         // Render the page
         return view('auctions.view')->with(compact('id', 'auction'));
+    }
+
+    /**
+     * Renders the auction create page
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('auctions.create');
+    }
+
+    public function store()
+    {
+        // todo: Store the auction
     }
 
 }

@@ -52,12 +52,17 @@ Route::get('auth/logout', 'Auth\AuthController@getLogout');
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
 
-Route::group(['middleware' => 'auth'], function()
-{
-    // Auctions
+Route::group(['middleware' => 'auth'], function () {
+    // All auctions
     Route::get('auctions', ['uses' => 'AuctionController@index']);
+
+    // Single auction
     Route::get('auctions/{id}', ['uses' => 'AuctionController@show']);
 
-    // Auction bids
+    // Create new auction form
+    Route::get('auctions/create', ['uses' => 'AuctionController@create']);
+    Route::post('auctions/create', ['uses' => 'AuctionController@store']);
+
+    // Store auction bid
     Route::post('auctions/{id}/bid', ['uses' => 'BidController@store']);
 });
