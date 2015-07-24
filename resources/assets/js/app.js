@@ -51,11 +51,13 @@ $(document).ready(function () {
         wrapper: "li",
         rules: {
             bid: {
+                required: true,
                 money: true
             }
         },
         messages: {
             bid: {
+                required: "A bid is required.",
                 money: "Bid must be a valid monetary amount (e.g. $1.23)."
             }
         },
