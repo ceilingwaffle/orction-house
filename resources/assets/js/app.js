@@ -11,6 +11,15 @@ $(document).ready(function () {
         });
     }
 
+    // Custom validators
+    jQuery.validator.addMethod("money", function(value, element) {
+        return this.optional(element) || value.match(/^(\$)?\d+(\.\d{1,2})?$/);
+    }, "Must be a valid money format (e.g. $1.23).");
+
+    jQuery.validator.addMethod("integer", function(value, element) {
+        return this.optional(element) || value.match(/^\d+$/);
+    }, "Must be a whole number.");
+
     // Auctions filter form validation using jquery.validate
     $('#auctions-filter-form').validate({
         rules: {
@@ -37,10 +46,47 @@ $(document).ready(function () {
         }
     });
 
-    // Custom validators
-    jQuery.validator.addMethod("money", function(value, element) {
-        return this.optional(element) || value.match(/^(\$)?\d+(\.\d{1,2})?$/);
-    }, "Must be a valid money format.");
+    // Auctions filter form validation using jquery.validate
+    $('#create-auction-form').validate({
+        rules: {
+            item_name: {
+                required: true,
+                maxlength: 50
+            },
+            description: {
+                required: true,
+                maxlength: 1000
+            },
+            category: {
+                required: true,
+                min: 1
+            },
+            starting_price: {
+                required: true,
+                money: true
+            },
+            days: {
+                required: true,
+                integer: true,
+                range: [1,14]
+            },
+            photo: {
+                required: false,
+                accept: "image/*"
+            }
+        },
+        messages: {
+            photo: {
+                accept: "The file must be an image."
+            }
+        },
+        highlight: function(element, errorClass) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function(element, errorClass) {
+            $(element).removeClass('error-highlight');
+        }
+    });
 
 });
 

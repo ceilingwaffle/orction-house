@@ -10,5 +10,17 @@ class AuctionCategory extends BaseModel
 
     public $timestamps = false;
 
+    /**
+     * Returns true if the provided category ID is valid
+     *
+     * @param $id
+     * @return bool
+     */
+    public static function isValidCategoryId($id)
+    {
+        $categories = AuctionCategory::all(['id']);
+
+        return $categories->contains('id', $id);
+    }
 
 }

@@ -24,44 +24,42 @@ class AppServiceProvider extends ServiceProvider
          */
 
         // Valid money string
-        Validator::extend('money', function($attribute, $value, $parameters) {
+        Validator::extend('money', function ($attribute, $value, $parameters) {
             // Allows formats like: $123.45, 123, $123, $123.4, 123.4
             return preg_match('/^(\$)?\d+(\.\d{1,2})?$/', $value);
         });
 
         // Valid auction category ID
-        Validator::extend('auction_category', function($attribute, $value, $parameters) {
-            $categories = AuctionCategory::all(['id']);
-
-            return $categories->contains('id', $value);
+        Validator::extend('auction_category', function ($attribute, $value, $parameters) {
+            return AuctionCategory::isValidCategoryId($value);
         });
 
         // Valid sortable field for the auctions query
-        Validator::extend('auction_order_by', function($attribute, $value, $parameters) {
+        Validator::extend('auction_order_by', function ($attribute, $value, $parameters) {
             $repo = App::make(AuctionRepository::class);
 
             return $repo->isValidSortableField($value);
         });
 
         // Valid "order by" direction
-        Validator::extend('sort_direction', function($attribute, $value, $parameters) {
+        Validator::extend('sort_direction', function ($attribute, $value, $parameters) {
             $allowedValues = ['asc', 'desc'];
 
             return in_array($value, $allowedValues);
         });
 
         // Valid if the auction is NOT owned by the provided user ID
-        Validator::extend('not_auction_owner', function($attribute, $value, $parameters) {
+        Validator::extend('not_auction_owner', function ($attribute, $value, $parameters) {
             $auctionId = $parameters[0];
             $userId = $parameters[1];
 
             $repo = App::make(AuctionRepository::class);
 
-            return ! $repo->isAuctionOwner($auctionId, $userId);
+            return !$repo->isAuctionOwner($auctionId, $userId);
         });
 
         // Valid bid amount
-        Validator::extend('allowable_bid_amount', function($attribute, $value, $parameters) {
+        Validator::extend('allowable_bid_amount', function ($attribute, $value, $parameters) {
 
             $bidTransformer = new BidTransformer();
             $bidAmount = $bidTransformer->transform($value);
@@ -77,13 +75,14 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Valid if the auction status is 'open'
-        Validator::extend('auction_is_open', function($attribute, $value, $parameters) {
+        Validator::extend('auction_is_open', function ($attribute, $value, $parameters) {
             $repo = App::make(AuctionRepository::class);
 
             $auctionId = $parameters[0];
 
             return $repo->isOpenForBidding($auctionId);
         });
+        
     }
 
     /**
@@ -93,8 +92,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if($this->app->environment('local'))
-        {
+        if ($this->app->environment('local')) {
             $this->app->register('Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider');
         }
     }

@@ -50,10 +50,10 @@ class AuctionController extends Controller
         $params['order_by'] = Input::get('order_by');
         $params['order_direction'] = Input::get('order_direction');
 
-        // Validate input. Redirects back with errors if any validation fails.
+        // Validate the search filter input. Redirects back with errors if any validation fails.
         $this->validate($request, [
             'title' => 'max:50',
-            'category' => 'numeric|auction_category',
+            'category' => 'integer|min:1|auction_category',
             'min_price' => 'money',
             'max_price' => 'money',
             'order_by' => 'auction_order_by',
@@ -124,16 +124,33 @@ class AuctionController extends Controller
     /**
      * Renders the auction create page
      *
-     * @return \Illuminate\View\View
+     * @return $this
      */
     public function create()
     {
-        return view('auctions.create');
+        $categories = $this->auctions->getAuctionCategories();
+
+        return view('auctions.create')->with(compact('categories'));
     }
 
-    public function store()
+    /**
+     * Stores a new auction
+     *
+     * @param Request $request
+     */
+    public function store(Request $request)
     {
-        // todo: Store the auction
+        // Validate the form input. Redirect back if any errors.
+        $this->validate($request, [
+            'item_name' => 'required|max:50',
+            'description' => 'required|max:1000',
+            'category' => 'required|integer|min:1|auction_category',
+            'starting_price' => 'required|money',
+            'days' => 'required|integer|min:1|max:14',
+            'photo' => 'image|max:1000', // max file size 1,000 kb
+        ]);
+
+        dd(Input::all());
     }
 
 }
