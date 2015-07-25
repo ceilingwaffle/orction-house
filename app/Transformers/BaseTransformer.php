@@ -28,12 +28,12 @@ abstract class BaseTransformer
     /**
      * Returns a human readable string like "2 minutes ago"
      *
-     * @param $auctionEndDateString
+     * @param $dateString
      * @return string
      */
-    protected function toHumanTimeDifference($auctionEndDateString)
+    protected function toHumanTimeDifference($dateString)
     {
-        $dt = Carbon::createFromTimestamp(strtotime($auctionEndDateString));
+        $dt = Carbon::createFromTimestamp(strtotime($dateString));
 
         return $dt->diffForHumans();
     }
