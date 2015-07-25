@@ -65,4 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Bid store
     Route::post('auctions/{id}/bid', ['uses' => 'BidController@store']);
+
+    // User feedback
+    Route::get('users/{username}/feedback', ['uses' => 'UserFeedbackController@index']);
 });

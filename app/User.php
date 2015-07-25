@@ -31,4 +31,15 @@ class User extends BaseModel implements AuthenticatableContract
      */
     protected $hidden = ['password'];
 
+    /**
+     * Returns true if the username exists
+     *
+     * @param $username
+     * @return mixed
+     */
+    public static function isValidUsername($username)
+    {
+        return self::where('username', '=', $username)->exists();
+    }
+
 }
