@@ -48,14 +48,22 @@ class UserFeedbackController extends Controller
         }
 
         // Get the feedback received by the user
-        $feedbackData = $this->feedback->getFeedbackSentToUser($username);
+        $feedbackResults = $this->feedback->getFeedbackSentToUser($username);
 
         // Transform the data
         $transformer = new FeedbackTransformer();
-        $feedbackData = $transformer->transformMany($feedbackData);
+        $transformedFeedback = $transformer->transformMany($feedbackResults);
+
+        // Apply pagination
+        list($paginator, $feedbackData) = $this->preparePaginator($transformedFeedback, $perPage = 6);
 
         // Render the page
-        return view('feedback.index')->with(compact('username', 'feedbackData'));
+        return view('feedback.index')
+            ->with(compact(
+                'username',
+                'feedbackData',
+                'paginator'
+            ));
     }
 
     /**

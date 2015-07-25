@@ -24,18 +24,9 @@ class AuctionController extends Controller
      */
     private $auctions;
 
-    /**
-     * @var PaginationService
-     */
-    private $paginator;
-
-    public function __construct
-    (
-        AuctionRepository $auctions,
-        PaginationService $paginator
-    ) {
+    public function __construct(AuctionRepository $auctions)
+    {
         $this->auctions = $auctions;
-        $this->paginator = $paginator;
     }
 
     /**
@@ -70,15 +61,12 @@ class AuctionController extends Controller
 
         // Fetch the auction data
         $auctions = $this->auctions
-            ->orderBy($params['order_by'], $params['order_direction'], $this->auctions->getAuctionSortableFields())
+            ->orderBy($params['order_by'], $params['order_direction'],
+                $this->auctions->getAuctionSortableFields())
             ->getAuctions($params);
 
         // Apply pagination to the data
-        $perPage = 4;
-        $currentPage = Input::get('page', 1);
-        $paginator = $this->paginator->makePaginated($auctions, $perPage, $currentPage);
-        $auctions = $paginator->getPaginatedData();
-        $paginator = $paginator->getPaginatorHtml();
+        list($paginator, $auctions) = $this->preparePaginator($auctions);
 
         // Transform the auctions data
         $auctions = $transformer->transformMany($auctions);
@@ -122,7 +110,8 @@ class AuctionController extends Controller
         $auction = $transformer->transform($auction);
 
         // Render the page
-        return view('auctions.view')->with(compact('id', 'auction'));
+        return view('auctions.view')
+            ->with(compact('id', 'auction'));
     }
 
     /**
@@ -135,7 +124,8 @@ class AuctionController extends Controller
         $categories = $this->auctions->getAuctionCategories();
         $conditions = $this->auctions->getAuctionConditions();
 
-        return view('auctions.create')->with(compact('categories', 'conditions'));
+        return view('auctions.create')
+            ->with(compact('categories', 'conditions'));
     }
 
     /**
@@ -185,8 +175,7 @@ class AuctionController extends Controller
             return Redirect::back()->withErrors('Sorry, something went wrong trying to save your auction.');
         }
 
-        // The auction was saved successfully. Show the auction page.
+        // The auction was saved successfully. Redirect to the auction
         return Redirect::to('/auctions/' . $auction->id);
     }
-
 }

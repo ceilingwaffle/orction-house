@@ -8,7 +8,7 @@
                 <h3 class="panel-title">Sign Up</h3>
             </div>
             <div class="panel-body">
-                <p class="text-muted text-center s-form-description">Fill in t his form to create an account to use with the website.</p>
+                <p class="text-muted text-center s-form-description">Fill in this form to create an account to use with the website.</p>
                 @include('partials._validationErrors')
                 <form method="POST" id="user-register-form" action="/auth/register" class="form-horizontal">
                     {!! csrf_field() !!}
