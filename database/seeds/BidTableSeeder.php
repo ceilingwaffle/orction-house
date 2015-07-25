@@ -23,6 +23,11 @@ class BidTableSeeder extends Seeder
 
         for ($i = 0; $i < $fakeRecordCount; $i++) {
 
+            if ($i % 2 === 0) {
+                // Half the auctions should have 0 bids
+                continue;
+            }
+
             $randomAuction = Auction::find($auctions->random()->id);
             $randomUser = $users->random();
 
@@ -41,9 +46,9 @@ class BidTableSeeder extends Seeder
         }
 
         // One random auction should have 0 bids
-        $auction = App\Auction::all()->random();
-        if ($auction) {
-            Bid::where('auction_id', '=', $auction->id)->delete();
-        }
+//        $auction = App\Auction::all()->random();
+//        if ($auction) {
+//            Bid::where('auction_id', '=', $auction->id)->delete();
+//        }
     }
 }
