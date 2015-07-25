@@ -9,7 +9,7 @@
             </div>
             <div class="panel-body">
                 @include('partials._validationErrors')
-                <form method="POST" action="/auth/login" class="form-horizontal">
+                <form method="POST" id="user-login-form" action="/auth/login" class="form-horizontal">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label for="username" class="col-sm-3 control-label">User Name:</label>

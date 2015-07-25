@@ -20,7 +20,49 @@ $(document).ready(function () {
         return this.optional(element) || value.match(/^\d+$/);
     }, "Must be a whole number.");
 
-    // Auctions filter form validation using jquery.validate
+    // Validate forms
+    $('#user-login-form').validate({
+        rules: {
+            username: {
+                required: true,
+                maxlength: 50
+            },
+            password: {
+                required: true,
+                minlength: 6
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-highlight');
+        }
+    });
+
+    $('#user-register-form').validate({
+        rules: {
+            username: {
+                required: true,
+                maxlength: 50
+            },
+            password: {
+                required: true,
+                minlength: 6
+            },
+            password_confirmation: {
+                required: true,
+                equalTo: '#password'
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-highlight');
+        }
+    });
+
     $('#auctions-filter-form').validate({
         rules: {
             title: {
@@ -69,7 +111,6 @@ $(document).ready(function () {
         }
     });
 
-    // Auctions filter form validation using jquery.validate
     $('#create-auction-form').validate({
         rules: {
             item_name: {

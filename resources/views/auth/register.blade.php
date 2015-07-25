@@ -10,7 +10,7 @@
             <div class="panel-body">
                 <p class="text-muted text-center s-form-description">Fill in t his form to create an account to use with the website.</p>
                 @include('partials._validationErrors')
-                <form method="POST" action="/auth/register" class="form-horizontal">
+                <form method="POST" id="user-register-form" action="/auth/register" class="form-horizontal">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label for="username" class="col-sm-4 control-label">User Name:</label>
