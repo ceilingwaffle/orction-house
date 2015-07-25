@@ -14,11 +14,11 @@
                         {!! csrf_field() !!}
                         <div class="form-group">
                             <label for="item_name">Item Name:</label>
-                            <input type="text" id="item_name" name="item_name" class="form-control" placeholder="e.g. Chair" value="{{ old('title') }}" />
+                            <input type="text" id="item_name" name="item_name" class="form-control" placeholder="e.g. Chair" value="{{ old('item_name') }}" />
                         </div>
                         <div class="form-group">
                             <label for="description">Describe the item:</label>
-                            <textarea id="description" name="description" class="form-control" placeholder="" value={{ old('description') }}></textarea>
+                            <textarea id="description" name="description" class="form-control" placeholder="">{{ old('description') }}</textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
