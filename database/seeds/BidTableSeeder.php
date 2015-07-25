@@ -18,8 +18,8 @@ class BidTableSeeder extends Seeder
         $auctions = App\Auction::all();
         $users = App\User::all();
 
-        // Total bids = 10 times the number of auctions
-        $fakeRecordCount = $auctions->count() * 10;
+        // Total bids = n times the number of auctions
+        $fakeRecordCount = $auctions->count() * 30;
 
         for ($i = 0; $i < $fakeRecordCount; $i++) {
 

@@ -44,6 +44,7 @@
                             @endforeach
                             </tbody>
                         </table>
+                        {!! $paginator !!}
                     @endif
                 </div>
             </div>
