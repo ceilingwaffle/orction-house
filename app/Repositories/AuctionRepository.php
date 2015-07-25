@@ -70,7 +70,7 @@ class AuctionRepository extends Repository
              , a.title AS 'auction_title'
              , a.end_date AS 'auction_end_date'
              , CASE
-                  WHEN w.id IS NOT NULL THEN 'sold'
+                  WHEN (b1.amount IS NOT NULL AND a.end_date <= now()) THEN 'sold'
                   WHEN a.end_date > now() THEN 'open'
                   ELSE 'expired'
                END AS 'auction_status'
@@ -93,7 +93,6 @@ class AuctionRepository extends Repository
              , a.description as 'auction_description'
              , a.start_price as 'auction_start_price'
             FROM auctions a
-            LEFT OUTER JOIN winners w ON w.auction_id = a.id
             LEFT OUTER JOIN auction_categories acat ON acat.id = a.auction_category_id
             LEFT OUTER JOIN auction_conditions acon ON acon.id = a.auction_condition_id
             LEFT OUTER JOIN (
