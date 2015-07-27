@@ -128,7 +128,7 @@ class AuctionController extends Controller
     }
 
     /**
-     * Stores a new auction
+     * Stores a new auction in storage
      *
      * @param Request $request
      * @return $this
@@ -230,14 +230,12 @@ class AuctionController extends Controller
 
         // Validate auction has not ended
         if ($this->auctions->auctionHasEnded($id)) {
-            return Redirect::back()
-                ->withErrors('Sorry, this auction has ended and cannot be updated.');
+            App::abort(403, 'Sorry, this auction has ended and cannot be updated.');
         }
 
         // Validate auction owned by user
         if (!$this->auctions->isAuctionOwner($id, Auth::user()->id)) {
-            return Redirect::back()
-                ->withErrors('Sorry, you cannot update this auction because you
+            App::abort(401, 'Sorry, you cannot update this auction because you
                                 are not logged in as the user who created it.');
         }
 
@@ -253,7 +251,7 @@ class AuctionController extends Controller
             'photo' => 'image|max:1000', // max file size 1,000 kb
             'delete_existing_photo' => 'boolean',
         ], [
-            'date_ending.date_format' => 'The auction end date is not a valid date (format must be DD/MM/YYYY and 1 to 14 days from now).',
+            'date_ending.date_format' => 'The auction end date is not in a valid format (DD/MM/YYYY).',
             'date_ending.after' => 'The auction end date must be between 1 to 14 days from now.',
             'date_ending.before' => 'The auction end date must be between 1 to 14 days from now.',
         ]);
