@@ -33,7 +33,7 @@
                                     <td>{{ $feedback['feedback_type'] }}</td>
                                     <td>
                                         <a href="/auctions/{{ $feedback['auction_id'] }}">{{ $feedback['auction_title'] }}</a>
-                                        (${{ $feedback['auction_winning_bid_amount'] }})
+                                        ({{ $feedback['auction_winning_bid_amount'] }})
                                     </td>
                                     <td>
                                         <a href="/users/{{ $feedback['left_by_username'] }}/feedback">{{ $feedback['left_by_username'] }}</a>

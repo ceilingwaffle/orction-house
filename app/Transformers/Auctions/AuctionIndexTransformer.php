@@ -29,7 +29,7 @@ class AuctionIndexTransformer extends AuctionBaseTransformer
             'seller_positive_feedback_percentage' => $this->feedbackStringToPercentage($auction->user_feedback_type_counts),
             'seller_feedback_link' => '#todo',
 //            'current_visible_bid' => $currentVisibleBid,
-            'current_auction_price' => $this->transformMoney(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
+            'current_auction_price' => $this->transformToCurrencyString(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
         ];
     }
 

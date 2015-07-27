@@ -19,7 +19,7 @@ class AuctionStoreTransformer extends AuctionBaseTransformer
             'auction_category_id' => $auctionInput['category_id'],
             'auction_condition_id' => $auctionInput['condition_id'],
             'user_id' => $auctionInput['user_id'],
-            'start_price' => $this->transformMoney($auctionInput['start_price']),
+            'start_price' => $this->transformCurrencyStringToFloat($auctionInput['start_price']),
             'end_date' => $this->createDateTimeStringFromFormat($auctionInput['date_ending']),
         ];
 

@@ -80,6 +80,18 @@ class AppServiceProvider extends ServiceProvider
             return $bidAmount >= $minBidAllowed;
         });
 
+        Validator::extend('maximum_bid_amount', function ($attribute, $value, $parameters) {
+
+            $bidTransformer = new BidTransformer();
+            $bidAmount = $bidTransformer->transform($value);
+
+            $maxAmount = floatval($parameters[0]);
+
+            return $bidAmount <= $maxAmount;
+
+        });
+
+
         // Valid if the auction status is 'open'
         Validator::extend('auction_is_open', function ($attribute, $value, $parameters) {
             $repo = App::make(AuctionRepository::class);

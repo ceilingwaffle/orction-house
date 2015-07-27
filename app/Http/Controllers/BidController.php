@@ -63,10 +63,11 @@ class BidController extends Controller
         // Validate the bid amount. Redirects back if validation fails.
         $this->validate($request, [
             'bid' => "required
-                     |money
                      |not_auction_owner:{$auctionId},{$userId}
-                     |allowable_bid_amount:{$auctionId}
-                     |auction_is_open:{$auctionId}"
+                     |auction_is_open:{$auctionId}
+                     |money
+                     |maximum_bid_amount:999999.99
+                     |allowable_bid_amount:{$auctionId}"
         ]);
 
         $bidAmount = $request->get('bid');

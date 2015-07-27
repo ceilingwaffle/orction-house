@@ -114,9 +114,7 @@
                                 </tr>
                                 <tr>
                                     <td class="td-left">Current Price:</td>
-                                    <td class="td-right">$ {{ $auction['current_auction_price'] }}</td>
-                                    {{--<td class="td-left">Highest Bidder:</td>--}}
-                                    {{--<td class="td-right">{{ $auction['highest_bidder_username'] }}</td>--}}
+                                    <td class="td-right">{{ $auction['current_auction_price'] }}</td>
                                     <td class="td-left">Total bids:</td>
                                     <td class="td-right">{{ $auction['total_bids'] }}</td>
                                 </tr>

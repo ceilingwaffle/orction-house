@@ -92,7 +92,7 @@
                         @else
                             <p class="left">Final Bid:</p>
                         @endif
-                        <p class="right" style="font-size: 1.3em;">${{ $auction['highest_bid_amount'] }}</p>
+                        <p class="right" style="font-size: 1.3em;">{{ $auction['highest_bid_amount'] }}</p>
 
                         <p class="right s-bids-link">[{{ $auction['total_bids'] }}
                             @if ($auction['total_bids'] == 1) bid @else bids @endif ]</p>
@@ -103,7 +103,7 @@
                         <p class="right">
                             <input type="text" id="bid" name="bid" value="{{ old('bid') }}"/>
                             <br/>
-                            <span class="s-faded-text">Enter ${{ $auction['minimum_bid'] }} or more</span>
+                            <span class="s-faded-text">Enter {{ $auction['minimum_bid'] }} or more</span>
                         </p>
 
                         <p class="right">
@@ -111,9 +111,9 @@
                         </p>
                     </div>
                     <div class="s-bid-errors">
-                        @if (count($errors) > 0 and !empty($errors->get('bid')))
-                            <li>{{ $errors->get('bid')[0] }}</li>
-                        @endif
+                        {{--@if (count($errors) > 0 and !empty($errors->get('bid')))--}}
+                            {{--<li>{{ $errors->get('bid')[0] }}</li>--}}
+                        {{--@endif--}}
                     </div>
                 </div>
             </form>
