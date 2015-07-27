@@ -194,14 +194,12 @@ class AuctionController extends Controller
 
         // Validate auction has not ended
         if ($this->auctions->auctionHasEnded($id)) {
-            return Redirect::back()
-                ->withErrors('Sorry, this auction has ended and cannot be updated.');
+            App::abort(403, 'Sorry, this auction has ended and cannot be updated.');
         }
 
         // Validate auction owned by user
         if (!$this->auctions->isAuctionOwner($id, Auth::user()->id)) {
-            return Redirect::back()
-                ->withErrors('Sorry, you cannot update this auction because you
+            App::abort(401, 'Sorry, you cannot update this auction because you
                                 are not logged in as the user who created it.');
         }
 
@@ -375,7 +373,7 @@ class AuctionController extends Controller
     {
         $userIsCreator = $user->username === $auctionSellerUsername;
 
-        $auctionHasNotEnded = ! $this->auctions->auctionHasEnded($auctionId);
+        $auctionHasNotEnded = !$this->auctions->auctionHasEnded($auctionId);
 
         return ($userIsCreator === true and $auctionHasNotEnded === true);
     }
