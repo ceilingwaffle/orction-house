@@ -23,7 +23,7 @@ class CreateBidsTable extends Migration
             $table->foreign('auction_id')->references('id')->on('auctions');
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->timestamps();
+            $table->timestamp('created_at');
         });
     }
 

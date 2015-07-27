@@ -13,4 +13,15 @@ class Bid extends BaseModel
         'auction_id',
         'user_id',
     ];
+
+    /**
+     * Disables use of the "updated_at" column
+     *
+     * @param $value
+     * @return null
+     */
+    public function setUpdatedAtAttribute($value)
+    {
+        return null;
+    }
 }

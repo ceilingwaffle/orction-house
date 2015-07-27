@@ -79,7 +79,7 @@
 
                 <p class="right s-faded-text">({{ $auction['auction_ended_date'] }})</p>
             </div>
-            <form id="place-bid-form" method="post" action="/auctions/{{ $auction['auction_id'] }}/bid">
+            <form id="place-bid-form" method="post" action="/auctions/{{ $auction['auction_id'] }}/bids">
                 {!! csrf_field() !!}
                 <div class="s-auction-bid-box">
                     <div class="s-auction-text-row">
@@ -94,8 +94,8 @@
                         @endif
                         <p class="right" style="font-size: 1.3em;">{{ $auction['highest_bid_amount'] }}</p>
 
-                        <p class="right s-bids-link">[{{ $auction['total_bids'] }}
-                            @if ($auction['total_bids'] == 1) bid @else bids @endif ]</p>
+                        <a href="/auctions/{{ $id }}/bids" class="right s-bids-link">[{{ $auction['total_bids'] }}
+                            @if ($auction['total_bids'] == 1) bid @else bids @endif ]</a>
                     </div>
                     <div class="s-auction-text-row">
                         <p class="left"></p>

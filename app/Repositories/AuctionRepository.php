@@ -259,7 +259,7 @@ class AuctionRepository extends Repository
      */
     public function isValidAuctionId($id)
     {
-        return ! is_null(Auction::find($id));
+        return !is_null(Auction::find($id));
     }
 
     /**
@@ -287,7 +287,7 @@ class AuctionRepository extends Repository
     {
         $auction = Auction::where('id', '=', $auctionId)->where('user_id', '=', $userId)->first();
 
-        return ! is_null($auction);
+        return !is_null($auction);
     }
 
     /**
@@ -300,7 +300,7 @@ class AuctionRepository extends Repository
     {
         $auction = $this->getAuctionViewData($auctionId);
 
-        return ! Auction::auctionHasEnded($auction->auction_status);
+        return !Auction::auctionHasEnded($auction->auction_status);
     }
 
     /**
@@ -348,14 +348,14 @@ class AuctionRepository extends Repository
             $auction->image_file_name = $auctionData['photo_file'];
         }
 
+        if (isset($auctionData['end_date'])) {
+            $auction->end_date = $auctionData['end_date'];
+        }
+
         $auction->title = $auctionData['title'];
         $auction->description = $auctionData['description'];
         $auction->auction_category_id = $auctionData['auction_category_id'];
         $auction->auction_condition_id = $auctionData['auction_condition_id'];
-
-        if (isset($auctionData['end_date'])) {
-            $auction->end_date = $auctionData['end_date'];
-        }
 
         $auction->save();
 
@@ -372,13 +372,13 @@ class AuctionRepository extends Repository
     {
         $this->pdoBindings['auction_id'] = $auctionId;
 
-        $query = "SELECT a.title as 'auction_title',
-                          a.description as 'auction_description',
-                          a.auction_category_id as 'auction_category_id',
-                          a.auction_condition_id as 'auction_condition_id',
-                          a.start_price as 'auction_start_price',
-                          a.end_date as 'auction_end_date',
-                          a.image_file_name as 'auction_photo_file_name'
+        $query = "SELECT a.title AS 'auction_title',
+                          a.description AS 'auction_description',
+                          a.auction_category_id AS 'auction_category_id',
+                          a.auction_condition_id AS 'auction_condition_id',
+                          a.start_price AS 'auction_start_price',
+                          a.end_date AS 'auction_end_date',
+                          a.image_file_name AS 'auction_photo_file_name'
                   FROM auctions a
                   WHERE a.id = :auction_id;";
 
@@ -410,6 +410,19 @@ class AuctionRepository extends Repository
         $endDate = Carbon::createFromTimestamp(strtotime($endDate));
 
         return $endDate->isPast();
+    }
+
+    /**
+     * Gets the title of an auction
+     *
+     * @param $auctionId
+     * @return string
+     */
+    public function getAuctionTitle($auctionId)
+    {
+        $title = Auction::findOrFail($auctionId)->title;
+
+        return ucfirst($title);
     }
 
 }
