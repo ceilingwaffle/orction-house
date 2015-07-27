@@ -57,6 +57,9 @@
                         feedback</p>
                 @endif
             </div>
+            @if ($userCanUpdate === true)
+                <a href="/auctions/{{ $id }}/edit" class="btn btn-primary btn-lg btn-block">Update Auction Details</a>
+            @endif
         </div>
         <div class="col-md-7">
             <h1 class="s-auction-title">{{ $auction['auction_title'] }}</h1>

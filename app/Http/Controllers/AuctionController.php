@@ -8,6 +8,7 @@ use App\Services\ListAuctionService;
 use App\Transformers\Auctions\AuctionEditTransformer;
 use App\Transformers\Auctions\AuctionIndexTransformer;
 use App\Transformers\Auctions\AuctionViewTransformer;
+use App\User;
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -105,9 +106,11 @@ class AuctionController extends Controller
         $transformer = App::make(AuctionViewTransformer::class);
         $auction = $transformer->transform($auction);
 
+        $userCanUpdate = $this->userCanUpdateAuction(Auth::user(), $id, $auction['auction_seller_username']);
+
         // Render the page
         return view('auctions.view')
-            ->with(compact('id', 'auction'));
+            ->with(compact('id', 'auction', 'userCanUpdate'));
     }
 
     /**
@@ -250,6 +253,7 @@ class AuctionController extends Controller
             //'date_ending' => "required|date_format:d/m/Y|after:tomorrow|before:+15 days",
             'date_ending' => "date_format:d/m/Y",
             'photo' => 'image|max:1000', // max file size 1,000 kb
+            'delete_existing_photo' => 'boolean',
         ], [
             'date_ending.date_format' => 'The auction end date is not a valid date (format must be DD/MM/YYYY and 1 to 14 days from now).',
             'date_ending.after' => 'The auction end date must be between 1 to 14 days from now.',
@@ -287,6 +291,7 @@ class AuctionController extends Controller
             'category_id' => Input::get('category'),
             'condition_id' => Input::get('condition'),
             'photo_file' => isset($photoFileName) ? $photoFileName : null,
+            'delete_existing_photo' => Input::get('delete_existing_photo'),
         ];
 
         if ($patchEndDate) {
@@ -356,5 +361,22 @@ class AuctionController extends Controller
             // continue with update, but do not patch date
             return false;
         }
+    }
+
+    /**
+     * Returns true if the user is allowed to update this auction
+     *
+     * @param User $user
+     * @param $auctionId
+     * @param $auctionSellerUsername
+     * @return bool
+     */
+    protected function userCanUpdateAuction(User $user, $auctionId, $auctionSellerUsername)
+    {
+        $userIsCreator = $user->username === $auctionSellerUsername;
+
+        $auctionHasNotEnded = ! $this->auctions->auctionHasEnded($auctionId);
+
+        return ($userIsCreator === true and $auctionHasNotEnded === true);
     }
 }

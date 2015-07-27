@@ -1,19 +1,42 @@
 <form method="POST" id="{{ $formId }}" action="{{ $formAction }}" enctype="multipart/form-data">
     {!! csrf_field() !!}
     @if (isset($formMethod))
-        <input type="hidden" name="_method" value="{{ $formMethod }}" />
+        <input type="hidden" name="_method" value="{{ $formMethod }}"/>
     @endif
-    <div class="form-group">
-        <label for="item_name">Item Name:</label>
-        <input type="text" id="item_name" name="item_name" class="form-control" placeholder="e.g. Chair"
-               value="{{ old('item_name', isset($auction['title']) ? $auction['title'] : null)  }}"
-               @if(isset($disabledInputs['item_name']) and $disabledInputs['item_name'] === true) disabled @endif />
-    </div>
-    <div class="form-group">
-        <label for="description">Describe the item:</label>
+    <div class="row">
+        <div class="@if(isset($auction['image_file_name'])) col-md-6 @else col-md-12 @endif">
+            <div class="form-group">
+                <label for="item_name">Item Name:</label>
+                <input type="text" id="item_name" name="item_name" class="form-control" placeholder="e.g. Chair"
+                       value="{{ old('item_name', isset($auction['title']) ? $auction['title'] : null)  }}"
+                       @if(isset($disabledInputs['item_name']) and $disabledInputs['item_name'] === true) disabled @endif />
+            </div>
+            <div class="form-group">
+                <label for="description">Describe the item:</label>
         <textarea id="description" name="description" class="form-control" rows="4" placeholder=""
                   @if(isset($disabledInputs['description']) and $disabledInputs['description'] === true) disabled @endif
                 >{{ old('description', isset($auction['description']) ? $auction['description'] : null)  }}</textarea>
+            </div>
+        </div>
+        @if (isset($auction['image_file_name']))
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="existing-photo">Existing photo:</label>
+                    @if (!empty($auction['image_file_name']))
+                        <img src="/assets/img/auctions/{{ $auction['image_file_name'] }}" class="s-auction-photo">
+                    @else
+                        <img src="/assets/img/placeholder-480x480.png" class="s-auction-photo">
+                    @endif
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="delete_existing_photo" id="delete_existing_photo" value="1">
+                            Delete photo on record?
+                        </label>
+                    </div>
+                </div>
+            </div>
+        @endif
+
     </div>
     <div class="row">
         <div class="col-md-6">
@@ -57,20 +80,21 @@
                        placeholder="e.g. $1.00"
                        @if(isset($disabledInputs['starting_price']) and $disabledInputs['starting_price'] === true) disabled
                        @endif
-                       value="{{ old('starting_price', isset($auction['start_price']) ? $auction['start_price'] :  "$0.00")  }}" />
+                       value="{{ old('starting_price', isset($auction['start_price']) ? $auction['start_price'] :  "$0.00")  }}"/>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="days">Auction End Date (1 to 14 days)</label>
+
                 <div class="input-group date" id="auctionFormDateEndingSelector">
                     <input id="date_ending" name="date_ending" type="text" class="form-control"
                            value="{{ old('date_ending', isset($auction['end_date']) ? $auction['end_date'] :  null)  }}"
                            @if(isset($auction['ending_today']) and $auction['ending_today'] === true) disabled @endif
                            @if(isset($disabledInputs['date_ending']) and $disabledInputs['date_ending'] === true) disabled @endif />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
                 </div>
             </div>
         </div>
@@ -81,4 +105,5 @@
                @if(isset($disabledInputs['photo']) and $disabledInputs['photo'] === true) disabled @endif />
     </div>
     <button type="submit" class="btn btn-lg btn-block btn-primary">{{ $submitButtonText }}</button>
+
 </form>

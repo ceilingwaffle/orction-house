@@ -14,7 +14,7 @@
                         'formId' => 'update-auction-form',
                         'formMethod' => 'PATCH',
                         'formAction' => "/auctions/{$id}",
-                        'submitButtonText' => 'Update My Listing',
+                        'submitButtonText' => 'Done',
                         'disabledInputs' => [
                             'starting_price' => true,
                         ],

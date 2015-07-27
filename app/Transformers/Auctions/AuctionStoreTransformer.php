@@ -2,7 +2,7 @@
 
 namespace App\Transformers\Auctions;
 
-class AuctionUpdateTransformer extends AuctionBaseTransformer
+class AuctionStoreTransformer extends AuctionBaseTransformer
 {
     /**
      * Transforms auction data from input
@@ -18,12 +18,10 @@ class AuctionUpdateTransformer extends AuctionBaseTransformer
             'image_file_name' => $auctionInput['photo_file'],
             'auction_category_id' => $auctionInput['category_id'],
             'auction_condition_id' => $auctionInput['condition_id'],
-            'delete_existing_photo' => $auctionInput['delete_existing_photo'],
+            'user_id' => $auctionInput['user_id'],
+            'start_price' => $this->transformMoney($auctionInput['start_price']),
+            'end_date' => $this->createDateTimeStringFromFormat($auctionInput['date_ending']),
         ];
-
-        if (isset($auctionInput['date_ending'])) {
-            $transformations['end_date'] = $this->createDateTimeStringFromFormat($auctionInput['date_ending']);
-        }
 
         return $transformations;
     }
