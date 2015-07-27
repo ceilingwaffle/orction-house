@@ -68,4 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // User feedback
     Route::get('users/{username}/feedback', ['uses' => 'UserFeedbackController@index']);
+    Route::get('auctions/{id}/feedback/create', ['uses' => 'UserFeedbackController@create'])->where(['id' => '[0-9]+']);
+    Route::post('auctions/{id}/feedback', ['uses' => 'UserFeedbackController@store'])->where(['id' => '[0-9]+']);
+
 });

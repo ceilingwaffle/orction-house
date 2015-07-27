@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App;
+use App\Repositories\AuctionRepository;
 use App\Repositories\FeedbackRepository;
 use App\Services\PaginationService;
 use App\Transformers\Feedback\FeedbackIndexTransformer;
@@ -20,6 +21,11 @@ class UserFeedbackController extends Controller
     private $feedback;
 
     /**
+     * @var AuctionRepository
+     */
+    private $auctions;
+
+    /**
      * @var PaginationService
      */
     private $paginator;
@@ -27,9 +33,11 @@ class UserFeedbackController extends Controller
     public function __construct
     (
         FeedbackRepository $feedback,
+        AuctionRepository $auctions,
         PaginationService $paginator
     ) {
         $this->feedback = $feedback;
+        $this->auctions = $auctions;
         $this->paginator = $paginator;
     }
 
@@ -69,11 +77,23 @@ class UserFeedbackController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param $id
      * @return Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        $auctionId = $id;
+
+        // Validate the auction ID
+        if ( ! $this->auctions->isValidAuctionId($auctionId)) {
+            App::abort(404, 'Auction not found.');
+        }
+
+        // Get the feedback types
+        $feedbackTypes = $this->feedback->getFeedbackTypes();
+
+        // Render the page
+        return view('feedback.create')->with(compact('auctionId', 'feedbackTypes'));
     }
 
     /**
@@ -83,17 +103,6 @@ class UserFeedbackController extends Controller
      * @return Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
     {
         //
     }
