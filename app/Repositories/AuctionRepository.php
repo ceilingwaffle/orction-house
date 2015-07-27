@@ -337,9 +337,15 @@ class AuctionRepository extends Repository
     {
         $auction = Auction::findOrFail($id);
 
+        // Check if we should delete the existing photo
+        if (empty($auctionData['image_file_name']) and $auctionData['delete_existing_photo'] == '1') {
+            $auction->image_file_name = null;
+        } else {
+            $auction->image_file_name = $auctionData['image_file_name'];
+        }
+
         $auction->title = $auctionData['title'];
         $auction->description = $auctionData['description'];
-        $auction->image_file_name = $auctionData['image_file_name'];
         $auction->auction_category_id = $auctionData['auction_category_id'];
         $auction->auction_condition_id = $auctionData['auction_condition_id'];
 

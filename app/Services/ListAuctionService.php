@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App;
 use App\Repositories\AuctionRepository;
+use App\Transformers\Auctions\AuctionStoreTransformer;
 use App\Transformers\Auctions\AuctionUpdateTransformer;
 use Exception;
 use File;
@@ -53,7 +54,7 @@ class ListAuctionService
     public function createAuction(array $auctionData)
     {
         // Transform the data
-        $transformer = App::make(AuctionUpdateTransformer::class);
+        $transformer = App::make(AuctionStoreTransformer::class);
         $auctionData = $transformer->transform($auctionData);
 
         // Save the auction

@@ -14,8 +14,6 @@ class AuctionIndexTransformer extends AuctionBaseTransformer
      */
     public function transform($auction)
     {
-//        $currentVisibleBid = $this->getCurrentVisibleBidForAuthUser($auction->auction_id);
-
         return [
             'auction_id' => $auction->auction_id,
             'auction_title' => $auction->auction_title,
