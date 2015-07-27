@@ -202,4 +202,7 @@ form#bid-form * input {
 label.error {
   color: red; }
 
+.s-auction-alert-box ul {
+  list-style-type: none; }
+
 /*# sourceMappingURL=app.css.map */

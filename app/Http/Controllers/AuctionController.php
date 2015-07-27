@@ -5,17 +5,18 @@ namespace App\Http\Controllers;
 use App;
 use App\Repositories\AuctionRepository;
 use App\Services\ListAuctionService;
-use App\Services\PaginationService;
+use App\Transformers\Auctions\AuctionEditTransformer;
 use App\Transformers\Auctions\AuctionIndexTransformer;
 use App\Transformers\Auctions\AuctionViewTransformer;
 use Auth;
+use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use Input;
 use Redirect;
-use Response;
 
 class AuctionController extends Controller
 {
@@ -95,12 +96,7 @@ class AuctionController extends Controller
      */
     public function show($id)
     {
-        // Validate the ID
-        $valid = $this->auctions->isValidAuctionId($id);
-
-        if (!$valid) {
-            App::abort(404, "Auction not found.");
-        }
+        $this->validateAuctionId($id);
 
         // Fetch the auction data
         $auction = $this->auctions->getAuctionViewData($id);
@@ -143,8 +139,12 @@ class AuctionController extends Controller
             'category' => 'required|integer|min:1|auction_category',
             'condition' => 'required|integer|min:1|auction_condition',
             'starting_price' => 'required|money',
-            'days' => 'required|integer|min:1|max:14',
+            'date_ending' => "required|date_format:d/m/Y|after:tomorrow|before:+15 days",
             'photo' => 'image|max:1000', // max file size 1,000 kb
+        ], [
+            'date_ending.date_format' => 'The auction end date is not a valid date (format must be DD/MM/YYYY and 1 to 14 days from now).',
+            'date_ending.after' => 'The auction end date must be between 1 to 14 days from now.',
+            'date_ending.before' => 'The auction end date must be between 1 to 14 days from now.',
         ]);
 
         $auctionCreator = App::make(ListAuctionService::class);
@@ -165,7 +165,7 @@ class AuctionController extends Controller
             'category_id' => Input::get('category'),
             'condition_id' => Input::get('condition'),
             'start_price' => Input::get('starting_price'),
-            'future_days_to_end' => Input::get('days'),
+            'date_ending' => Input::get('date_ending'),
             'photo_file' => isset($photoFileName) ? $photoFileName : null,
             'user_id' => Auth::user()->id,
         ]);
@@ -177,5 +177,184 @@ class AuctionController extends Controller
 
         // The auction was saved successfully. Redirect to the auction
         return Redirect::to('/auctions/' . $auction->id);
+    }
+
+    /**
+     * Shows a form for updating an existing auction
+     *
+     * @param $id
+     * @return $this
+     */
+    public function edit($id)
+    {
+        $this->validateAuctionId($id);
+
+        // Validate auction has not ended
+        if ($this->auctions->auctionHasEnded($id)) {
+            return Redirect::back()
+                ->withErrors('Sorry, this auction has ended and cannot be updated.');
+        }
+
+        // Validate auction owned by user
+        if (!$this->auctions->isAuctionOwner($id, Auth::user()->id)) {
+            return Redirect::back()
+                ->withErrors('Sorry, you cannot update this auction because you
+                                are not logged in as the user who created it.');
+        }
+
+        // Get data for the form
+        $categories = $this->auctions->getAuctionCategories();
+        $conditions = $this->auctions->getAuctionConditions();
+
+        // Fetch the auction data and transform it
+        $auction = $this->auctions->getAuctionEditFormData($id);
+        $transformer = App::make(AuctionEditTransformer::class);
+        $auction = $transformer->transform($auction);
+
+        // Render the page
+        return view('auctions.edit')
+            ->with(compact('id', 'auction', 'categories', 'conditions'));
+    }
+
+    /**
+     * Updates an auction in storage
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update($id, Request $request)
+    {
+        $this->validateAuctionId($id);
+
+        // Validate auction has not ended
+        if ($this->auctions->auctionHasEnded($id)) {
+            return Redirect::back()
+                ->withErrors('Sorry, this auction has ended and cannot be updated.');
+        }
+
+        // Validate auction owned by user
+        if (!$this->auctions->isAuctionOwner($id, Auth::user()->id)) {
+            return Redirect::back()
+                ->withErrors('Sorry, you cannot update this auction because you
+                                are not logged in as the user who created it.');
+        }
+
+        // Validate the form input. Redirect back if any errors.
+        $this->validate($request, [
+            'item_name' => 'required|max:50',
+            'description' => 'required|max:1000',
+            'category' => 'required|integer|min:1|auction_category',
+            'condition' => 'required|integer|min:1|auction_condition',
+            //'starting_price' => 'required|money',
+            //'date_ending' => "required|date_format:d/m/Y|after:tomorrow|before:+15 days",
+            'date_ending' => "date_format:d/m/Y",
+            'photo' => 'image|max:1000', // max file size 1,000 kb
+        ], [
+            'date_ending.date_format' => 'The auction end date is not a valid date (format must be DD/MM/YYYY and 1 to 14 days from now).',
+            'date_ending.after' => 'The auction end date must be between 1 to 14 days from now.',
+            'date_ending.before' => 'The auction end date must be between 1 to 14 days from now.',
+        ]);
+
+
+        // Validate that if the auction ending date input is a different date than the existing date,
+        // the auction date must not be not ending today, and must be set 1 to 14 days in the future.
+        $patchEndDate = $this->shouldPatchValidEndDate($id, Input::get('date_ending'));
+
+        if ($patchEndDate instanceOf RedirectResponse) {
+            return $patchEndDate;
+        }
+
+        // Update the auction
+        $auctionCreator = App::make(ListAuctionService::class);
+
+        // todo: delete the old photo if one exists
+        // todo: refactor to make update() and store() more DRY (currently we have duplicate auction creator code)
+
+        // Prepare the photo for storage
+        if ($request->file('photo')) {
+            try {
+                $photoFileName = $auctionCreator->preparePhoto($request->file('photo'));
+            } catch (Exception $e) {
+                return Redirect::back()->withErrors('An error occurred while processing the photo. Please try again later.');
+            }
+        }
+
+        // Set the auction data to be updated
+        $updateData = [
+            'title' => Input::get('item_name'),
+            'description' => Input::get('description'),
+            'category_id' => Input::get('category'),
+            'condition_id' => Input::get('condition'),
+            'photo_file' => isset($photoFileName) ? $photoFileName : null,
+        ];
+
+        if ($patchEndDate) {
+            $updateData['date_ending'] = Input::get('date_ending');
+        }
+
+        // Update the auction
+        $auction = $auctionCreator->updateAuction($id, $updateData);
+
+        // Redirect to the auction page
+        return Redirect::to('/auctions/' . $auction->id);
+    }
+
+    /**
+     * Returns a 404 error if the auction ID does not exist
+     *
+     * @param $id
+     */
+    protected function validateAuctionId($id)
+    {
+        $valid = $this->auctions->isValidAuctionId($id);
+
+        if (!$valid) {
+            App::abort(404, "Auction not found.");
+        }
+    }
+
+    /**
+     * Returns true if the auction end date is valida and should be updated.
+     * Redirects back with errors if the date is invalid.
+     *
+     * @param $auctionId
+     * @param $newDateInput
+     * @return $this|bool
+     */
+    protected function shouldPatchValidEndDate($auctionId, $newDateInput)
+    {
+        $redirectUrl = "/auctions/{$auctionId}/edit";
+
+        // if date input is set
+        if (!empty($newDateInput)) {
+            // if date = existing date
+            $newDate = Carbon::createFromFormat('d/m/Y', $newDateInput);
+            $currentAuctionDate = $this->auctions->getAuctionEndDate($auctionId); //dt string
+            $currentAuctionDate = Carbon::createFromTimestamp(strtotime($currentAuctionDate));
+            if ($newDate->diffInDays($currentAuctionDate) === 0) {
+                // continue with update, but do not patch date
+                return false;
+            } // else if date is not set within 1-14 days
+            elseif (!$newDate->between(Carbon::tomorrow()->startOfDay(), Carbon::now()->addDays(15)->startOfDay())) {
+                // redirect back with error
+                return Redirect::to($redirectUrl)->withErrors('End date must be set within 1 to 14 days from today.');
+            } // else (date different to existing date, and set within 1-14 days)
+            else {
+                // if auction ending today
+                if ($currentAuctionDate->isToday()) {
+                    // redirect back with error
+                    return Redirect::to($redirectUrl)->withErrors('Cannot change the auction end date because the auction is due to end today.');
+                } // else (auction not ending today)
+                else {
+                    // continue with update, and patch the date
+                    return true;
+                }
+            }
+        } // if date input is NOT set
+        else {
+            // continue with update, but do not patch date
+            return false;
+        }
     }
 }

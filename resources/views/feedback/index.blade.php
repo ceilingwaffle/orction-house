@@ -20,9 +20,9 @@
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <th>Type</th>
-                                <th>User</th>
-                                <th>Bought Item</th>
+                                <th>Experience</th>
+                                <th>Sold Item</th>
+                                <th>Purchased By</th>
                                 <th>Message</th>
                                 <th>Written</th>
                             </tr>
@@ -32,11 +32,11 @@
                                 <tr>
                                     <td>{{ $feedback['feedback_type'] }}</td>
                                     <td>
-                                        <a href="/users/{{ $feedback['left_by_username'] }}/feedback">{{ $feedback['left_by_username'] }}</a>
-                                    </td>
-                                    <td>
                                         <a href="/auctions/{{ $feedback['auction_id'] }}">{{ $feedback['auction_title'] }}</a>
                                         (${{ $feedback['auction_winning_bid_amount'] }})
+                                    </td>
+                                    <td>
+                                        <a href="/users/{{ $feedback['left_by_username'] }}/feedback">{{ $feedback['left_by_username'] }}</a>
                                     </td>
                                     <td>{{ $feedback['feedback_message'] }}</td>
                                     <td>{{ $feedback['feedback_date'] }}</td>

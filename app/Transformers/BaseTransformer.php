@@ -55,7 +55,7 @@ abstract class BaseTransformer
             $moneyString = ltrim($moneyString, '$');
         }
 
-        if ( ! is_numeric($moneyString)) {
+        if (!is_numeric($moneyString)) {
             $moneyString = "0.0";
         }
 
@@ -83,5 +83,50 @@ abstract class BaseTransformer
     protected function formatDate($dateString)
     {
         return date('d M, Y    h:i:s a', strtotime($dateString));
+    }
+
+    /**
+     * Adds a $ to the beginning of a currency float value
+     *
+     * @param $moneyFloat
+     * @return string
+     */
+    protected function toMoneyString($moneyFloat)
+    {
+        return '$' . $this->toDecimalPlacesFormat($moneyFloat);
+    }
+
+    /**
+     * Returns a full date time string from a date string with the given format
+     *
+     * @param $date
+     * @param string $format
+     * @return string
+     */
+    protected function createDateTimeStringFromFormat($date, $format = 'd/m/Y')
+    {
+        return Carbon::createFromFormat($format, $date)->toDateTimeString();
+    }
+
+    /**
+     * Returns a date string in the format of DD/MM/YYY from a full datetime string
+     *
+     * @param $dtString
+     * @return string
+     */
+    protected function convertDateTimeStringToDate($dtString)
+    {
+        return Carbon::createFromTimestamp(strtotime($dtString))->format('d/m/Y');
+    }
+
+    /**
+     * Returns true if the date string is today
+     *
+     * @param $dtString
+     * @return bool
+     */
+    protected function dateIsToday($dtString)
+    {
+        return Carbon::createFromTimestamp(strtotime($dtString))->isToday();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Auction;
 use App\User;
+use Carbon\Carbon;
 use DB;
 
 class AuctionRepository extends Repository
@@ -324,6 +325,81 @@ class AuctionRepository extends Repository
         $auction->save();
 
         return $auction;
+    }
+
+    /**
+     * Inserts a new auction record into the database
+     *
+     * @param array $auctionData
+     * @return Auction
+     */
+    public function updateAuction($id, array $auctionData)
+    {
+        $auction = Auction::findOrFail($id);
+
+        $auction->title = $auctionData['title'];
+        $auction->description = $auctionData['description'];
+        $auction->image_file_name = $auctionData['image_file_name'];
+        $auction->auction_category_id = $auctionData['auction_category_id'];
+        $auction->auction_condition_id = $auctionData['auction_condition_id'];
+
+        if (isset($auctionData['end_date'])) {
+            $auction->end_date = $auctionData['end_date'];
+        }
+
+        $auction->save();
+
+        return $auction;
+    }
+
+    /**
+     * Returns an array of auction data to be displayed on the auction edit form
+     *
+     * @param $auctionId
+     * @return array
+     */
+    public function getAuctionEditFormData($auctionId)
+    {
+        $this->pdoBindings['auction_id'] = $auctionId;
+
+        $query = "SELECT a.title as 'auction_title',
+                          a.description as 'auction_description',
+                          a.auction_category_id as 'auction_category_id',
+                          a.auction_condition_id as 'auction_condition_id',
+                          a.start_price as 'auction_start_price',
+                          a.end_date as 'auction_end_date',
+                          a.image_file_name as 'auction_photo_file_name'
+                  FROM auctions a
+                  WHERE a.id = :auction_id;";
+
+        $results = DB::select(DB::raw($query), $this->pdoBindings);
+
+        return $results[0];
+    }
+
+    /**
+     * Returns the end date of the auction with the given ID
+     *
+     * @param $auctionId
+     * @return mixed
+     */
+    public function getAuctionEndDate($auctionId)
+    {
+        return Auction::findOrFail($auctionId)->end_date;
+    }
+
+    /**
+     * Returns true if an auction has ended
+     *
+     * @param $auctionId
+     * @return bool
+     */
+    public function auctionHasEnded($auctionId)
+    {
+        $endDate = $this->getAuctionEndDate($auctionId);
+        $endDate = Carbon::createFromTimestamp(strtotime($endDate));
+
+        return $endDate->isPast();
     }
 
 }
