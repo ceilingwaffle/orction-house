@@ -118,7 +118,7 @@ body > .container {
 
 .pagination {
   display: table;
-  margin: 0 auto;
+  margin: 20px auto 0;
 }
 
 /* Validation
@@ -292,4 +292,8 @@ label.error {
   ul {
     list-style-type: none;
   }
+}
+
+.s-table {
+  margin-bottom: 0;
 }
