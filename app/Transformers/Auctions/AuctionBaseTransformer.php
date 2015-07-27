@@ -6,7 +6,6 @@ use App\Exceptions\UnexpectedAuctionFeedbackTypeStringFormatException;
 use App\FeedbackType;
 use App\Repositories\AuctionRepository;
 use App\Transformers\BaseTransformer;
-use Auth;
 
 abstract class AuctionBaseTransformer extends BaseTransformer
 {
@@ -158,5 +157,6 @@ abstract class AuctionBaseTransformer extends BaseTransformer
 //
 //        return $currentBid;
 //    }
+
 
 }

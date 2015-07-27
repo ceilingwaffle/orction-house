@@ -4,7 +4,7 @@ namespace App\Transformers\Feedback;
 
 use App\Transformers\BaseTransformer;
 
-class FeedbackTransformer extends BaseTransformer
+class FeedbackIndexTransformer extends BaseTransformer
 {
 
     /**

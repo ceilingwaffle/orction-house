@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App;
 use App\Repositories\FeedbackRepository;
 use App\Services\PaginationService;
-use App\Transformers\Feedback\FeedbackTransformer;
+use App\Transformers\Feedback\FeedbackIndexTransformer;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -51,7 +51,7 @@ class UserFeedbackController extends Controller
         $feedbackResults = $this->feedback->getFeedbackSentToUser($username);
 
         // Transform the data
-        $transformer = new FeedbackTransformer();
+        $transformer = new FeedbackIndexTransformer();
         $transformedFeedback = $transformer->transformMany($feedbackResults);
 
         // Apply pagination

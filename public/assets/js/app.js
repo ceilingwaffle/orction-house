@@ -129,10 +129,8 @@ $(document).ready(function () {
                 required: true,
                 money: true
             },
-            days: {
-                required: true,
-                integer: true,
-                range: [ 1, 14 ]
+            date_ending: {
+                required: true
             },
             photo: {
                 required: false,
@@ -149,7 +147,73 @@ $(document).ready(function () {
         },
         unhighlight: function (element) {
             $(element).removeClass('error-highlight');
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "date_ending" )
+                error.insertAfter(element.parent());
+            else
+                error.insertAfter(element);
         }
+    });
+
+    $('#update-auction-form').validate({
+        rules: {
+            item_name: {
+                required: true,
+                maxlength: 50
+            },
+            description: {
+                required: true,
+                maxlength: 1000
+            },
+            category: {
+                required: true,
+                min: 1
+            },
+            date_ending: {
+                required: false
+            },
+            photo: {
+                required: false,
+                accept: "image/*"
+            }
+        },
+        messages: {
+            photo: {
+                accept: "The file must be an image."
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-highlight');
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") == "date_ending" )
+                error.insertAfter(element.parent());
+            else
+                error.insertAfter(element);
+        }
+    });
+
+    // Calendar date picker widget
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    $('#auctionFormDateEndingSelector').datetimepicker({
+        format: "DD/MM/YYYY",
+        locale: moment.locale('en-AU'),
+        minDate: tomorrow.setHours(0, 0, 0, 0),
+        maxDate: moment().add(14, 'days'),
+        showClear: true,
+        showClose: true,
+        useCurrent: false,
+        keepInvalid: true
+    });
+
+    $('input#date_ending').click(function () {
+        $('#auctionFormDateEndingSelector').data("DateTimePicker").show();
     });
 
 });

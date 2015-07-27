@@ -12,6 +12,7 @@
 
     <link href='//fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/vendor/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="/assets/css/app.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -35,6 +36,8 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="/assets/js/vendor/jquery-validation/jquery.validate.js"></script>
 <script src="/assets/js/vendor/jquery-validation/additional-methods.js"></script>
+<script src="/assets/js/vendor/moment/moment-with-locales.min.js"></script>
+<script src="/assets/js/vendor/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
 <script src="/assets/js/app.js"></script>
 
 </body>

@@ -12,7 +12,8 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-    "jquery-validation": "~1.14.0"
+  "devDependencies": {
+    "jquery-validation": "~1.14.0",
+    "eonasdan-bootstrap-datetimepicker": "~4.15.35"
   }
 }
