@@ -79,7 +79,7 @@ body > .container {
 
 .pagination {
   display: table;
-  margin: 0 auto; }
+  margin: 20px auto 0; }
 
 /* Validation
 -------------------------------------------------- */
@@ -204,5 +204,8 @@ label.error {
 
 .s-auction-alert-box ul {
   list-style-type: none; }
+
+.s-table {
+  margin-bottom: 0; }
 
 /*# sourceMappingURL=app.css.map */

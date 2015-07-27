@@ -17,7 +17,7 @@
                     @else
                         <div class="row">
                             <div class="col-md-8 col-md-offset-2">
-                                <table class="table table-striped table-bordered">
+                                <table class="table table-striped table-bordered s-table">
                                     <thead>
                                     <tr>
                                         <th>Bidder</th>

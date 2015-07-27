@@ -13,7 +13,7 @@
                     @if (count($feedbackData) < 1)
                         <h3 class="text-center">No feedback to show</h3>
                     @else
-                        <table class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered s-table">
                             <thead>
                             <tr>
                                 <th>Experience</th>
