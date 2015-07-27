@@ -29,7 +29,7 @@
                 @if (isset($auction['auction_status']) and $auction['auction_status'] != 'Expired')
                     <div class="alert alert-success text-center s-auction-alert-box">
                         @if ($auction['auction_status'] == 'Sold')
-                            You won this item! Congratulations!
+                            You won this item! Congratulations! <a href="/auctions/{{ $id }}/feedback/create">Leave feedback?</a>
                         @elseif ($auction['auction_status'] == 'Open')
                             You are currently the highest bidder!
                         @endif

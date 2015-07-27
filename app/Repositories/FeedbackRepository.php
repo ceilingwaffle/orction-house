@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\FeedbackType;
 use DB;
 
 class FeedbackRepository extends Repository
@@ -53,5 +54,21 @@ class FeedbackRepository extends Repository
     public function getFeedbackLeftByUser($username)
     {
         //
+    }
+
+    /**
+     * Fetches the feedback types and ids
+     *
+     * @return array
+     */
+    public function getFeedbackTypes()
+    {
+        $query = "SELECT ft.id, ft.type
+                  FROM feedback_types ft
+                  ORDER BY ft.id;";
+
+        $results = DB::select(DB::raw($query));
+
+        return $results;
     }
 }
