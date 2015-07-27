@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Transformers;
+namespace App\Transformers\Bids;
 
-class BidTransformer extends BaseTransformer
+use App\Transformers\BaseTransformer;
+
+class BidStoreTransformer extends BaseTransformer
 {
     /**
      * Transforms a bid amount into a different value

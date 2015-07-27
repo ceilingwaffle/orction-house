@@ -59,9 +59,9 @@ abstract class BaseTransformer
      * @param $dateString
      * @return bool|string
      */
-    protected function formatDate($dateString)
+    protected function formatAsPrettyDateAndTime($dateString)
     {
-        return date('d M, Y    h:i:s a', strtotime($dateString));
+        return date('d M, Y h:i:s a', strtotime($dateString));
     }
 
     /**

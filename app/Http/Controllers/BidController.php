@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\Repositories\AuctionRepository;
 use App\Repositories\BidRepository;
-use App\Transformers\BidTransformer;
+use App\Transformers\Bids\BidIndexTransformer;
+use App\Transformers\Bids\BidStoreTransformer;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -32,14 +34,36 @@ class BidController extends Controller
     }
 
     /**
-     * Display a listing of all bids for an auction.
+     * Display a listing of all the bids placed on an auction.
      *
-     * @param $auctionId
+     * @param $id
      * @return Response
      */
-    public function index($auctionId)
+    public function index($id)
     {
-        //
+        $auctionId = $id;
+
+        // Validate the auction ID
+        if (!$this->auctions->isValidAuctionId($auctionId)) {
+            App::abort(404, 'Auction not found.');
+        };
+
+        // Get the auction title
+        $auctionTitle = $this->auctions->getAuctionTitle($auctionId);
+
+        // Get the bids
+        $bids = $this->bids->getBidsForAuction($auctionId);
+
+        // Apply pagination to the data
+        list($paginator, $bids) = $this->preparePaginator($bids, $perPage = 10);
+
+        // Transform the data
+        $transformer = App::make(BidIndexTransformer::class);
+        $bids = $transformer->transformMany($bids);
+
+        // Render the page
+        return view('auctions.bids.index')
+            ->with(compact('id', 'auctionTitle', 'bids', 'paginator'));
     }
 
     /**
@@ -54,8 +78,8 @@ class BidController extends Controller
         $auctionId = $id;
 
         // Validate the auction ID
-        if (!$this->auctions->isValidAuctionId($id)) {
-            return Redirect::back()->with(['auction_id_error' => "Invalid auction ID: {$id}"]);
+        if (!$this->auctions->isValidAuctionId($auctionId)) {
+            App::abort(404, 'Auction not found.');
         };
 
         $userId = Auth::user()->id;
@@ -72,7 +96,7 @@ class BidController extends Controller
 
         $bidAmount = $request->get('bid');
 
-        $transformer = new BidTransformer();
+        $transformer = new BidStoreTransformer();
         $bidAmount = $transformer->transform($bidAmount);
 
         // Store the bid

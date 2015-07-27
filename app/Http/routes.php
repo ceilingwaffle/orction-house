@@ -63,7 +63,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::patch('auctions/{id}', ['uses' => 'AuctionController@update'])->where(['id' => '[0-9]+']);
 
     // Bids
-    Route::post('auctions/{id}/bid', ['uses' => 'BidController@store']);
+    Route::get('auctions/{id}/bids', ['uses' => 'BidController@index'])->where(['id' => '[0-9]+']);;
+    Route::post('auctions/{id}/bids', ['uses' => 'BidController@store'])->where(['id' => '[0-9]+']);;
 
     // User feedback
     Route::get('users/{username}/feedback', ['uses' => 'UserFeedbackController@index']);

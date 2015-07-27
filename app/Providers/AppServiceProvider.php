@@ -7,7 +7,7 @@ use App\Auction;
 use App\AuctionCategory;
 use App\AuctionCondition;
 use App\Repositories\AuctionRepository;
-use App\Transformers\BidTransformer;
+use App\Transformers\Bids\BidStoreTransformer;
 use Illuminate\Support\ServiceProvider;
 use Validator;
 
@@ -67,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
         // Valid bid amount
         Validator::extend('allowable_bid_amount', function ($attribute, $value, $parameters) {
 
-            $bidTransformer = new BidTransformer();
+            $bidTransformer = new BidStoreTransformer();
             $bidAmount = $bidTransformer->transform($value);
 
             $auctionId = $parameters[0];
@@ -82,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('maximum_bid_amount', function ($attribute, $value, $parameters) {
 
-            $bidTransformer = new BidTransformer();
+            $bidTransformer = new BidStoreTransformer();
             $bidAmount = $bidTransformer->transform($value);
 
             $maxAmount = floatval($parameters[0]);
