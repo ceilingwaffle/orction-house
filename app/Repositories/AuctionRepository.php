@@ -330,6 +330,7 @@ class AuctionRepository extends Repository
     /**
      * Inserts a new auction record into the database
      *
+     * @param $id
      * @param array $auctionData
      * @return Auction
      */
@@ -338,10 +339,13 @@ class AuctionRepository extends Repository
         $auction = Auction::findOrFail($id);
 
         // Check if we should delete the existing photo
-        if (empty($auctionData['image_file_name']) and $auctionData['delete_existing_photo'] == '1') {
+        if ($auctionData['delete_existing_photo'] == '1') {
             $auction->image_file_name = null;
-        } else {
-            $auction->image_file_name = $auctionData['image_file_name'];
+        }
+
+        // Include the new photo if one has been uploaded
+        if (isset($auctionData['photo_file'])) {
+            $auction->image_file_name = $auctionData['photo_file'];
         }
 
         $auction->title = $auctionData['title'];

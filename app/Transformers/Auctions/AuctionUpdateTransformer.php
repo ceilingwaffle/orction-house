@@ -15,7 +15,6 @@ class AuctionUpdateTransformer extends AuctionBaseTransformer
         $transformations = [
             'title' => ucfirst($auctionInput['title']),
             'description' => ucfirst($auctionInput['description']),
-            'image_file_name' => $auctionInput['photo_file'],
             'auction_category_id' => $auctionInput['category_id'],
             'auction_condition_id' => $auctionInput['condition_id'],
             'delete_existing_photo' => $auctionInput['delete_existing_photo'],
@@ -23,6 +22,10 @@ class AuctionUpdateTransformer extends AuctionBaseTransformer
 
         if (isset($auctionInput['date_ending'])) {
             $transformations['end_date'] = $this->createDateTimeStringFromFormat($auctionInput['date_ending']);
+        }
+
+        if (isset($auctionInput['photo_file'])) {
+            $transformations['photo_file'] = $auctionInput['photo_file'];
         }
 
         return $transformations;
