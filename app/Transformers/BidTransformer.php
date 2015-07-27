@@ -12,6 +12,6 @@ class BidTransformer extends BaseTransformer
      */
     public function transform($bidAmount)
     {
-        return $this->transformMoney($bidAmount);
+        return $this->transformCurrencyStringToFloat($bidAmount);
     }
 }

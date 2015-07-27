@@ -39,39 +39,18 @@ abstract class BaseTransformer
     }
 
     /**
-     * Removes the dollar sign from the beginning of the provided string
+     * Converts a currency string to a float value
      *
      * @param $moneyString
      * @return string
      */
-    protected function transformMoney($moneyString)
+    protected function transformCurrencyStringToFloat($moneyString)
     {
         if (empty($moneyString)) {
             $moneyString = "0.0";
         }
 
-        // Remove the $ from the beginning of the string
-        if (substr($moneyString, 0, 1) === '$') {
-            $moneyString = ltrim($moneyString, '$');
-        }
-
-        if (!is_numeric($moneyString)) {
-            $moneyString = "0.0";
-        }
-
-        return $this->toDecimalPlacesFormat($moneyString, 2);
-    }
-
-    /**
-     * Returns a string with two decimal places on the end
-     *
-     * @param $string
-     * @param int $decPlaces
-     * @return string
-     */
-    protected function toDecimalPlacesFormat($string, $decPlaces = 2)
-    {
-        return number_format($string, $decPlaces);
+        return preg_replace("/([^0-9\\.])/i", "", $moneyString);
     }
 
     /**
@@ -83,17 +62,6 @@ abstract class BaseTransformer
     protected function formatDate($dateString)
     {
         return date('d M, Y    h:i:s a', strtotime($dateString));
-    }
-
-    /**
-     * Adds a $ to the beginning of a currency float value
-     *
-     * @param $moneyFloat
-     * @return string
-     */
-    protected function toMoneyString($moneyFloat)
-    {
-        return '$' . $this->toDecimalPlacesFormat($moneyFloat);
     }
 
     /**
@@ -128,5 +96,18 @@ abstract class BaseTransformer
     protected function dateIsToday($dtString)
     {
         return Carbon::createFromTimestamp(strtotime($dtString))->isToday();
+    }
+
+    /**
+     * Transforms a value to a currency format like $1,234.56
+     *
+     * @param $input
+     * @return string
+     */
+    protected function transformToCurrencyString($input)
+    {
+        $float = floatval($input);
+
+        return '$' . number_format($float, 2, '.', ',');
     }
 }

@@ -19,7 +19,7 @@ class FeedbackIndexTransformer extends BaseTransformer
             'left_by_username' => $feedback->left_by_username,
             'auction_id' => $feedback->auction_id,
             'auction_title' => $feedback->auction_title,
-            'auction_winning_bid_amount' => $feedback->auction_winning_bid_amount,
+            'auction_winning_bid_amount' => $this->transformToCurrencyString($feedback->auction_winning_bid_amount),
             'feedback_type' => $feedback->feedback_type,
             'feedback_message' => $feedback->feedback_message,
             'feedback_date' => $this->toHumanTimeDifference($feedback->feedback_date),

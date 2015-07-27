@@ -124,11 +124,11 @@ abstract class AuctionBaseTransformer extends BaseTransformer
     public function transformSearchParams(array $params)
     {
         if (isset($params['min_price']) && !empty($params['min_price'])) {
-            $params['min_price'] = $this->transformMoney($params['min_price']);
+            $params['min_price'] = $this->transformCurrencyStringToFloat($params['min_price']);
         }
 
         if (isset($params['max_price']) && !empty($params['max_price'])) {
-            $params['max_price'] = $this->transformMoney($params['max_price']);
+            $params['max_price'] = $this->transformCurrencyStringToFloat($params['max_price']);
         }
 
         return $params;

@@ -35,21 +35,21 @@ class AuctionViewTransformer extends AuctionBaseTransformer
             'auction_updated_date' => $this->formatDate($auction->auction_updated_at),
             'auction_updated_date_readable' => $this->toHumanTimeDifference($auction->auction_updated_at),
             'auction_description' => $auction->auction_description,
-            'highest_bid_amount' => $this->transformMoney(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
-            'minimum_bid' => $this->transformMoney(Auction::determineMinimumBid($auction->auction_start_price, $auction->highest_bid_amount)),
+            'highest_bid_amount' => $this->transformToCurrencyString(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
+            'minimum_bid' => $this->transformToCurrencyString(Auction::determineMinimumBid($auction->auction_start_price, $auction->highest_bid_amount)),
             'start_price' => $auction->auction_start_price,
         ];
     }
 
-    /**
-     * Removes the $ from the beginning of the bid amount if it exists
-     *
-     * @param $bid
-     * @return string
-     */
-    public function transformBid($bid)
-    {
-        return $this->transformMoney($bid);
-    }
+//    /**
+//     * Removes the $ from the beginning of the bid amount if it exists
+//     *
+//     * @param $bid
+//     * @return string
+//     */
+//    public function transformBid($bid)
+//    {
+//        return $this->transformCurrencyStringToFloat($bid);
+//    }
 
 }
