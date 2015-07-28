@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group">
                             <label for="message">Message:</label>
-                            <textarea id="message" name="message" class="form-control"
+                            <textarea id="message" name="message" class="form-control" maxlength="200"
                                       placeholder="Describe your experience...">{{ old('message') }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Leave Feedback</button>

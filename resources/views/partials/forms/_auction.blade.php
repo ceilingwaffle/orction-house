@@ -9,11 +9,12 @@
                 <label for="item_name">Item Name:</label>
                 <input type="text" id="item_name" name="item_name" class="form-control" placeholder="e.g. Chair"
                        value="{{ old('item_name', isset($auction['title']) ? $auction['title'] : null)  }}"
+                       maxlength="50"
                        @if(isset($disabledInputs['item_name']) and $disabledInputs['item_name'] === true) disabled @endif />
             </div>
             <div class="form-group">
                 <label for="description">Describe the item:</label>
-        <textarea id="description" name="description" class="form-control" rows="4" placeholder=""
+        <textarea id="description" name="description" class="form-control" rows="4" placeholder="" maxlength="1000"
                   @if(isset($disabledInputs['description']) and $disabledInputs['description'] === true) disabled @endif
                 >{{ old('description', isset($auction['description']) ? $auction['description'] : null)  }}</textarea>
             </div>
