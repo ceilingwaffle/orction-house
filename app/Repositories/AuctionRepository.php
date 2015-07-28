@@ -272,19 +272,19 @@ class AuctionRepository extends Repository
         return !is_null(Auction::find($id));
     }
 
-    /**
-     * Returns the minimum bid allowed for an auction for the given user
-     *
-     * @param $auctionId
-     * @param User $user
-     * @return mixed
-     */
-    public function getMinimumBidForUser($auctionId, User $user)
-    {
-        $auction = Auction::findOrFail($auctionId);
-
-        return $auction->calculateMinimumBidForUser($user);
-    }
+//    /**
+//     * Returns the minimum bid allowed for an auction for the given user
+//     *
+//     * @param $auctionId
+//     * @param User $user
+//     * @return mixed
+//     */
+//    public function getMinimumBidForUser($auctionId, User $user)
+//    {
+//        $auction = Auction::findOrFail($auctionId);
+//
+//        return $auction->calculateMinimumBidForUser($user);
+//    }
 
     /**
      * Returns true if the auction is owned by the user
@@ -433,6 +433,44 @@ class AuctionRepository extends Repository
         $title = Auction::findOrFail($auctionId)->title;
 
         return ucfirst($title);
+    }
+
+    /**
+     * Returns the user ID of the winner of an auction
+     *
+     * @param $auctionId
+     * @return mixed
+     */
+    public function getAuctionWinnerUserId($auctionId)
+    {
+        $this->pdoBindings['auction_id'] = $auctionId;
+
+        $query = "SELECT b.id, b.auction_id, b.amount, b.created_at, u.id as 'user_id'
+                    FROM (
+                        SELECT b1.*
+                        FROM bids AS b1
+                        LEFT JOIN bids AS b2
+                        ON (b1.auction_id = b2.auction_id AND b1.amount < b2.amount)
+                        WHERE b2.amount IS NULL
+                    ) b
+                    INNER JOIN users u ON u.id = b.user_id
+                    WHERE b.auction_id = :auction_id;";
+
+        $results = DB::select(DB::raw($query), $this->pdoBindings);
+
+        return $results[0]->user_id;
+    }
+
+    /**
+     * Returns true if the user is the auction winner
+     *
+     * @param $userId
+     * @param $auctionId
+     * @return bool
+     */
+    public function userIsAuctionWinner($userId, $auctionId)
+    {
+        return $userId === $this->getAuctionWinnerUserId($auctionId);
     }
 
 }

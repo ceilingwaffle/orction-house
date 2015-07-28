@@ -84,6 +84,7 @@ return [
     'allowable_bid_amount' => 'Bid is too low.',
     'auction_is_open' => 'Bidding has ended for this auction.',
     'maximum_bid_amount' => 'The bid must not exceed $999,999.99 dollars.',
+    'feedback_type' => 'Not a valid rating.',
 
     /*
     |--------------------------------------------------------------------------

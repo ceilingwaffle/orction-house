@@ -7,6 +7,7 @@ use App\Auction;
 use App\AuctionCategory;
 use App\AuctionCondition;
 use App\Repositories\AuctionRepository;
+use App\Repositories\FeedbackRepository;
 use App\Transformers\Bids\BidStoreTransformer;
 use Illuminate\Support\ServiceProvider;
 use Validator;
@@ -80,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
             return $bidAmount >= $minBidAllowed;
         });
 
+        // Bid is under the maximum bid amount
         Validator::extend('maximum_bid_amount', function ($attribute, $value, $parameters) {
 
             $bidTransformer = new BidStoreTransformer();
@@ -91,14 +93,27 @@ class AppServiceProvider extends ServiceProvider
 
         });
 
-
-        // Valid if the auction status is 'open'
+        // Auction status is "open"
         Validator::extend('auction_is_open', function ($attribute, $value, $parameters) {
             $repo = App::make(AuctionRepository::class);
 
             $auctionId = $parameters[0];
 
             return $repo->isOpenForBidding($auctionId);
+        });
+
+        // Valid feedback type ID
+        Validator::extend('feedback_type', function ($attribute, $value, $parameters) {
+
+            $feedbackTypeId = $value;
+
+            if (!is_numeric($feedbackTypeId)) {
+                return false;
+            }
+
+            $repo = App::make(FeedbackRepository::class);
+
+            return $repo->isValidFeedbackTypeId($feedbackTypeId);
         });
 
     }
