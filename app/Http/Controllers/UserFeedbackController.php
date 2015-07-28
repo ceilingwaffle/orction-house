@@ -7,6 +7,7 @@ use App\Repositories\AuctionRepository;
 use App\Repositories\FeedbackRepository;
 use App\Services\PaginationService;
 use App\Transformers\Feedback\FeedbackIndexTransformer;
+use App\Transformers\Feedback\FeedbackStoreTransformer;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -106,10 +107,7 @@ class UserFeedbackController extends Controller
     {
         $auctionId = $id;
 
-        // Validate the auction ID
-        if (!$this->auctions->isValidAuctionId($auctionId)) {
-            App::abort(404, 'Auction not found.');
-        }
+        $this->runFeedbackPreValidations($auctionId);
 
         // Get the feedback types
         $feedbackTypes = $this->feedback->getFeedbackTypes();
@@ -129,25 +127,7 @@ class UserFeedbackController extends Controller
     {
         $auctionId = $id;
 
-        // Validate the auction ID
-        if (!$this->auctions->isValidAuctionId($auctionId)) {
-            App::abort(404, 'Auction not found.');
-        }
-
-        // Validate that the auction has ended
-        if (!$this->auctions->auctionHasEnded($auctionId)) {
-            App::abort(403, 'Auction has ended.');
-        }
-
-        // Validate that the user is the winner of the auction
-        if (!$this->auctions->userIsAuctionWinner(Auth::user()->id, $auctionId)) {
-            App::abort(401, 'User is not auction winner.');
-        }
-
-        // Validate that this auction has no feedback assigned to it
-        if ($this->feedback->auctionHasFeedback($auctionId)) {
-            App::abort(403, 'Auction already has feedback.');
-        }
+        $this->runFeedbackPreValidations($auctionId);
 
         // Validate form data
         $this->validate($request, [
@@ -155,17 +135,26 @@ class UserFeedbackController extends Controller
             'message' => 'required|max:200'
         ]);
 
-        dd("valid feedback received. todo: store the feedback");
-
         // Transform the form data
-
+        $transformer = App::make(FeedbackStoreTransformer::class);
+        $feedbackData = $transformer->transform([
+            'feedback_type_id' => Input::get('rating'),
+            'message' => Input::get('message'),
+            'auction_id' => $auctionId,
+            'left_by_user_id' => Auth::user()->id,
+        ]);
 
         // Store the feedback
+        $feedback = $this->feedback->createFeedback($feedbackData);
 
+        if (!$feedback) {
+            return Redirect::back()->withErrors('Sorry, something went wrong trying to save your feedback.');
+        }
 
-        // Redirect to feedback page (highlight row)
+        // Redirect to the feedback page
+        $sellerUsername = $this->auctions->getAuctionSellerUsername($auctionId);
 
-
+        return Redirect::to("/users/{$sellerUsername}/feedback?highlightAuctionId={$auctionId}");
     }
 
     /**
@@ -226,5 +215,31 @@ class UserFeedbackController extends Controller
 
         // Redirect to the new URI
         return Redirect::to($uri);
+    }
+
+    /**
+     * @param $auctionId
+     */
+    protected function runFeedbackPreValidations($auctionId)
+    {
+        // Validate the auction ID
+        if (!$this->auctions->isValidAuctionId($auctionId)) {
+            App::abort(404, 'Auction not found.');
+        }
+
+        // Validate that the auction has ended
+        if (!$this->auctions->auctionHasEnded($auctionId)) {
+            App::abort(403, 'Auction has ended.');
+        }
+
+        // Validate that the user is the winner of the auction
+        if (!$this->auctions->userIsAuctionWinner(Auth::user()->id, $auctionId)) {
+            App::abort(401, 'User is not auction winner.');
+        }
+
+        // Validate that this auction has no feedback assigned to it
+        if ($this->feedback->auctionHasFeedback($auctionId)) {
+            App::abort(403, 'Auction already has feedback.');
+        }
     }
 }
