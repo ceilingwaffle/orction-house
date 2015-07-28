@@ -93,6 +93,10 @@ class AuctionRepository extends Repository
              , a.updated_at as 'auction_updated_at'
              , a.description as 'auction_description'
              , a.start_price as 'auction_start_price'
+             , CASE
+                  WHEN f2.left_by_user_id IS NOT NULL THEN f2.left_by_username
+                  ELSE null
+               END AS 'feedback_left_by_username'
             FROM auctions a
             LEFT OUTER JOIN auction_categories acat ON acat.id = a.auction_category_id
             LEFT OUTER JOIN auction_conditions acon ON acon.id = a.auction_condition_id
@@ -132,6 +136,12 @@ class AuctionRepository extends Repository
                 GROUP BY user_id
                 ORDER BY user_id
             ) f ON f.user_id = a.user_id
+            LEFT OUTER JOIN (
+              -- User who left feedback
+              SELECT f.auction_id, f.left_by_user_id, u.username as 'left_by_username'
+              FROM feedback f
+              INNER JOIN users u ON u.id = f.left_by_user_id
+            ) f2 ON f2.auction_id = a.id
             WHERE 1 {$this->whereStatements}
             {$orderBy};";
 

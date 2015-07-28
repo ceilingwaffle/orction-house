@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Input;
+use Redirect;
+use Session;
 
 class UserFeedbackController extends Controller
 {
@@ -58,12 +61,29 @@ class UserFeedbackController extends Controller
         // Get the feedback received by the user
         $feedbackResults = $this->feedback->getFeedbackSentToUser($username);
 
-        // Transform the data
-        $transformer = new FeedbackIndexTransformer();
-        $transformedFeedback = $transformer->transformMany($feedbackResults);
+        // Check if we need to highlight a particular piece of feedback
+        $highlightAuctionId = Input::get('highlightAuctionId');
+        $itemsPerPage = 6;
+
+        if ($highlightAuctionId) {
+            // Get the page number where the highlighted auction will reside
+            foreach ($feedbackResults as $i => $feedback) {
+                if ($feedback->auction_id == $highlightAuctionId) {
+                    // Calculate the page number from the item index
+                    $loadPageNum = (int) ceil(($i+1) / $itemsPerPage);
+
+                    // Reload the page and go to the page number where the highlighted feedback resides
+                    return $this->redirectToHighlightRow($loadPageNum, $highlightAuctionId);
+                }
+            }
+        }
 
         // Apply pagination
-        list($paginator, $feedbackData) = $this->preparePaginator($transformedFeedback, $perPage = 6);
+        list($paginator, $feedbackPaginated) = $this->preparePaginator($feedbackResults, $itemsPerPage);
+
+        // Transform the data
+        $transformer = new FeedbackIndexTransformer();
+        $feedbackData = $transformer->transformMany($feedbackPaginated);
 
         // Render the page
         return view('feedback.index')
@@ -87,6 +107,11 @@ class UserFeedbackController extends Controller
         // Validate the auction ID
         if ( ! $this->auctions->isValidAuctionId($auctionId)) {
             App::abort(404, 'Auction not found.');
+        }
+
+        // Validate that this auction has no feedback assigned to it
+        if ( $this->feedback->auctionHasFeedback($auctionId)) {
+            App::abort(403, 'Auction already has feedback.');
         }
 
         // Get the feedback types
@@ -139,5 +164,31 @@ class UserFeedbackController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Sets a session variable (to be used to highlight a feedback row), then returns
+     * a Redirect object to redirect to the page where the highlighted feedback resides
+     *
+     * @param $loadPageNum
+     * @param $highlightAuctionId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function redirectToHighlightRow($loadPageNum, $highlightAuctionId)
+    {
+        // Set the paginator page number and remove the highlight auction ID from the URL query
+        $query = $_GET;
+        $query['page'] = $loadPageNum;
+        unset($query['highlightAuctionId']);
+        $query_result = http_build_query($query);
+
+        // Save the highlighted auction ID in the session
+        Session::flash('highlightAuction', $highlightAuctionId);
+
+        // Rebuild the URI
+        $uri = strtok($_SERVER["REQUEST_URI"], '?') . '/?' . $query_result;
+
+        // Redirect to the new URI
+        return Redirect::to($uri);
     }
 }

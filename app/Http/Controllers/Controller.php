@@ -28,8 +28,8 @@ abstract class Controller extends BaseController
     protected function preparePaginator($data, $perPage = 4, $pageParamName = 'page')
     {
         $this->paginator = new PaginationService();
-        $currentPage = Input::get($pageParamName, 1);
-        $paginator = $this->paginator->makePaginated($data, $perPage, $currentPage);
+        $loadPageNum = Input::get($pageParamName, 1);
+        $paginator = $this->paginator->makePaginated($data, $perPage, $loadPageNum);
         $data = $paginator->getPaginatedData();
         $paginator = $paginator->getPaginatorHtml();
 
