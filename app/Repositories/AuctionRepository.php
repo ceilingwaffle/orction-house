@@ -473,4 +473,21 @@ class AuctionRepository extends Repository
         return $userId === $this->getAuctionWinnerUserId($auctionId);
     }
 
+    /**
+     * Returns the username of the auction seller if the auction exists
+     *
+     * @param $auctionId
+     * @return null
+     */
+    public function getAuctionSellerUsername($auctionId)
+    {
+        $auction = Auction::where('id', '=', $auctionId)->with('user')->first();
+
+        if (!$auction) {
+            return null;
+        }
+
+        return $auction->user->username;
+    }
+
 }

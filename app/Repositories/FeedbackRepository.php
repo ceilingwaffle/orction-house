@@ -42,7 +42,7 @@ class FeedbackRepository extends Repository
                     inner join feedback_types ft on ft.id = f.feedback_type_id
                     inner join users u2 on f.left_by_user_id = u2.id
                     where u.username = :username
-                    order by a.user_id;";
+                    order by f.created_at desc;";
 
         $this->pdoBindings['username'] = $username;
 
@@ -88,5 +88,25 @@ class FeedbackRepository extends Repository
     public function isValidFeedbackTypeId($feedbackTypeId)
     {
         return FeedbackType::all(['id'])->contains('id', $feedbackTypeId);
+    }
+
+    /**
+     * Inserts a new feedback record into the database
+     *
+     * @param array $feedbackData
+     * @return Feedback
+     */
+    public function createFeedback(array $feedbackData)
+    {
+        $feedback = new Feedback([
+            'feedback_type_id' => $feedbackData['feedback_type_id'],
+            'message' => $feedbackData['message'],
+            'auction_id' => $feedbackData['auction_id'],
+            'left_by_user_id' => $feedbackData['left_by_user_id'],
+        ]);
+
+        $feedback->save();
+
+        return $feedback;
     }
 }
