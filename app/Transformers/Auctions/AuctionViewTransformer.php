@@ -38,6 +38,7 @@ class AuctionViewTransformer extends AuctionBaseTransformer
             'highest_bid_amount' => $this->transformToCurrencyString(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
             'minimum_bid' => $this->transformToCurrencyString(Auction::determineMinimumBid($auction->auction_start_price, $auction->highest_bid_amount)),
             'start_price' => $auction->auction_start_price,
+            'feedback_left_by_username' => $auction->feedback_left_by_username,
         ];
     }
 

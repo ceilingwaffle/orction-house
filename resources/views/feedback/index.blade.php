@@ -25,7 +25,7 @@
                             </thead>
                             <tbody>
                             @foreach ($feedbackData as $feedback)
-                                <tr>
+                                <tr class="@if(Session::get('highlightAuction') == $feedback['auction_id']) s-table-row-highlight @endif">
                                     <td>{{ $feedback['feedback_type'] }}</td>
                                     <td>
                                         <a href="/auctions/{{ $feedback['auction_id'] }}">{{ $feedback['auction_title'] }}</a>

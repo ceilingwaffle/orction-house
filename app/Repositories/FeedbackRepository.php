@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\FeedbackType;
+use App\Feedback;
 use DB;
 
 class FeedbackRepository extends Repository
@@ -57,7 +57,7 @@ class FeedbackRepository extends Repository
     }
 
     /**
-     * Fetches the feedback types and ids
+     * Fetches the feedback types and ID's
      *
      * @return array
      */
@@ -70,5 +70,16 @@ class FeedbackRepository extends Repository
         $results = DB::select(DB::raw($query));
 
         return $results;
+    }
+
+    /**
+     * Returns true if feedback has been assigned to an auction
+     *
+     * @param $auctionId
+     * @return mixed
+     */
+    public function auctionHasFeedback($auctionId)
+    {
+        return ! is_null(Feedback::where('auction_id', '=', $auctionId)->first());
     }
 }

@@ -208,4 +208,7 @@ label.error {
 .s-table {
   margin-bottom: 0; }
 
+tr.s-table-row-highlight {
+  background-color: yellow !important; }
+
 /*# sourceMappingURL=app.css.map */
