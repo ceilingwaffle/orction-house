@@ -14,7 +14,7 @@
                     <div class="form-group">
                         <label for="title">Item Name:</label>
                         <input type="text" id="title" name="title" class="form-control" placeholder="e.g. Chair"
-                               value="{{ old('title') ?: Input::get('title') }}" />
+                               value="{{ old('title') ?: Input::get('title') }}" maxlength="50" />
                     </div>
                     <div class="form-group">
                         <label for="category">Item Category:</label>

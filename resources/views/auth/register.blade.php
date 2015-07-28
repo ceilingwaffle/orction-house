@@ -16,7 +16,7 @@
                         <label for="username" class="col-sm-4 control-label">User Name:</label>
                         <div class="col-sm-8">
                             <input type="text" id="username" name="username" class="form-control" placeholder=""
-                                   value="{{ old('username') }}" />
+                                   value="{{ old('username') }}" maxlength="50" />
                         </div>
                     </div>
                     <div class="form-group">

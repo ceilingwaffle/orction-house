@@ -197,6 +197,24 @@ $(document).ready(function () {
         }
     });
 
+    $('#create-feedback-form').validate({
+        rules: {
+            rating: {
+                required: true
+            },
+            message: {
+                required: true,
+                maxlength: 200
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass('error-highlight');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('error-highlight');
+        }
+    });
+
     // Calendar date picker widget
     var tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);

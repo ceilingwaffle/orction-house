@@ -14,7 +14,7 @@
                     <div class="form-group">
                         <label for="username" class="col-sm-3 control-label">User Name:</label>
                         <div class="col-sm-9">
-                            <input type="text" id="username" name="username" class="form-control"
+                            <input type="text" id="username" name="username" class="form-control" maxlength="50"
                                    value="{{ old('username') }}" />
                         </div>
                     </div>
