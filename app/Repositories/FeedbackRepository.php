@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Feedback;
+use App\FeedbackType;
 use DB;
 
 class FeedbackRepository extends Repository
@@ -51,11 +52,6 @@ class FeedbackRepository extends Repository
         return $results;
     }
 
-    public function getFeedbackLeftByUser($username)
-    {
-        //
-    }
-
     /**
      * Fetches the feedback types and ID's
      *
@@ -81,5 +77,16 @@ class FeedbackRepository extends Repository
     public function auctionHasFeedback($auctionId)
     {
         return ! is_null(Feedback::where('auction_id', '=', $auctionId)->first());
+    }
+
+    /**
+     * Returns true if the provided feedback type ID exists
+     *
+     * @param $feedbackTypeId
+     * @return bool
+     */
+    public function isValidFeedbackTypeId($feedbackTypeId)
+    {
+        return FeedbackType::all(['id'])->contains('id', $feedbackTypeId);
     }
 }

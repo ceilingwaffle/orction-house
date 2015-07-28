@@ -19,7 +19,7 @@
                             <select id="rating" name="rating" class="form-control">
                                 <option value="" disabled>-- Select --</option>
                                 @foreach($feedbackTypes as $feedbackType)
-                                    <option value="{{ $feedbackType->id }}">{{ $feedbackType->type }}</option>
+                                    <option value="{{ $feedbackType->id }}" @if(old('rating')) selected @endif>{{ $feedbackType->type }}</option>
                                 @endforeach
                             </select>
                         </div>

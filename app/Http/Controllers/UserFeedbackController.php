@@ -8,6 +8,7 @@ use App\Repositories\FeedbackRepository;
 use App\Services\PaginationService;
 use App\Transformers\Feedback\FeedbackIndexTransformer;
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -38,7 +39,8 @@ class UserFeedbackController extends Controller
         FeedbackRepository $feedback,
         AuctionRepository $auctions,
         PaginationService $paginator
-    ) {
+    )
+    {
         $this->feedback = $feedback;
         $this->auctions = $auctions;
         $this->paginator = $paginator;
@@ -54,7 +56,7 @@ class UserFeedbackController extends Controller
     public function index(Request $request, $username)
     {
         // Validate the username
-        if ( ! User::isValidUsername($username)) {
+        if (!User::isValidUsername($username)) {
             App::abort(404);
         }
 
@@ -70,7 +72,7 @@ class UserFeedbackController extends Controller
             foreach ($feedbackResults as $i => $feedback) {
                 if ($feedback->auction_id == $highlightAuctionId) {
                     // Calculate the page number from the item index
-                    $loadPageNum = (int) ceil(($i+1) / $itemsPerPage);
+                    $loadPageNum = (int)ceil(($i + 1) / $itemsPerPage);
 
                     // Reload the page and go to the page number where the highlighted feedback resides
                     return $this->redirectToHighlightRow($loadPageNum, $highlightAuctionId);
@@ -105,13 +107,8 @@ class UserFeedbackController extends Controller
         $auctionId = $id;
 
         // Validate the auction ID
-        if ( ! $this->auctions->isValidAuctionId($auctionId)) {
+        if (!$this->auctions->isValidAuctionId($auctionId)) {
             App::abort(404, 'Auction not found.');
-        }
-
-        // Validate that this auction has no feedback assigned to it
-        if ( $this->feedback->auctionHasFeedback($auctionId)) {
-            App::abort(403, 'Auction already has feedback.');
         }
 
         // Get the feedback types
@@ -124,18 +121,57 @@ class UserFeedbackController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param $id
+     * @param  Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store($id, Request $request)
     {
-        //
+        $auctionId = $id;
+
+        // Validate the auction ID
+        if (!$this->auctions->isValidAuctionId($auctionId)) {
+            App::abort(404, 'Auction not found.');
+        }
+
+        // Validate that the auction has ended
+        if (!$this->auctions->auctionHasEnded($auctionId)) {
+            App::abort(403, 'Auction has ended.');
+        }
+
+        // Validate that the user is the winner of the auction
+        if (!$this->auctions->userIsAuctionWinner(Auth::user()->id, $auctionId)) {
+            App::abort(401, 'User is not auction winner.');
+        }
+
+        // Validate that this auction has no feedback assigned to it
+        if ($this->feedback->auctionHasFeedback($auctionId)) {
+            App::abort(403, 'Auction already has feedback.');
+        }
+
+        // Validate form data
+        $this->validate($request, [
+            'rating' => 'required|feedback_type',
+            'message' => 'required|max:200'
+        ]);
+
+        dd("valid feedback received. todo: store the feedback");
+
+        // Transform the form data
+
+
+        // Store the feedback
+
+
+        // Redirect to feedback page (highlight row)
+
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function edit($id)
@@ -146,8 +182,8 @@ class UserFeedbackController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param  Request $request
+     * @param  int $id
      * @return Response
      */
     public function update(Request $request, $id)
@@ -158,7 +194,7 @@ class UserFeedbackController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return Response
      */
     public function destroy($id)
