@@ -211,4 +211,69 @@ label.error {
 tr.s-table-row-highlight {
   background-color: yellow !important; }
 
+.s-faded-btn {
+  opacity: 0.3; }
+
+.s-bright-btn {
+  opacity: 1.0 !important; }
+
+.s-btn-neutral {
+  color: #fff;
+  background-color: #aaa;
+  border-color: #999; }
+  .s-btn-neutral:focus,
+  .s-btn-neutral.focus {
+    color: #fff;
+    background-color: #909090;
+    border-color: #595959; }
+  .s-btn-neutral:hover {
+    color: #fff;
+    background-color: #909090;
+    border-color: #7a7a7a; }
+  .s-btn-neutral:active,
+  .s-btn-neutral.active,
+  .open > .s-btn-neutral.dropdown-toggle {
+    color: #fff;
+    background-color: #909090;
+    border-color: #7a7a7a; }
+    .s-btn-neutral:active:hover,
+    .s-btn-neutral:active:focus,
+    .s-btn-neutral:active.focus,
+    .s-btn-neutral.active:hover,
+    .s-btn-neutral.active:focus,
+    .s-btn-neutral.active.focus,
+    .open > .s-btn-neutral.dropdown-toggle:hover,
+    .open > .s-btn-neutral.dropdown-toggle:focus,
+    .open > .s-btn-neutral.dropdown-toggle.focus {
+      color: #fff;
+      background-color: #7f7f7f;
+      border-color: #595959; }
+  .s-btn-neutral:active,
+  .s-btn-neutral.active,
+  .open > .s-btn-neutral.dropdown-toggle {
+    background-image: none; }
+  .s-btn-neutral.disabled,
+  .s-btn-neutral.disabled:hover,
+  .s-btn-neutral.disabled:focus,
+  .s-btn-neutral.disabled.focus,
+  .s-btn-neutral.disabled:active,
+  .s-btn-neutral.disabled.active,
+  .s-btn-neutral[disabled],
+  .s-btn-neutral[disabled]:hover,
+  .s-btn-neutral[disabled]:focus,
+  .s-btn-neutral[disabled].focus,
+  .s-btn-neutral[disabled]:active,
+  .s-btn-neutral[disabled].active,
+  fieldset[disabled] .s-btn-neutral,
+  fieldset[disabled] .s-btn-neutral:hover,
+  fieldset[disabled] .s-btn-neutral:focus,
+  fieldset[disabled] .s-btn-neutral.focus,
+  fieldset[disabled] .s-btn-neutral:active,
+  fieldset[disabled] .s-btn-neutral.active {
+    background-color: #aaa;
+    border-color: #999; }
+  .s-btn-neutral .badge {
+    color: #aaa;
+    background-color: #fff; }
+
 /*# sourceMappingURL=app.css.map */

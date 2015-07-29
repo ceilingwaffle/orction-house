@@ -11,11 +11,32 @@ class FeedbackRepository extends Repository
     /**
      * Returns an array of feedback sent to the given user by other users
      *
-     * @param $username
+     * @param $params
      * @return array
      */
-    public function getFeedbackSentToUser($username)
+    public function getFeedbackSentToUser($params)
     {
+        $whereParams = [];
+
+        if (isset($params['feedback_type_id']) && !empty($params['feedback_type_id'])) {
+            $whereParams['feedback_type_id'] = [
+                'urlParam' => 'feedback_type_id',
+                'columnName' => 'feedback_type_id',
+                'whereStatement' => " AND ft.id = :feedback_type_id "
+            ];
+        }
+
+        if (isset($params['username']) && !empty($params['username'])) {
+            $whereParams['username'] = [
+                'urlParam' => 'username',
+                'columnName' => 'left_by_username',
+                'whereStatement' => " AND u.username = :username "
+            ];
+        }
+
+        // Apply the bindings and where filters
+        $this->prepareQueryFilters($params, $whereParams);
+
         $query = "SELECT
                       u2.username as 'left_by_username'
                     , a.id as 'auction_id'
@@ -25,6 +46,7 @@ class FeedbackRepository extends Repository
                     , f.message as 'feedback_message'
                     , f.created_at as 'feedback_date'
                     , f2.feedback_type_counts as 'user_feedback_type_counts'
+                    , ft.id as 'feedback_type_id'
                     FROM users u
                     inner join auctions a on a.user_id = u.id
                     inner join (
@@ -59,10 +81,8 @@ class FeedbackRepository extends Repository
                         GROUP BY user_id
                         ORDER BY user_id
                     ) f2 ON f2.user_id = f.left_by_user_id
-                    where u.username = :username
+                    WHERE 1 {$this->whereStatements}
                     order by f.created_at desc;";
-
-        $this->pdoBindings['username'] = $username;
 
         // Fetch the results
         $results = DB::select(DB::raw($query), $this->pdoBindings);
@@ -94,7 +114,7 @@ class FeedbackRepository extends Repository
      */
     public function auctionHasFeedback($auctionId)
     {
-        return ! is_null(Feedback::where('auction_id', '=', $auctionId)->first());
+        return !is_null(Feedback::where('auction_id', '=', $auctionId)->first());
     }
 
     /**

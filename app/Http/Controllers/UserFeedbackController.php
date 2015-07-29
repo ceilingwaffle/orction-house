@@ -69,8 +69,21 @@ class UserFeedbackController extends Controller
             App::abort(404, 'Username does not exist.');
         }
 
-        // Get the feedback received by the user
-        $feedbackResults = $this->feedback->getFeedbackSentToUser($username);
+        // Validate any URL query strings
+        if (Input::get('feedback_type')) {
+            if (!$this->feedback->isValidFeedbackTypeId(Input::get('feedback_type'))) {
+                // Delete the parameter if invalid
+                Input::merge(['feedback_type' => null]);
+            }
+        }
+
+        // Get data for feedback sent to the user
+        $params = [
+            'username' => $username,
+            'feedback_type_id' => Input::get('feedback_type'),
+        ];
+
+        $feedbackResults = $this->feedback->getFeedbackSentToUser($params);
 
         // Check if we need to highlight a particular piece of feedback
         $highlightAuctionId = Input::get('highlightAuctionId');
@@ -98,7 +111,7 @@ class UserFeedbackController extends Controller
 
         // Get user feedback data (positive, neutral, negative counts)
         $userFeedback = $this->users->getUserFeedbackData($username);
-        $userData = $transformer->transformManyUserFeedback($userFeedback)[0];
+        $userData = empty($userFeedback) ? [] : $transformer->transformUserFeedback($userFeedback);
 
         // Render the page
         return view('feedback.index')

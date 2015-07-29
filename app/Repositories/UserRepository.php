@@ -35,6 +35,10 @@ class UserRepository extends Repository
         // Fetch the results
         $results = DB::select(DB::raw($query), $this->pdoBindings);
 
-        return $results;
+        if (!isset($results[0])) {
+            return [];
+        }
+
+        return $results[0];
     }
 }

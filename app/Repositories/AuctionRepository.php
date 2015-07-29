@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Auction;
-use App\User;
 use Carbon\Carbon;
 use DB;
 
