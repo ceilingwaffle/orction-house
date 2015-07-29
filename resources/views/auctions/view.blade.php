@@ -94,7 +94,6 @@
                 {!! csrf_field() !!}
                 <div class="s-auction-bid-box">
                     <div class="s-auction-text-row">
-                        {{ dd($auction['total_bids']) }}
                         @if ($auction['total_bids'] === 0)
                             <p class="left">Starting Bid:</p>
                         @elseif ($auction['auction_status'] == 'Open')
