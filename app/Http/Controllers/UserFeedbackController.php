@@ -85,7 +85,7 @@ class UserFeedbackController extends Controller
         list($paginator, $feedbackPaginated) = $this->preparePaginator($feedbackResults, $itemsPerPage);
 
         // Transform the data
-        $transformer = new FeedbackIndexTransformer();
+        $transformer = App::make(FeedbackIndexTransformer::class);
         $feedbackData = $transformer->transformMany($feedbackPaginated);
 
         // Render the page
