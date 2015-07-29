@@ -28,23 +28,12 @@ class FeedbackIndexTransformer extends AuctionBaseTransformer
     }
 
     /**
-     * Transforms a 2D array of user feedback data
-     *
-     * @param $userData
-     * @return array
-     */
-    public function transformManyUserFeedback($userData)
-    {
-        return $this->transformMany($userData, 'transformUserFeedback');
-    }
-
-    /**
      * Transforms a single array of user feedback data
      *
      * @param $userData
      * @return array
      */
-    protected function transformUserFeedback($userData)
+    public function transformUserFeedback($userData)
     {
         return [
             'user_id' => $userData->user_id,
