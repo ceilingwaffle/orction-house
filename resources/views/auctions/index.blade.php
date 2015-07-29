@@ -81,7 +81,7 @@
             </div>
             <div class="panel-body">
                 @if (!isset($auctions) or empty($auctions))
-                    No results found
+                    <h3 class="text-center">No results</h3>
                 @else
                     <p class="text-muted"
                        style="margin-top:0;margin-bottom:10px;">Click on an auction to view its full details and place a bid.</p>

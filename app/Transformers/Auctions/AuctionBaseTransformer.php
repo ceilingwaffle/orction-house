@@ -33,6 +33,7 @@ abstract class AuctionBaseTransformer extends BaseTransformer
         if (empty($feedbackString)) {
             return [
                 'positive' => 0,
+                'neutral' => 0,
                 'negative' => 0,
             ];
         }
@@ -56,10 +57,12 @@ abstract class AuctionBaseTransformer extends BaseTransformer
 
         // Set the feedback count values (0 if not the feedback type is not set)
         $positive = (array_key_exists(FeedbackType::POSITIVE, $amounts) ? $amounts[FeedbackType::POSITIVE] : 0);
+        $neutral = (array_key_exists(FeedbackType::NEUTRAL, $amounts) ? $amounts[FeedbackType::NEUTRAL] : 0);
         $negative = (array_key_exists(FeedbackType::NEGATIVE, $amounts) ? $amounts[FeedbackType::NEGATIVE] : 0);
 
         return [
             'positive' => $positive,
+            'neutral' => $neutral,
             'negative' => $negative,
         ];
     }
@@ -102,6 +105,30 @@ abstract class AuctionBaseTransformer extends BaseTransformer
     protected function feedbackStringToPositiveCount($feedbackString)
     {
         return (int)$this->feedbackStringToValues($feedbackString)['positive'];
+    }
+
+    /**
+     * Gets the number of neutral feedback from the string
+     *
+     * @param $feedbackString
+     * @return mixed
+     * @throws UnexpectedAuctionFeedbackTypeStringFormatException
+     */
+    protected function feedbackStringToNeutralCount($feedbackString)
+    {
+        return (int)$this->feedbackStringToValues($feedbackString)['neutral'];
+    }
+
+    /**
+     * Gets the number of negative feedback from the string
+     *
+     * @param $feedbackString
+     * @return mixed
+     * @throws UnexpectedAuctionFeedbackTypeStringFormatException
+     */
+    protected function feedbackStringToNegativeCount($feedbackString)
+    {
+        return (int)$this->feedbackStringToValues($feedbackString)['negative'];
     }
 
 //    /**
