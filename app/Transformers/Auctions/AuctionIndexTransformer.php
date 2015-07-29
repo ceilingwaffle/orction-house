@@ -26,9 +26,7 @@ class AuctionIndexTransformer extends AuctionBaseTransformer
             'auction_seller_username' => $auction->auction_creator_username,
             'total_bids' => $auction->total_bids,
             'highest_bidder_username' => $auction->highest_bidder_username,
-            'seller_positive_feedback_percentage' => $this->feedbackStringToPercentage($auction->user_feedback_type_counts),
-            'seller_feedback_link' => '#todo',
-//            'current_visible_bid' => $currentVisibleBid,
+            'seller_positive_feedback_count' => $this->feedbackStringToPositiveCount($auction->user_feedback_type_counts),
             'current_auction_price' => $this->transformToCurrencyString(Auction::determineCurrentAuctionPrice($auction->auction_start_price, $auction->highest_bid_amount)),
         ];
     }

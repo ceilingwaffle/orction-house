@@ -2,9 +2,9 @@
 
 namespace App\Transformers\Feedback;
 
-use App\Transformers\BaseTransformer;
+use App\Transformers\Auctions\AuctionBaseTransformer;
 
-class FeedbackIndexTransformer extends BaseTransformer
+class FeedbackIndexTransformer extends AuctionBaseTransformer
 {
 
     /**
@@ -23,6 +23,7 @@ class FeedbackIndexTransformer extends BaseTransformer
             'feedback_type' => $feedback->feedback_type,
             'feedback_message' => $feedback->feedback_message,
             'feedback_date' => $this->toHumanTimeDifference($feedback->feedback_date),
+            'user_positive_feedback_count' => $this->feedbackStringToPositiveCount($feedback->user_feedback_type_counts),
         ];
     }
 }

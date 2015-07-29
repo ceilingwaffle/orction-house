@@ -105,10 +105,7 @@
                                     <td class="td-left">Listed By:</td>
                                     <td class="td-right">
                                         <a href="/users/{{ $auction['auction_seller_username'] }}/feedback">
-                                            {{ $auction['auction_seller_username'] }}
-                                            @if(!is_null($auction['seller_positive_feedback_percentage']) )
-                                                ({{ $auction['seller_positive_feedback_percentage'] }})
-                                            @endif
+                                            {{ $auction['auction_seller_username'] }} ({{ $auction['seller_positive_feedback_count'] }})
                                         </a>
                                     </td>
                                 </tr>
