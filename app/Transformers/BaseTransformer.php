@@ -9,12 +9,13 @@ abstract class BaseTransformer
     /**
      * Transforms a collection of data
      *
-     * @param $items
+     * @param array $items
+     * @param string $method
      * @return array
      */
-    public function transformMany(array $items)
+    public function transformMany(array $items, $method = 'transform')
     {
-        return array_map([$this, 'transform'], $items);
+        return array_map([$this, $method], $items);
     }
 
     /**

@@ -26,4 +26,34 @@ class FeedbackIndexTransformer extends AuctionBaseTransformer
             'user_positive_feedback_count' => $this->feedbackStringToPositiveCount($feedback->user_feedback_type_counts),
         ];
     }
+
+    /**
+     * Transforms a 2D array of user feedback data
+     *
+     * @param $userData
+     * @return array
+     */
+    public function transformManyUserFeedback($userData)
+    {
+        return $this->transformMany($userData, 'transformUserFeedback');
+    }
+
+    /**
+     * Transforms a single array of user feedback data
+     *
+     * @param $userData
+     * @return array
+     */
+    protected function transformUserFeedback($userData)
+    {
+        return [
+            'user_id' => $userData->user_id,
+            'username' => $userData->username,
+            'feedback' => [
+                'positive_count' => $this->feedbackStringToPositiveCount($userData->feedback_type_counts),
+                'neutral_count' => $this->feedbackStringToNeutralCount($userData->feedback_type_counts),
+                'negative_count' => $this->feedbackStringToNegativeCount($userData->feedback_type_counts),
+            ]
+        ];
+    }
 }

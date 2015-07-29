@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App;
 use App\Repositories\AuctionRepository;
 use App\Repositories\FeedbackRepository;
+use App\Repositories\UserRepository;
 use App\Services\PaginationService;
 use App\Transformers\Feedback\FeedbackIndexTransformer;
 use App\Transformers\Feedback\FeedbackStoreTransformer;
@@ -31,6 +32,11 @@ class UserFeedbackController extends Controller
     private $auctions;
 
     /**
+     * @var UserRepository
+     */
+    private $users;
+
+    /**
      * @var PaginationService
      */
     private $paginator;
@@ -39,11 +45,13 @@ class UserFeedbackController extends Controller
     (
         FeedbackRepository $feedback,
         AuctionRepository $auctions,
+        UserRepository $users,
         PaginationService $paginator
     )
     {
         $this->feedback = $feedback;
         $this->auctions = $auctions;
+        $this->users = $users;
         $this->paginator = $paginator;
     }
 
@@ -58,7 +66,7 @@ class UserFeedbackController extends Controller
     {
         // Validate the username
         if (!User::isValidUsername($username)) {
-            App::abort(404);
+            App::abort(404, 'Username does not exist.');
         }
 
         // Get the feedback received by the user
@@ -88,10 +96,15 @@ class UserFeedbackController extends Controller
         $transformer = App::make(FeedbackIndexTransformer::class);
         $feedbackData = $transformer->transformMany($feedbackPaginated);
 
+        // Get user feedback data (positive, neutral, negative counts)
+        $userFeedback = $this->users->getUserFeedbackData($username);
+        $userData = $transformer->transformManyUserFeedback($userFeedback)[0];
+
         // Render the page
         return view('feedback.index')
             ->with(compact(
                 'username',
+                'userData',
                 'feedbackData',
                 'paginator'
             ));
