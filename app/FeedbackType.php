@@ -12,4 +12,6 @@ class FeedbackType extends Model
 
     protected $table = 'feedback_types';
 
+    public $timestamps = false;
+
 }
