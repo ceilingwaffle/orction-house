@@ -39,9 +39,8 @@
 |
 */
 
-Route::get('/', function () {
-    return redirect('/auctions');
-});
+// Home page
+Route::get('/', 'PagesController@getHome');
 
 // Authentication routes
 Route::get('auth/login', 'Auth\AuthController@getLogin');
