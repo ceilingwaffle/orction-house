@@ -276,4 +276,21 @@ tr.s-table-row-highlight {
     color: #aaa;
     background-color: #fff; }
 
+.home-container {
+  width: 100%;
+  height: 700px;
+  background: url("/assets/img/orc-with-speech-bubble.png") no-repeat 100% 0;
+  background-size: 40%; }
+
+.home-container-text {
+  margin-left: 40px;
+  max-width: 56%; }
+  .home-container-text h1 {
+    margin-bottom: 30px; }
+  .home-container-text h4 {
+    margin-bottom: 14px; }
+  .home-container-text ul li {
+    margin-bottom: 16px;
+    font-size: 1.1em; }
+
 /*# sourceMappingURL=app.css.map */
