@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <label for="password" class="col-sm-3 control-label">Password:</label>
                         <div class="col-sm-9">
-                            <input type="password" id="password" name="password" class="form-control"
+                            <input type="password" id="password" name="password" class="form-control" maxlength="50"
                                    value="{{ old('password') }}" />
                         </div>
                     </div>
