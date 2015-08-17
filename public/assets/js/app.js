@@ -29,7 +29,8 @@ $(document).ready(function () {
             },
             password: {
                 required: true,
-                minlength: 6
+                minlength: 6,
+                maxlength: 50
             }
         },
         highlight: function (element) {
@@ -48,7 +49,8 @@ $(document).ready(function () {
             },
             password: {
                 required: true,
-                minlength: 6
+                minlength: 6,
+                maxlength: 50
             },
             password_confirmation: {
                 required: true,

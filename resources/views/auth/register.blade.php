@@ -22,14 +22,14 @@
                     <div class="form-group">
                         <label for="password" class="col-sm-4 control-label">Password:</label>
                         <div class="col-sm-8">
-                            <input type="password" id="password" name="password" class="form-control"
+                            <input type="password" id="password" name="password" class="form-control" maxlength="50"
                                    placeholder="" />
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="password_confirmation" class="col-sm-4 control-label">Confirm Password:</label>
                         <div class="col-sm-8">
-                            <input type="password" id="password_confirmation" name="password_confirmation"
+                            <input type="password" id="password_confirmation" name="password_confirmation" maxlength="50"
                                    class="form-control" placeholder="" />
                         </div>
                     </div>
