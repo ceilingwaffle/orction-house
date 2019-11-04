@@ -10,41 +10,6 @@ The word “Orction” is a portmanteau of the words “orc” and “auction”
 
 To tackle the issue of “seller trust”, the website will allow buyers to provide publicly viewable feedback to a seller after the sale of an auction has been completed. This feedback system allows potential buyers to better gauge the trust worthiness of a seller, prior to bidding on an item. This is accomplished by allowing each user to see how much positive, neutral, and negative feedback the seller has received, including each associated “feedback message”, and which auction listing each piece of feedback pertains to.
 
-# Technologies
-## LAMP Stack
-- Ubuntu 14.04.03 LTS
-- Apache 2.4.7
-- MySQL 5.5.44
-- PHP 5.56.12
-- Laravel 5.1
-
-## Dependencies
-- Laravel
-- jQuery
-- Twitter Bootstrap
-- jQuery Validate
-- MomentJS
-- Bootstrap DateTimePicker
-
-## Software Design Patterns
-- MVC (Laravel)
-- Repositories
-- Transformers
-- Blade view templates (Laravel)
-
-## SQL Queries
-- Queries stored in various repository classes in directory: ./app/Repositories
-e.g. "Get all auctions" query stored within: ./app/Repositories/AuctionRepository.php -> getAuctions()
-
-## Validation
-- Most server-side validation is logic stored in the class:
-    ./app/Providers/AppServiceProvider.php -> boot()
-    ...then called in controller methods using $this->validate(...)
-- Most server-side error messages are contained in the file:
-    ./resources/lang/en/validation.php
-- Client-side validation logic + messages stored in:
-    ./resources/assets/js/app.js (using jquery.validate library)
-
 # How it Works
 ## Functionality
 - User Authentication
@@ -106,15 +71,60 @@ e.g. "Get all auctions" query stored within: ./app/Repositories/AuctionRepositor
 ![Entity Relationship Diagram][er_diagram]
 ## Site Map
 ![Site Map][site_map]
-## Page Mockups
-![Home Page](https://i.imgur.com/X5AW2Cn.png "Home Page")
-![Log In](https://i.imgur.com/BPBwUdN.png "Log In")
-![Sign Up](https://i.imgur.com/eDhCrOQ.png "Sign Up")
-![View All Auctions](https://i.imgur.com/4FLTLqN.png "View All Auctions")
-![Create Auction](https://i.imgur.com/2ki7VrT.png "Create Auction")
-![View Bids For Auction](https://i.imgur.com/cBR9gXZ.png "View Bids For Auction")
-![Leave User Feedback](https://i.imgur.com/P0rLGOL.png "Leave User Feedback")
-![Update Auction](https://i.imgur.com/6rseZ5M.png "Update Auction")
-![View Auction](https://i.imgur.com/IUFDZv7.png "View Auction")
-![View User Feedback](https://i.imgur.com/URc8vCA.png "View User Feedback")
 
+# Page Mockups
+## Home Page
+![Home Page](https://i.imgur.com/X5AW2Cn.png "Home Page")
+## Sign Up
+![Sign Up](https://i.imgur.com/eDhCrOQ.png "Sign Up")
+## Log In
+![Log In](https://i.imgur.com/BPBwUdN.png "Log In")
+## View All Auctions
+![View All Auctions](https://i.imgur.com/4FLTLqN.png "View All Auctions")
+## Create New Auction
+![Create New Auction](https://i.imgur.com/2ki7VrT.png "Create New Auction")
+## View Bids For Auction
+![View Bids For Auction](https://i.imgur.com/cBR9gXZ.png "View Bids For Auction")
+## View User Feedback
+![View User Feedback](https://i.imgur.com/URc8vCA.png "View User Feedback")
+## Create User Feedback
+![Create User Feedback](https://i.imgur.com/P0rLGOL.png "Create User Feedback")
+## View Auction
+![View Auction](https://i.imgur.com/IUFDZv7.png "View Auction")
+## Update Auction
+![Update Auction](https://i.imgur.com/6rseZ5M.png "Update Auction")
+
+# Technologies Used
+## LAMP Stack
+- Ubuntu 14.04.03 LTS
+- Apache 2.4.7
+- MySQL 5.5.44
+- PHP 5.56.12
+- Laravel 5.1
+
+## Dependencies
+- Laravel
+- jQuery
+- Twitter Bootstrap
+- jQuery Validate
+- MomentJS
+- Bootstrap DateTimePicker
+
+## Software Design Patterns
+- MVC (Laravel)
+- Repositories
+- Transformers
+- Blade view templates (Laravel)
+
+## SQL Queries
+- Queries stored in various repository classes in directory: ./app/Repositories
+e.g. "Get all auctions" query stored within: ./app/Repositories/AuctionRepository.php -> getAuctions()
+
+## Validation
+- Most server-side validation is logic stored in the class:
+    ./app/Providers/AppServiceProvider.php -> boot()
+    ...then called in controller methods using $this->validate(...)
+- Most server-side error messages are contained in the file:
+    ./resources/lang/en/validation.php
+- Client-side validation logic + messages stored in:
+    ./resources/assets/js/app.js (using jquery.validate library)
